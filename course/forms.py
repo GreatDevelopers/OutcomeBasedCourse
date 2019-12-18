@@ -21,3 +21,20 @@ class CreateInstituteForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
+
+
+class CreateLevelForm(forms.Form):
+    level_name = forms.CharField(
+        label="Level Name",
+        max_length=300,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter level name"}
+        ),
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateLevelForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
