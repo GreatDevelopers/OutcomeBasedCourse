@@ -1,0 +1,25 @@
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_messages %}
+
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Outcome Based Course</title>
+</head>
+<body>
+<div class = "wrapper">
+  <div class="white-board">
+    <div class ="main-box" id="c-panel">
+      <center>
+        <header class="primary-branding" style="font-size:32;">
+          <a href='{% url "home" %}'> <span class="pb-dark">OUTCOME BASED COURSE</span></a>
+        </header>
+      </center>
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
