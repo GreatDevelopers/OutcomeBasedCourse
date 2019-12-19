@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Institute, Level, Programme
+from .models import Institute, Level, Programme, Discipline
 
 
 class CreateInstituteForm(forms.Form):
@@ -37,7 +37,8 @@ class CreateLevelForm(forms.Form):
         label="Institutes",
         queryset=Institute.objects.all(),
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more than one.",
+        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
+        "than one.",
         required=False,
     )
 
@@ -137,6 +138,110 @@ class CreateDisciplineForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(CreateDisciplineForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+
+class CreateCourseForm(forms.Form):
+    course_id = forms.CharField(
+        label="Course id",
+        max_length=20,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter course id"}
+        ),
+        required=True,
+    )
+    course_title = forms.CharField(
+        label="Title",
+        max_length=200,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter course title"}
+        ),
+        required=True,
+    )
+    course_overview = forms.CharField(
+        label="Overview",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter course overview",
+            }
+        ),
+        required=False,
+    )
+    course_outcome = forms.CharField(
+        label="Outcome",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter course outcomes",
+            }
+        ),
+        required=False,
+    )
+    course_objective = forms.CharField(
+        label="Objective",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter course objective",
+            }
+        ),
+        required=False,
+    )
+    course_credit = forms.DecimalField(
+        label="Credit",
+        max_digits=4,
+        decimal_places=2,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter course credits",
+            }
+        ),
+        required=True,
+    )
+    contact_hours_per_week = forms.DecimalField(
+        label="Contact hours per week",
+        max_digits=4,
+        decimal_places=2,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter total credits",
+            }
+        ),
+        required=True,
+    )
+    course_resources = forms.CharField(
+        label="Resources",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter course resources",
+            }
+        ),
+        required=False,
+    )
+    course_test = forms.CharField(
+        label="Test",
+        widget=forms.Textarea(
+            attrs={"class": "form-control", "placeholder": "Enter course test"}
+        ),
+        required=False,
+    )
+    course_discipline = forms.ModelMultipleChoiceField(
+        label="Discipline",
+        queryset=Discipline.objects.all(),
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
+        "than one.",
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateCourseForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

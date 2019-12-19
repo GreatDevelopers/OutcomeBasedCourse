@@ -52,18 +52,18 @@ class Discipline(models.Model):
 
 class Course(models.Model):
     course_id = models.CharField(primary_key=True, max_length=20)
-    title = models.CharField(max_length=200)
-    overview = models.TextField(blank=True, null=True)
-    outcome = models.TextField(blank=True, null=True)
-    objective = models.TextField(blank=True, null=True)
-    credit = models.DecimalField(max_digits=4, decimal_places=2)
+    course_title = models.CharField(max_length=200)
+    course_overview = models.TextField(blank=True, null=True)
+    course_outcome = models.TextField(blank=True, null=True)
+    course_objective = models.TextField(blank=True, null=True)
+    course_credit = models.DecimalField(max_digits=4, decimal_places=2)
     contact_hours_per_week = models.DecimalField(max_digits=4, decimal_places=2)
-    resources = models.TextField(blank=True, null=True)
-    test = models.TextField(blank=True, null=True)
-    discipline = models.ManyToManyField(Discipline, blank=True)
+    course_resources = models.TextField(blank=True, null=True)
+    course_test = models.TextField(blank=True, null=True)
+    course_discipline = models.ManyToManyField(Discipline, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.course_title
 
 
 class Module(models.Model):
