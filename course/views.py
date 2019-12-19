@@ -1,13 +1,14 @@
 from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
-from .models import Institute, Level, Programme, Discipline, Course
+from .models import Institute, Level, Programme, Discipline, Course, Module
 from .forms import (
     CreateInstituteForm,
     CreateLevelForm,
     CreateProgrammeForm,
     CreateDisciplineForm,
     CreateCourseForm,
+    CreateModuleForm,
 )
 
 
@@ -87,8 +88,27 @@ class CreateCourseView(FormView):
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
-        discipline = cleaned_data.pop("course_discipline")
+        discipline = cleaned_data.pop("discipline")
         course = Course.objects.create(**cleaned_data)
         course.save()
-        course.course_discipline.set(discipline)
+        course.discipline.set(discipline)
+        return super().form_valid(form)
+
+
+class ModuleView(ListView):
+    model = Module
+    template_name = "course/module_list.html"
+
+
+class CreateModuleView(FormView):
+    template_name = "course/create_module_form.html"
+    form_class = CreateModuleForm
+    success_url = reverse_lazy("module")
+
+    def form_valid(self, form):
+        cleaned_data = form.cleaned_data
+        course = cleaned_data.pop("course")
+        module = Module.objects.create(**cleaned_data)
+        module.save()
+        module.course.set(course)
         return super().form_valid(form)

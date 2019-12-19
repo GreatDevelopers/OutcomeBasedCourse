@@ -10,6 +10,8 @@ from .views import (
     CreateDisciplineView,
     CourseView,
     CreateCourseView,
+    ModuleView,
+    CreateModuleView,
 )
 
 urlpatterns = [
@@ -32,4 +34,6 @@ urlpatterns = [
     ),
     path("course/", CourseView.as_view(), name="course"),
     path("course/add/", CreateCourseView.as_view(), name="create-course"),
+    path("module/", ModuleView.as_view(), name="module"),
+    path("module/add/", CreateModuleView.as_view(), name="create-module"),
 ]

@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Institute, Level, Programme, Discipline
+from .models import Institute, Level, Programme, Discipline, Course
 
 
 class CreateInstituteForm(forms.Form):
@@ -231,7 +231,7 @@ class CreateCourseForm(forms.Form):
         ),
         required=False,
     )
-    course_discipline = forms.ModelMultipleChoiceField(
+    discipline = forms.ModelMultipleChoiceField(
         label="Discipline",
         queryset=Discipline.objects.all(),
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
@@ -242,6 +242,78 @@ class CreateCourseForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(CreateCourseForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+
+class CreateModuleForm(forms.Form):
+    module_title = forms.CharField(
+        label="Title",
+        max_length=200,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter module title"}
+        ),
+        required=True,
+    )
+    module_overview = forms.CharField(
+        label="Overview",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter module overview",
+            }
+        ),
+        required=False,
+    )
+    module_outcome = forms.CharField(
+        label="Outcome",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter module outcomes",
+            }
+        ),
+        required=False,
+    )
+    module_objective = forms.CharField(
+        label="Objective",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter module objective",
+            }
+        ),
+        required=False,
+    )
+    module_resources = forms.CharField(
+        label="Resources",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter module resources",
+            }
+        ),
+        required=False,
+    )
+    module_test = forms.CharField(
+        label="Test",
+        widget=forms.Textarea(
+            attrs={"class": "form-control", "placeholder": "Enter module test"}
+        ),
+        required=False,
+    )
+    course = forms.ModelMultipleChoiceField(
+        label="Course",
+        queryset=Course.objects.all(),
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
+        "than one.",
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateModuleForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
