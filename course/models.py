@@ -72,8 +72,8 @@ class Module(models.Model):
     )
     module_title = models.CharField(max_length=200)
     module_overview = models.TextField(blank=True, null=True)
-    module_objective = models.TextField(blank=True, null=True)
     module_outcome = models.TextField(blank=True, null=True)
+    module_objective = models.TextField(blank=True, null=True)
     module_resources = models.TextField(blank=True, null=True)
     module_test = models.TextField(blank=True, null=True)
     course = models.ManyToManyField(Course, blank=True)
@@ -84,17 +84,17 @@ class Module(models.Model):
 
 class Unit(models.Model):
     unit_number = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200, blank=True, null=True)
-    overview = models.TextField(blank=True, null=True)
-    objective = models.TextField(blank=True, null=True)
-    outcome = models.TextField(blank=True, null=True)
-    resources = models.TextField(blank=True, null=True)
-    test = models.TextField(blank=True, null=True)
+    unit_name = models.CharField(max_length=200, blank=True, null=True)
+    unit_overview = models.TextField(blank=True, null=True)
+    unit_outcome = models.TextField(blank=True, null=True)
+    unit_objective = models.TextField(blank=True, null=True)
+    unit_resources = models.TextField(blank=True, null=True)
+    unit_test = models.TextField(blank=True, null=True)
     module = models.ManyToManyField(Module, blank=True)
 
     def __str__(self):
         return (
             "Unit "
             + str(self.unit_number)
-            + (". " + self.name if self.name else "")
+            + (". " + self.unit_name if self.unit_name else "")
         )

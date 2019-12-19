@@ -12,6 +12,8 @@ from .views import (
     CreateCourseView,
     ModuleView,
     CreateModuleView,
+    UnitView,
+    CreateUnitView,
 )
 
 urlpatterns = [
@@ -36,4 +38,6 @@ urlpatterns = [
     path("course/add/", CreateCourseView.as_view(), name="create-course"),
     path("module/", ModuleView.as_view(), name="module"),
     path("module/add/", CreateModuleView.as_view(), name="create-module"),
+    path("unit/", UnitView.as_view(), name="unit"),
+    path("unit/add/", CreateUnitView.as_view(), name="create-unit"),
 ]

@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Institute, Level, Programme, Discipline, Course
+from .models import Institute, Level, Programme, Discipline, Course, Module
 
 
 class CreateInstituteForm(forms.Form):
@@ -314,6 +314,78 @@ class CreateModuleForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(CreateModuleForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+
+class CreateUnitForm(forms.Form):
+    unit_name = forms.CharField(
+        label="Name",
+        max_length=200,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter unit name"}
+        ),
+        required=False,
+    )
+    unit_overview = forms.CharField(
+        label="Overview",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter unit overview",
+            }
+        ),
+        required=False,
+    )
+    unit_outcome = forms.CharField(
+        label="Outcome",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter unit outcomes",
+            }
+        ),
+        required=False,
+    )
+    unit_objective = forms.CharField(
+        label="Objective",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter unit objective",
+            }
+        ),
+        required=False,
+    )
+    unit_resources = forms.CharField(
+        label="Resources",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter unit resources",
+            }
+        ),
+        required=False,
+    )
+    unit_test = forms.CharField(
+        label="Test",
+        widget=forms.Textarea(
+            attrs={"class": "form-control", "placeholder": "Enter unit test"}
+        ),
+        required=False,
+    )
+    module = forms.ModelMultipleChoiceField(
+        label="Module",
+        queryset=Module.objects.all(),
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
+        "than one.",
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateUnitForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
