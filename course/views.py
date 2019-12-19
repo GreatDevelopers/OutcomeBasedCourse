@@ -38,5 +38,12 @@ class CreateLevelView(FormView):
     success_url = reverse_lazy("level")
 
     def form_valid(self, form):
-        Level.objects.create(**form.cleaned_data).save()
+        cleaned_data = form.cleaned_data
+        if cleaned_data["programme"].exists():
+            for programme in form.cleaned_data["programme"]:
+                cleaned_data["programme"] = programme
+                Level.objects.create(**cleaned_data).save()
+        else:
+            cleaned_data["programme"] = None
+            Level.objects.create(**cleaned_data).save()
         return super().form_valid(form)
