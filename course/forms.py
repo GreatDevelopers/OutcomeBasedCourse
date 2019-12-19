@@ -1,6 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+from .models import Level
 
 
 class CreateInstituteForm(forms.Form):
@@ -14,6 +15,12 @@ class CreateInstituteForm(forms.Form):
             }
         ),
         required=True,
+    )
+    level = forms.ModelMultipleChoiceField(
+        label="Levels",
+        queryset=Level.objects.all(),
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):

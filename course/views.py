@@ -16,7 +16,14 @@ class CreateInstituteView(FormView):
     success_url = reverse_lazy("institute")
 
     def form_valid(self, form):
-        Institute.objects.create(**form.cleaned_data).save()
+        cleaned_data = form.cleaned_data
+        if cleaned_data["level"].exists():
+            for level in form.cleaned_data["level"]:
+                cleaned_data["level"] = level
+                Institute.objects.create(**cleaned_data).save()
+        else:
+            cleaned_data["level"] = None
+            Institute.objects.create(**cleaned_data).save()
         return super().form_valid(form)
 
 
