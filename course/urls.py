@@ -4,6 +4,8 @@ from .views import (
     CreateInstituteView,
     LevelView,
     CreateLevelView,
+    ProgrammeView,
+    CreateProgrammeView,
 )
 
 urlpatterns = [
@@ -14,4 +16,6 @@ urlpatterns = [
     ),
     path("level/", LevelView.as_view(), name="level"),
     path("level/add/", CreateLevelView.as_view(), name="create-level"),
+    path("programme/", ProgrammeView.as_view(), name="programme"),
+    path("programme/add/", CreateProgrammeView.as_view(), name="create-programme"),
 ]

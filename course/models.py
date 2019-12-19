@@ -51,6 +51,16 @@ class Course(models.Model):
         return self.title
 
 
+class Institute(models.Model):
+    institute_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )
+    institute_name = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.institute_name
+
+
 class Level(models.Model):
     """Level can be: U.G., P.G., etc.
     """
@@ -59,6 +69,7 @@ class Level(models.Model):
         primary_key=True, default=uuid.uuid4, editable=False
     )
     level_name = models.CharField(max_length=50)
+    institute = models.ManyToManyField(Institute, blank=True)
 
     def __str__(self):
         return self.level_name
@@ -87,14 +98,3 @@ class Discipline(models.Model):
 
     def __str__(self):
         return self.discipline_name
-
-
-class Institute(models.Model):
-    institute_id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False
-    )
-    institute_name = models.CharField(max_length=300)
-    level = models.ManyToManyField(Level, blank=True)
-
-    def __str__(self):
-        return self.institute_name

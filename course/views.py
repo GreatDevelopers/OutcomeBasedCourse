@@ -1,8 +1,8 @@
 from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
-from .models import Institute, Level
-from .forms import CreateInstituteForm, CreateLevelForm
+from .models import Institute, Level, Programme
+from .forms import CreateInstituteForm, CreateLevelForm, CreateProgrammeForm
 
 
 class InstituteView(ListView):
@@ -16,14 +16,7 @@ class CreateInstituteView(FormView):
     success_url = reverse_lazy("institute")
 
     def form_valid(self, form):
-        cleaned_data = form.cleaned_data
-        if cleaned_data["level"].exists():
-            for level in form.cleaned_data["level"]:
-                cleaned_data["level"] = level
-                Institute.objects.create(**cleaned_data).save()
-        else:
-            cleaned_data["level"] = None
-            Institute.objects.create(**cleaned_data).save()
+        Institute.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
 
@@ -39,11 +32,23 @@ class CreateLevelView(FormView):
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
-        if cleaned_data["programme"].exists():
-            for programme in form.cleaned_data["programme"]:
-                cleaned_data["programme"] = programme
-                Level.objects.create(**cleaned_data).save()
-        else:
-            cleaned_data["programme"] = None
-            Level.objects.create(**cleaned_data).save()
+        institute = cleaned_data.pop("institute")
+        level = Level.objects.create(**cleaned_data)
+        level.save()
+        level.institute.set(institute)
+        return super().form_valid(form)
+
+
+class ProgrammeView(ListView):
+    model = Institute
+    template_name = "course/programme_list.html"
+
+
+class CreateProgrammeView(FormView):
+    template_name = "course/create_programme_form.html"
+    form_class = CreateProgrammeForm
+    success_url = reverse_lazy("programme")
+
+    def form_valid(self, form):
+        Programme.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
