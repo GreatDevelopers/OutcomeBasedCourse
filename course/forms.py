@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Institute, Level
+from .models import Institute, Level, Programme
 
 
 class CreateInstituteForm(forms.Form):
@@ -89,6 +89,54 @@ class CreateProgrammeForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(CreateProgrammeForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+
+class CreateDisciplineForm(forms.Form):
+    discipline_code = forms.CharField(
+        label="Discipline Code",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter discipline code",
+            }
+        ),
+        required=True,
+    )
+    discipline_name = forms.CharField(
+        label="Discipline Name",
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter discipline name",
+            }
+        ),
+        required=True,
+    )
+    total_credits = forms.DecimalField(
+        label="Total Credits",
+        max_digits=5,
+        decimal_places=2,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter total credits",
+            }
+        ),
+    )
+    programme = forms.ModelChoiceField(
+        label="Programme",
+        queryset=Programme.objects.all(),
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateDisciplineForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
