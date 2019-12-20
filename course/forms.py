@@ -286,6 +286,13 @@ class CreateModuleForm(forms.Form):
         ),
         required=False,
     )
+    module_body = forms.CharField(
+        label="Body",
+        widget=forms.Textarea(
+            attrs={"class": "form-control", "placeholder": "Enter module body"}
+        ),
+        required=False,
+    )
     module_resources = forms.CharField(
         label="Resources",
         widget=forms.Textarea(
@@ -355,6 +362,13 @@ class CreateUnitForm(forms.Form):
                 "class": "form-control",
                 "placeholder": "Enter unit objective",
             }
+        ),
+        required=False,
+    )
+    unit_body = forms.CharField(
+        label="Body",
+        widget=forms.Textarea(
+            attrs={"class": "form-control", "placeholder": "Enter unit body"}
         ),
         required=False,
     )
