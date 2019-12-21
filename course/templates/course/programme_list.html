@@ -1,0 +1,7 @@
+{% extends "course/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+<h4>Programmes</h4><br>
+{% render_table programme %}
+{% endblock %}

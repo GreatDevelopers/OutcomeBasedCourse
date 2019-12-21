@@ -7,8 +7,7 @@ from .models import Programme
 from .models import Level
 from .models import Institute
 
-# Register your models here.
-
+admin.site.site_header = "Outcome Based Course"
 admin.site.register(Unit)
 admin.site.register(Module)
 admin.site.register(Course)
