@@ -1,6 +1,7 @@
 from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
+from django_tables2 import RequestConfig, SingleTableView
 from .models import *
 from .forms import (
     CreateInstituteForm,
@@ -11,11 +12,21 @@ from .forms import (
     CreateModuleForm,
     CreateUnitForm,
 )
+from .tables import InstituteTable
 
 
-class InstituteView(ListView):
+class InstituteView(SingleTableView):
     model = Institute
     template_name = "course/institute_list.html"
+    context_object_name = "institute"
+    ordering = ["institute_name"]
+
+    def get_context_data(self, **kwargs):
+        context = super(InstituteView, self).get_context_data(**kwargs)
+        table = InstituteTable(Institute.objects.values('institute_name'))
+        RequestConfig(self.request, paginate={'per_page': 30}).configure(table)
+        context['table'] = table
+        return context
 
 
 class CreateInstituteView(FormView):
