@@ -3,16 +3,8 @@ from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django_tables2 import RequestConfig, SingleTableView
 from .models import *
-from .forms import (
-    CreateInstituteForm,
-    CreateLevelForm,
-    CreateProgrammeForm,
-    CreateDisciplineForm,
-    CreateCourseForm,
-    CreateModuleForm,
-    CreateUnitForm,
-)
-from .tables import InstituteTable
+from .forms import *
+from .tables import *
 
 
 class InstituteView(SingleTableView):
@@ -23,9 +15,9 @@ class InstituteView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super(InstituteView, self).get_context_data(**kwargs)
-        table = InstituteTable(Institute.objects.values('institute_name'))
-        RequestConfig(self.request, paginate={'per_page': 30}).configure(table)
-        context['table'] = table
+        table = InstituteTable(Institute.objects.values("institute_name"))
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["table"] = table
         return context
 
 
@@ -42,6 +34,15 @@ class CreateInstituteView(FormView):
 class LevelView(ListView):
     model = Level
     template_name = "course/level_list.html"
+    context_object_name = "level"
+    ordering = ["level_name"]
+
+    def get_context_data(self, **kwargs):
+        context = super(LevelView, self).get_context_data(**kwargs)
+        table = LevelTable(Level.objects.values("level_name"))
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["table"] = table
+        return context
 
 
 class CreateLevelView(FormView):
@@ -61,6 +62,15 @@ class CreateLevelView(FormView):
 class ProgrammeView(ListView):
     model = Programme
     template_name = "course/programme_list.html"
+    context_object_name = "programme"
+    ordering = ["programme_name"]
+
+    def get_context_data(self, **kwargs):
+        context = super(ProgrammeView, self).get_context_data(**kwargs)
+        table = ProgrammeTable(Programme.objects.values("programme_name"))
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["table"] = table
+        return context
 
 
 class CreateProgrammeView(FormView):
@@ -76,6 +86,15 @@ class CreateProgrammeView(FormView):
 class DisciplineView(ListView):
     model = Discipline
     template_name = "course/discipline_list.html"
+    context_object_name = "discipline"
+    ordering = ["discipline_name"]
+
+    def get_context_data(self, **kwargs):
+        context = super(DisciplineView, self).get_context_data(**kwargs)
+        table = DisciplineTable(Discipline.objects.values("discipline_name"))
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["table"] = table
+        return context
 
 
 class CreateDisciplineView(FormView):
@@ -91,6 +110,15 @@ class CreateDisciplineView(FormView):
 class CourseView(ListView):
     model = Course
     template_name = "course/course_list.html"
+    context_object_name = "course"
+    ordering = ["course_title"]
+
+    def get_context_data(self, **kwargs):
+        context = super(CourseView, self).get_context_data(**kwargs)
+        table = CourseTable(Course.objects.values("course_title"))
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["table"] = table
+        return context
 
 
 class CreateCourseView(FormView):
@@ -110,6 +138,15 @@ class CreateCourseView(FormView):
 class ModuleView(ListView):
     model = Module
     template_name = "course/module_list.html"
+    context_object_name = "module"
+    ordering = ["module_title"]
+
+    def get_context_data(self, **kwargs):
+        context = super(ModuleView, self).get_context_data(**kwargs)
+        table = ModuleTable(Module.objects.values("module_title"))
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["table"] = table
+        return context
 
 
 class CreateModuleView(FormView):
@@ -129,6 +166,15 @@ class CreateModuleView(FormView):
 class UnitView(ListView):
     model = Unit
     template_name = "course/unit_list.html"
+    context_object_name = "unit"
+    ordering = ["unit_name"]
+
+    def get_context_data(self, **kwargs):
+        context = super(UnitView, self).get_context_data(**kwargs)
+        table = UnitTable(Unit.objects.values("unit_name"))
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["table"] = table
+        return context
 
 
 class CreateUnitView(FormView):
