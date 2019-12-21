@@ -1,5 +1,7 @@
-<html>
-	<body>
-        Institute List goes here
-	</body>
-</html>
+{% extends "course/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+<h4>Institutes</h4><br>
+{% render_table institute %}
+{% endblock %}

@@ -1,5 +1,7 @@
-<html>
-	<body>
-        Discipline List goes here
-	</body>
-</html>
+{% extends "course/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+<h4>Disciplines</h4><br>
+{% render_table discipline %}
+{% endblock %}
