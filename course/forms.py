@@ -2,6 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import Institute, Level, Programme, Discipline, Course, Module
+from martor.fields import MartorFormField
 
 
 class CreateInstituteForm(forms.Form):
@@ -160,7 +161,7 @@ class CreateCourseForm(forms.Form):
         ),
         required=True,
     )
-    course_overview = forms.CharField(
+    course_overview = MartorFormField(
         label="Overview",
         widget=forms.Textarea(
             attrs={
@@ -170,7 +171,7 @@ class CreateCourseForm(forms.Form):
         ),
         required=False,
     )
-    course_outcome = forms.CharField(
+    course_outcome = MartorFormField(
         label="Outcome",
         widget=forms.Textarea(
             attrs={
@@ -180,7 +181,7 @@ class CreateCourseForm(forms.Form):
         ),
         required=False,
     )
-    course_objective = forms.CharField(
+    course_objective = MartorFormField(
         label="Objective",
         widget=forms.Textarea(
             attrs={
@@ -214,7 +215,7 @@ class CreateCourseForm(forms.Form):
         ),
         required=True,
     )
-    course_resources = forms.CharField(
+    course_resources = MartorFormField(
         label="Resources",
         widget=forms.Textarea(
             attrs={
@@ -224,7 +225,7 @@ class CreateCourseForm(forms.Form):
         ),
         required=False,
     )
-    course_test = forms.CharField(
+    course_test = MartorFormField(
         label="Test",
         widget=forms.Textarea(
             attrs={"class": "form-control", "placeholder": "Enter course test"}
@@ -256,7 +257,7 @@ class CreateModuleForm(forms.Form):
         ),
         required=True,
     )
-    module_overview = forms.CharField(
+    module_overview = MartorFormField(
         label="Overview",
         widget=forms.Textarea(
             attrs={
@@ -266,7 +267,7 @@ class CreateModuleForm(forms.Form):
         ),
         required=False,
     )
-    module_outcome = forms.CharField(
+    module_outcome = MartorFormField(
         label="Outcome",
         widget=forms.Textarea(
             attrs={
@@ -276,7 +277,7 @@ class CreateModuleForm(forms.Form):
         ),
         required=False,
     )
-    module_objective = forms.CharField(
+    module_objective = MartorFormField(
         label="Objective",
         widget=forms.Textarea(
             attrs={
@@ -286,14 +287,14 @@ class CreateModuleForm(forms.Form):
         ),
         required=False,
     )
-    module_body = forms.CharField(
+    module_body = MartorFormField(
         label="Body",
         widget=forms.Textarea(
             attrs={"class": "form-control", "placeholder": "Enter module body"}
         ),
         required=False,
     )
-    module_resources = forms.CharField(
+    module_resources = MartorFormField(
         label="Resources",
         widget=forms.Textarea(
             attrs={
@@ -303,7 +304,7 @@ class CreateModuleForm(forms.Form):
         ),
         required=False,
     )
-    module_test = forms.CharField(
+    module_test = MartorFormField(
         label="Test",
         widget=forms.Textarea(
             attrs={"class": "form-control", "placeholder": "Enter module test"}
@@ -335,7 +336,7 @@ class CreateUnitForm(forms.Form):
         ),
         required=False,
     )
-    unit_overview = forms.CharField(
+    unit_overview = MartorFormField(
         label="Overview",
         widget=forms.Textarea(
             attrs={
@@ -345,7 +346,7 @@ class CreateUnitForm(forms.Form):
         ),
         required=False,
     )
-    unit_outcome = forms.CharField(
+    unit_outcome = MartorFormField(
         label="Outcome",
         widget=forms.Textarea(
             attrs={
@@ -355,7 +356,7 @@ class CreateUnitForm(forms.Form):
         ),
         required=False,
     )
-    unit_objective = forms.CharField(
+    unit_objective = MartorFormField(
         label="Objective",
         widget=forms.Textarea(
             attrs={
@@ -365,14 +366,14 @@ class CreateUnitForm(forms.Form):
         ),
         required=False,
     )
-    unit_body = forms.CharField(
+    unit_body = MartorFormField(
         label="Body",
         widget=forms.Textarea(
             attrs={"class": "form-control", "placeholder": "Enter unit body"}
         ),
         required=False,
     )
-    unit_resources = forms.CharField(
+    unit_resources = MartorFormField(
         label="Resources",
         widget=forms.Textarea(
             attrs={
@@ -382,7 +383,7 @@ class CreateUnitForm(forms.Form):
         ),
         required=False,
     )
-    unit_test = forms.CharField(
+    unit_test = MartorFormField(
         label="Test",
         widget=forms.Textarea(
             attrs={"class": "form-control", "placeholder": "Enter unit test"}

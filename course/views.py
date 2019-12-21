@@ -15,9 +15,9 @@ class InstituteView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super(InstituteView, self).get_context_data(**kwargs)
-        table = InstituteTable(Institute.objects.values("institute_name"))
+        table = InstituteTable(Institute.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["table"] = table
+        context["institute"] = table
         return context
 
 
@@ -39,9 +39,9 @@ class LevelView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LevelView, self).get_context_data(**kwargs)
-        table = LevelTable(Level.objects.values("level_name"))
+        table = LevelTable(Level.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["table"] = table
+        context["level"] = table
         return context
 
 
@@ -67,9 +67,9 @@ class ProgrammeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProgrammeView, self).get_context_data(**kwargs)
-        table = ProgrammeTable(Programme.objects.values("programme_name"))
+        table = ProgrammeTable(Programme.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["table"] = table
+        context["programme"] = table
         return context
 
 
@@ -91,9 +91,9 @@ class DisciplineView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DisciplineView, self).get_context_data(**kwargs)
-        table = DisciplineTable(Discipline.objects.values("discipline_name"))
+        table = DisciplineTable(Discipline.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["table"] = table
+        context["discipline"] = table
         return context
 
 
@@ -115,9 +115,9 @@ class CourseView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CourseView, self).get_context_data(**kwargs)
-        table = CourseTable(Course.objects.values("course_title"))
+        table = CourseTable(Course.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["table"] = table
+        context["course"] = table
         return context
 
 
@@ -143,9 +143,9 @@ class ModuleView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ModuleView, self).get_context_data(**kwargs)
-        table = ModuleTable(Module.objects.values("module_title"))
+        table = ModuleTable(Module.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["table"] = table
+        context["module"] = table
         return context
 
 
@@ -171,9 +171,9 @@ class UnitView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(UnitView, self).get_context_data(**kwargs)
-        table = UnitTable(Unit.objects.values("unit_name"))
+        table = UnitTable(Unit.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["table"] = table
+        context["unit"] = table
         return context
 
 
