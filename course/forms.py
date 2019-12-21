@@ -4,6 +4,7 @@ from crispy_forms.layout import Submit
 from .models import Institute, Level, Programme, Discipline, Course, Module
 from martor.fields import MartorFormField
 
+
 class CreateInstituteForm(forms.Form):
     institute_name = forms.CharField(
         label="Institute Name",
