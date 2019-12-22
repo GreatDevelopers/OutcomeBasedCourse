@@ -1,0 +1,11 @@
+{% extends "course/base.html" %}
+
+{% block content %}
+
+<br>
+<center><h2>{{ course_name }} Syllabus</h2></center>
+{% for module in modules %}
+<b>{{ module.module_title }}</b>: {{ module.module_body|linebreaks }}<br>
+{% endfor %}
+
+{% endblock %}

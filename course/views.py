@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django_tables2 import RequestConfig, SingleTableView
@@ -189,3 +189,16 @@ class CreateUnitView(FormView):
         unit.save()
         unit.module.set(module)
         return super().form_valid(form)
+
+
+class SyllabusView(TemplateView):
+    template_name = "course/view_syllabus.html"
+    context_object_name = "syllabus"
+
+    def get_context_data(self, **kwargs):
+        context = super(SyllabusView, self).get_context_data(**kwargs)
+        course = Course.objects.get(course_id=self.kwargs["course_id"])
+        context["course_name"] = course.course_title
+        modules = Module.objects.filter(course=course)
+        context["modules"] = modules.values("module_title", "module_body")
+        return context
