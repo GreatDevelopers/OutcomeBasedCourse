@@ -1,5 +1,10 @@
 import os
 
+import ldap
+from django_auth_ldap.config import LDAPSearch, PosixGroupType #GroupOfNamesType
+
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -14,6 +19,69 @@ SECRET_KEY = "k01@s%35uz)2un(s63l^&mj1504=g5f#4*@hj2=5j($dawaokx"
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+#ldap config start
+
+# Baseline configuration.
+AUTH_LDAP_SERVER_URI = 'ldap://lab.gdy.club:389'
+
+AUTH_LDAP_BIND_DN = 'cn=admin,dc=lab,dc=gdy,dc=club'
+AUTH_LDAP_BIND_PASSWORD = 'fillpassword'
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    'dc=lab,dc=gdy,dc=club',
+    ldap.SCOPE_SUBTREE,
+    '(cn=%(user)s)',
+)
+# Or:
+AUTH_LDAP_USER_DN_TEMPLATE = 'cn=%(user)s,ou=users,dc=lab,dc=gdy,dc=club'
+
+# Set up the basic group parameters.
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    'ou=groups,dc=lab,dc=gdy,dc=club',
+    ldap.SCOPE_SUBTREE,
+    '(objectClass=posixGroup)',
+)
+AUTH_LDAP_GROUP_TYPE = PosixGroupType(name_attr='cn')
+
+# Simple group restrictions
+AUTH_LDAP_REQUIRE_GROUP = 'cn=admins,ou=groups,dc=lab,dc=gdy,dc=club'
+AUTH_LDAP_DENY_GROUP = None #'cn=users,ou=groups,dc=lab,dc=gdy,dc=club'
+
+# Populate the Django user from the LDAP directory.
+AUTH_LDAP_USER_ATTR_MAP = {
+    'first_name': 'givenName',
+    'last_name': 'sn',
+#    'email': 'mail',
+}
+
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    'is_active': 'cn=admins,ou=groups,dc=lab,dc=gdy,dc=club',
+    'is_staff': 'cn=admins,ou=groups,dc=lab,dc=gdy,dc=club',
+    'is_superuser': 'cn=admins,ou=groups,dc=lab,dc=gdy,dc=club',
+}
+#
+# This is the default, but I like to be explicit.
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+# Use LDAP group membership to calculate group permissions.
+AUTH_LDAP_FIND_GROUP_PERMS = True
+
+# Cache distinguished names and group memberships for an hour to minimize
+# LDAP traffic.
+AUTH_LDAP_CACHE_TIMEOUT = 0
+
+# Keep ModelBackend around for per-user permissions and maybe a local
+# superuser.
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+#ldap config end
+
+
+
+
 
 
 # Application definition
@@ -110,6 +178,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
+}
+
+
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
@@ -163,3 +240,4 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 # MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx
 #MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://github.githubassets.com/images/icons/emoji/'                  # default from github
 #MARTOR_MARKDOWN_BASE_MENTION_URL = 'https://python.web.id/author/'                                      # please change this to your domain
+
