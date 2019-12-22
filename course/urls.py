@@ -1,20 +1,5 @@
 from django.urls import path
-from .views import (
-    InstituteView,
-    CreateInstituteView,
-    LevelView,
-    CreateLevelView,
-    ProgrammeView,
-    CreateProgrammeView,
-    DisciplineView,
-    CreateDisciplineView,
-    CourseView,
-    CreateCourseView,
-    ModuleView,
-    CreateModuleView,
-    UnitView,
-    CreateUnitView,
-)
+from .views import *
 
 urlpatterns = [
     path("", InstituteView.as_view(), name="home"),
@@ -35,6 +20,7 @@ urlpatterns = [
         name="create-discipline",
     ),
     path("course/", CourseView.as_view(), name="course"),
+    path("syllabus/<str:course_id>", SyllabusView.as_view(), name="syllabus"),
     path("course/add/", CreateCourseView.as_view(), name="create-course"),
     path("module/", ModuleView.as_view(), name="module"),
     path("module/add/", CreateModuleView.as_view(), name="create-module"),
