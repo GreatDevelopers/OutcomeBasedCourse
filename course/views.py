@@ -5,6 +5,11 @@ from django_tables2 import RequestConfig, SingleTableView
 from .models import *
 from .forms import *
 from .tables import *
+from django.shortcuts import *
+
+
+def home_page(request):
+	return render(request, "course/home_page.html")
 
 
 class InstituteView(SingleTableView):

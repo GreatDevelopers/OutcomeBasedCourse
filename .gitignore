@@ -128,3 +128,4 @@ dmypy.json
 
 # Migrations
 */migrations/
+OBE/
