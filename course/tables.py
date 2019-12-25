@@ -44,7 +44,9 @@ class CourseTable(tables.Table):
             "course_outcome",
             "course_objective",
             "course_credit",
-            "contact_hours_per_week",
+            "lecture_contact_hours_per_week",
+            "tutorial_contact_hours_per_week",
+            "practical_contact_hours_per_week",
             "course_resources",
             "course_test",
         )
