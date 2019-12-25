@@ -203,14 +203,38 @@ class CreateCourseForm(forms.Form):
         ),
         required=True,
     )
-    contact_hours_per_week = forms.DecimalField(
-        label="Contact hours per week",
+    lecture_contact_hours_per_week = forms.DecimalField(
+        label="Lecture contact hours per week",
         max_digits=4,
         decimal_places=2,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
-                "placeholder": "Enter total credits",
+                "placeholder": "Enter lecture contact hours",
+            }
+        ),
+        required=True,
+    )
+    tutorial_contact_hours_per_week = forms.DecimalField(
+        label="Tutorial contact hours per week",
+        max_digits=4,
+        decimal_places=2,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter tutorial contact hours",
+            }
+        ),
+        required=True,
+    )
+    practical_contact_hours_per_week = forms.DecimalField(
+        label="Practical contact hours per week",
+        max_digits=4,
+        decimal_places=2,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter practical contact hours",
             }
         ),
         required=True,
