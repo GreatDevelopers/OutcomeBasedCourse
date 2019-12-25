@@ -125,7 +125,15 @@ class Course(models.Model):
     course_credit = models.DecimalField(
         verbose_name=COURSE_SINGULAR + " credit", max_digits=4, decimal_places=2
     )
-    contact_hours_per_week = models.DecimalField(max_digits=4, decimal_places=2)
+    lecture_contact_hours_per_week = models.DecimalField(
+        max_digits=4, decimal_places=2
+    )
+    tutorial_contact_hours_per_week = models.DecimalField(
+        max_digits=4, decimal_places=2
+    )
+    practical_contact_hours_per_week = models.DecimalField(
+        max_digits=4, decimal_places=2
+    )
     course_resources = models.TextField(
         verbose_name=COURSE_SINGULAR + " resources", blank=True, null=True
     )

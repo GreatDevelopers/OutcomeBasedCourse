@@ -82,6 +82,7 @@ AUTHENTICATION_BACKENDS = (
 
 # ldap config end
 
+LOGIN_URL = '/admin/login'
 
 # Application definition
 
