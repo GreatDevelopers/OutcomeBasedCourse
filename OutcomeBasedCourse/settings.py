@@ -1,5 +1,7 @@
 import os
-from .martor import *
+from .config.martor import *
+
+# from .config.djmoney_config import *
 
 import ldap
 from django_auth_ldap.config import (
@@ -93,8 +95,9 @@ INSTALLED_APPS = [
     "django_tables2",
     "bootstrap4",
     "crispy_forms",
-    "course.apps.CourseConfig",
     "martor",
+    # "djmoney",
+    "course.apps.CourseConfig",
 ]
 
 MIDDLEWARE = [

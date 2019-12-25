@@ -128,3 +128,6 @@ dmypy.json
 
 # Migrations
 */migrations/
+
+# Python virtual environment
+.venv/
