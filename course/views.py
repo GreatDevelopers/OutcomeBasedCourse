@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
-from django.shortcuts import render, request
+from django.shortcuts import render
 from django_tables2 import RequestConfig, SingleTableView
 from .models import *
 from .forms import *
@@ -246,7 +246,11 @@ class SyllabusView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SyllabusView, self).get_context_data(**kwargs)
         course = Course.objects.get(course_id=self.kwargs["course_id"])
-        context["course_name"] = course.course_title
+        #context["course_name"] = course.course_title
+        context["course"] = course.values("course_title", "course_overview", "course_outcome", "course_objective", "course_credit", "contact_hours_per_week","course_resources","course_test")
         modules = Module.objects.filter(course=course)
-        context["modules"] = modules.values("module_title", "module_body")
+        #context["modules"] = modules.values("module_title", "module_body")
+        context["modules"] = module.values("module_title", "module_overview", "module_outcome", "module_objective", "module_body", "module_resources","module_test")
+	#units = Unit.objects.filter(module=modules)
+	#context["units"]=
         return context

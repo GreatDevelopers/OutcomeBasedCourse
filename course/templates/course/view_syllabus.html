@@ -3,9 +3,18 @@
 {% block content %}
 
 <br>
-<center><h2>{{ course_name }} Syllabus</h2></center>
+<center><h2>{{ course.course_name }} Syllabus</h2></center>
+<p>{{ course.course_overview }}</p>
+<p style="float:left"><b>Credits:<b> {{ course.course_credit }}<p>
+<p style="float:right"><b>Contact Hours Per Week:</b> {{ course.contact_hours_per_week }}</p>
+<p><b>Objective:</b> {{ course.course_objective}}</p>
+<ol>
 {% for module in modules %}
-<b>{{ module.module_title }}</b>: {{ module.module_body|linebreaks }}<br>
+<li><b>{{ module.module_title }}</b>: {{ module.module_body|linebreaks }}<br></li>
 {% endfor %}
+</ol>
 
+<p><b>Outcomes:</b> {{ course.course_outcomes}}</p>
+<p><b>Tests:</b> {{ course.course_outcomes}}</p>
+<p><b>Resources:</b> {{ course.course_outcomes}}</p>
 {% endblock %}
