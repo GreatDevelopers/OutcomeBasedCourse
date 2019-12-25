@@ -246,11 +246,19 @@ class SyllabusView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SyllabusView, self).get_context_data(**kwargs)
         course = Course.objects.get(course_id=self.kwargs["course_id"])
-        #context["course_name"] = course.course_title
-        context["course"] = course.values("course_title", "course_overview", "course_outcome", "course_objective", "course_credit", "contact_hours_per_week","course_resources","course_test")
+        context["course_name"] = course.course_title
+        context["course_overview"] = course.course_overview
+        context["course_credit"] = course.course_credit
+        context["lecture_contact_hours_per_week"] = course.lecture_contact_hours_per_week
+        context["tutorial_contact_hours_per_week"] = course.tutorial_contact_hours_per_week
+        context["practical_contact_hours_per_week"] = course.practical_contact_hours_per_week
+        context["course_objective"] = course.course_objective
+        context["course_outcome"] = course.course_outcome
+        context["course_test"] = course.course_test
+        context["course_resources"] = course.course_resources
         modules = Module.objects.filter(course=course)
-        #context["modules"] = modules.values("module_title", "module_body")
-        context["modules"] = module.values("module_title", "module_overview", "module_outcome", "module_objective", "module_body", "module_resources","module_test")
-	#units = Unit.objects.filter(module=modules)
-	#context["units"]=
+        context["modules"] = modules.values("module_title", "module_overview", "module_outcome", "module_objective", "module_body", "module_resources","module_test")
+        for module in modules:
+                units = Unit.objects.filter(module=module)
+                context["units"] = units.values("unit_name", "unit_overview", "unit_outcome", "unit_objective", "unit_body", "unit_resources","unit_test", "module")
         return context
