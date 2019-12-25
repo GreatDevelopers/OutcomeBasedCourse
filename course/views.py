@@ -1,10 +1,16 @@
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
+from django.shortcuts import render, request
 from django_tables2 import RequestConfig, SingleTableView
 from .models import *
 from .forms import *
 from .tables import *
+from OutcomeBasedCourse.config.verbose_names import *
+
+
+def home_page(request):
+    return render(request, "course/home_page.html")
 
 
 class InstituteView(SingleTableView):
@@ -15,6 +21,7 @@ class InstituteView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super(InstituteView, self).get_context_data(**kwargs)
+        context["INSTITUTE"] = INSTITUTE_PLURAL
         table = InstituteTable(Institute.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["institute"] = table
@@ -22,13 +29,18 @@ class InstituteView(SingleTableView):
 
 
 class CreateInstituteView(FormView):
-    template_name = "course/institute_form.html"
+    template_name = "course/create_institute_form.html"
     form_class = CreateInstituteForm
     success_url = reverse_lazy("institute")
 
     def form_valid(self, form):
         Institute.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateInstituteView, self).get_context_data(**kwargs)
+        context["INSTITUTE"] = INSTITUTE_SINGULAR
+        return context
 
 
 class LevelView(ListView):
@@ -39,6 +51,7 @@ class LevelView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LevelView, self).get_context_data(**kwargs)
+        context["LEVEL"] = LEVEL_PLURAL
         table = LevelTable(Level.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["level"] = table
@@ -58,6 +71,11 @@ class CreateLevelView(FormView):
         level.institute.set(institute)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateLevelView, self).get_context_data(**kwargs)
+        context["LEVEL"] = LEVEL_SINGULAR
+        return context
+
 
 class ProgrammeView(ListView):
     model = Programme
@@ -67,6 +85,7 @@ class ProgrammeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProgrammeView, self).get_context_data(**kwargs)
+        context["PROGRAMME"] = PROGRAMME_PLURAL
         table = ProgrammeTable(Programme.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["programme"] = table
@@ -82,6 +101,11 @@ class CreateProgrammeView(FormView):
         Programme.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateProgrammeView, self).get_context_data(**kwargs)
+        context["PROGRAMME"] = PROGRAMME_SINGULAR
+        return context
+
 
 class DisciplineView(ListView):
     model = Discipline
@@ -91,6 +115,7 @@ class DisciplineView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DisciplineView, self).get_context_data(**kwargs)
+        context["DISCIPLINE"] = DISCIPLINE_PLURAL
         table = DisciplineTable(Discipline.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["discipline"] = table
@@ -106,6 +131,11 @@ class CreateDisciplineView(FormView):
         Discipline.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateDisciplineView, self).get_context_data(**kwargs)
+        context["DISCIPLINE"] = DISCIPLINE_SINGULAR
+        return context
+
 
 class CourseView(ListView):
     model = Course
@@ -115,6 +145,7 @@ class CourseView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CourseView, self).get_context_data(**kwargs)
+        context["COURSE"] = COURSE_PLURAL
         table = CourseTable(Course.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["course"] = table
@@ -134,6 +165,11 @@ class CreateCourseView(FormView):
         course.discipline.set(discipline)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateCourseView, self).get_context_data(**kwargs)
+        context["COURSE"] = COURSE_SINGULAR
+        return context
+
 
 class ModuleView(ListView):
     model = Module
@@ -143,6 +179,7 @@ class ModuleView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ModuleView, self).get_context_data(**kwargs)
+        context["MODULE"] = MODULE_PLURAL
         table = ModuleTable(Module.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["module"] = table
@@ -162,6 +199,11 @@ class CreateModuleView(FormView):
         module.course.set(course)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateModuleView, self).get_context_data(**kwargs)
+        context["MODULE"] = MODULE_SINGULAR
+        return context
+
 
 class UnitView(ListView):
     model = Unit
@@ -171,6 +213,7 @@ class UnitView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(UnitView, self).get_context_data(**kwargs)
+        context["UNIT"] = UNIT_PLURAL
         table = UnitTable(Unit.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["unit"] = table
@@ -189,6 +232,11 @@ class CreateUnitView(FormView):
         unit.save()
         unit.module.set(module)
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateUnitView, self).get_context_data(**kwargs)
+        context["UNIT"] = UNIT_SINGULAR
+        return context
 
 
 class SyllabusView(TemplateView):
