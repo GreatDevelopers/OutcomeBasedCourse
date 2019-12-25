@@ -3,11 +3,14 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import Institute, Level, Programme, Discipline, Course, Module
 from martor.fields import MartorFormField
+from OutcomeBasedCourse.config.verbose_names import *
+
+# from djmoney.forms import MoneyWidget
 
 
 class CreateInstituteForm(forms.Form):
     institute_name = forms.CharField(
-        label="Institute Name",
+        label=INSTITUTE_SINGULAR + " Name",
         max_length=300,
         widget=forms.TextInput(
             attrs={
@@ -27,7 +30,7 @@ class CreateInstituteForm(forms.Form):
 
 class CreateLevelForm(forms.Form):
     level_name = forms.CharField(
-        label="Level Name",
+        label=LEVEL_SINGULAR + " Name",
         max_length=300,
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": "Enter level name"}
@@ -35,7 +38,7 @@ class CreateLevelForm(forms.Form):
         required=True,
     )
     institute = forms.ModelMultipleChoiceField(
-        label="Institutes",
+        label=INSTITUTE_PLURAL,
         queryset=Institute.objects.all(),
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
         help_text="Hold down “Control”, or “Command” on a Mac, to select more "
@@ -52,7 +55,7 @@ class CreateLevelForm(forms.Form):
 
 class CreateProgrammeForm(forms.Form):
     programme_code = forms.CharField(
-        label="Programme Code",
+        label=PROGRAMME_SINGULAR + " Code",
         max_length=10,
         widget=forms.TextInput(
             attrs={
@@ -63,7 +66,7 @@ class CreateProgrammeForm(forms.Form):
         required=True,
     )
     programme_name = forms.CharField(
-        label="Programme Name",
+        label=PROGRAMME_SINGULAR + " Name",
         max_length=300,
         widget=forms.TextInput(
             attrs={
@@ -74,16 +77,19 @@ class CreateProgrammeForm(forms.Form):
         required=True,
     )
     programme_fees = forms.IntegerField(
-        label="Programme Fees",
+        label=PROGRAMME_SINGULAR + " Fees",
+        # Will be used for money field
+        # widget=MoneyWidget(
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
                 "placeholder": "Enter programme fees",
             }
         ),
+        required=False,
     )
     level = forms.ModelChoiceField(
-        label="Level",
+        label=LEVEL_SINGULAR,
         queryset=Level.objects.all(),
         widget=forms.Select(attrs={"class": "form-control"}),
         required=False,
@@ -98,7 +104,7 @@ class CreateProgrammeForm(forms.Form):
 
 class CreateDisciplineForm(forms.Form):
     discipline_code = forms.CharField(
-        label="Discipline Code",
+        label=DISCIPLINE_SINGULAR + " Code",
         max_length=10,
         widget=forms.TextInput(
             attrs={
@@ -109,7 +115,7 @@ class CreateDisciplineForm(forms.Form):
         required=True,
     )
     discipline_name = forms.CharField(
-        label="Discipline Name",
+        label=DISCIPLINE_SINGULAR + " Name",
         max_length=50,
         widget=forms.TextInput(
             attrs={
@@ -129,9 +135,10 @@ class CreateDisciplineForm(forms.Form):
                 "placeholder": "Enter total credits",
             }
         ),
+        required=False,
     )
     programme = forms.ModelChoiceField(
-        label="Programme",
+        label=PROGRAMME_SINGULAR,
         queryset=Programme.objects.all(),
         widget=forms.Select(attrs={"class": "form-control"}),
         required=False,
@@ -146,7 +153,7 @@ class CreateDisciplineForm(forms.Form):
 
 class CreateCourseForm(forms.Form):
     course_id = forms.CharField(
-        label="Course id",
+        label=COURSE_SINGULAR + " id",
         max_length=20,
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": "Enter course id"}
@@ -257,7 +264,7 @@ class CreateCourseForm(forms.Form):
         required=False,
     )
     discipline = forms.ModelMultipleChoiceField(
-        label="Discipline",
+        label=DISCIPLINE_PLURAL,
         queryset=Discipline.objects.all(),
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
         help_text="Hold down “Control”, or “Command” on a Mac, to select more "
@@ -336,7 +343,7 @@ class CreateModuleForm(forms.Form):
         required=False,
     )
     course = forms.ModelMultipleChoiceField(
-        label="Course",
+        label=COURSE_PLURAL,
         queryset=Course.objects.all(),
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
         help_text="Hold down “Control”, or “Command” on a Mac, to select more "
@@ -415,7 +422,7 @@ class CreateUnitForm(forms.Form):
         required=False,
     )
     module = forms.ModelMultipleChoiceField(
-        label="Module",
+        label=MODULE_PLURAL,
         queryset=Module.objects.all(),
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
         help_text="Hold down “Control”, or “Command” on a Mac, to select more "
