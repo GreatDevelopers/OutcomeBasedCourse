@@ -1,11 +1,16 @@
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
+from django.shortcuts import render, request
 from django_tables2 import RequestConfig, SingleTableView
 from .models import *
 from .forms import *
 from .tables import *
 from OutcomeBasedCourse.config.verbose_names import *
+
+
+def home_page(request):
+    return render(request, "course/home_page.html")
 
 
 class InstituteView(SingleTableView):
