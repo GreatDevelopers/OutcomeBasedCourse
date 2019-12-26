@@ -1,7 +1,15 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Institute, Level, Programme, Discipline, Course, Module
+from .models import (
+    Institute,
+    Level,
+    Programme,
+    Department,
+    Discipline,
+    Course,
+    Module,
+)
 from martor.fields import MartorFormField
 from OutcomeBasedCourse.config.verbose_names import *
 
@@ -24,7 +32,7 @@ class CreateInstituteForm(forms.Form):
         label=INSTITUTE_SINGULAR + " short name",
         max_length=10,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter short name",}
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
         ),
         required=False,
     )
@@ -49,7 +57,7 @@ class CreateLevelForm(forms.Form):
         label=LEVEL_SINGULAR + " short name",
         max_length=10,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter short name",}
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
         ),
         required=False,
     )
@@ -96,7 +104,7 @@ class CreateProgrammeForm(forms.Form):
         label=PROGRAMME_SINGULAR + " short name",
         max_length=10,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter short name",}
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
         ),
         required=False,
     )
@@ -121,6 +129,45 @@ class CreateProgrammeForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(CreateProgrammeForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+
+class CreateDepartmentForm(forms.Form):
+    department_code = forms.CharField(
+        label=DEPARTMENT_SINGULAR + " Code",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter department code",
+            }
+        ),
+        required=True,
+    )
+    department_name = forms.CharField(
+        label=DEPARTMENT_SINGULAR + " Name",
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter department name",
+            }
+        ),
+        required=True,
+    )
+    department_short_name = forms.CharField(
+        label=DEPARTMENT_SINGULAR + " short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
+        ),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateDepartmentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
@@ -153,7 +200,7 @@ class CreateDisciplineForm(forms.Form):
         label=DISCIPLINE_SINGULAR + " short name",
         max_length=10,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter short name",}
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
         ),
         required=False,
     )
@@ -204,7 +251,7 @@ class CreateCourseForm(forms.Form):
         label=COURSE_SINGULAR + " short name",
         max_length=10,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter short name",}
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
         ),
         required=False,
     )
@@ -332,7 +379,7 @@ class CreateModuleForm(forms.Form):
         label=MODULE_SINGULAR + " short name",
         max_length=10,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter short name",}
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
         ),
         required=False,
     )
@@ -419,7 +466,7 @@ class CreateUnitForm(forms.Form):
         label=UNIT_SINGULAR + " short name",
         max_length=10,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter short name",}
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
         ),
         required=False,
     )

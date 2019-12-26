@@ -96,6 +96,30 @@ class Programme(models.Model):
         verbose_name_plural = PROGRAMME_PLURAL
 
 
+class Department(models.Model):
+    department_code = models.CharField(
+        verbose_name=DEPARTMENT_SINGULAR + " code",
+        primary_key=True,
+        max_length=10,
+    )
+    department_name = models.CharField(
+        verbose_name=DEPARTMENT_SINGULAR + " name", max_length=255, unique=True
+    )
+    department_short_name = models.CharField(
+        verbose_name=DEPARTMENT_SINGULAR + " short name",
+        max_length=10,
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        return self.department_name
+
+    class Meta:
+        verbose_name = DEPARTMENT_SINGULAR
+        verbose_name_plural = DEPARTMENT_PLURAL
+
+
 class Discipline(models.Model):
     discipline_code = models.CharField(
         verbose_name=DISCIPLINE_SINGULAR + " code",
@@ -117,6 +141,13 @@ class Discipline(models.Model):
     programme = models.ForeignKey(
         Programme,
         verbose_name=PROGRAMME_PLURAL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    offered_by = models.ForeignKey(
+        Department,
+        verbose_name=DEPARTMENT_SINGULAR,
         on_delete=models.CASCADE,
         blank=True,
         null=True,

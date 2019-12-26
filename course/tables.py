@@ -31,6 +31,14 @@ class ProgrammeTable(tables.Table):
         empty_text = "There is no programme matching the search criteria..."
 
 
+class DepartmentTable(tables.Table):
+    class Meta:
+        model = Department
+        fields = ("department_code", "department_name", "department_short_name")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no department matching the search criteria..."
+
+
 class DisciplineTable(tables.Table):
     class Meta:
         model = Discipline

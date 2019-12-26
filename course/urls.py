@@ -22,6 +22,12 @@ urlpatterns = [
         login_required(CreateProgrammeView.as_view()),
         name="create-programme",
     ),
+    path("department/", DepartmentView.as_view(), name="department"),
+    path(
+        "department/add/",
+        login_required(CreateDepartmentView.as_view()),
+        name="create-department",
+    ),
     path("discipline/", DisciplineView.as_view(), name="discipline"),
     path(
         "discipline/add/",
