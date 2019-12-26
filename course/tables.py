@@ -5,7 +5,7 @@ from .models import *
 class InstituteTable(tables.Table):
     class Meta:
         model = Institute
-        fields = ("institute_name", "institiue_short_name")
+        fields = ("institute_name", "institute_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no institute matching the search criteria..."
 
