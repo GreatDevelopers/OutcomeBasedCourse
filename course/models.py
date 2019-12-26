@@ -15,6 +15,12 @@ class Institute(models.Model):
     institute_name = models.CharField(
         verbose_name=INSTITUTE_SINGULAR + " name", max_length=300
     )
+    institute_short_name = models.CharField(
+        verbose_name=INSTITUTE_SINGULAR + " short name",
+        max_length=10,
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return self.institute_name
@@ -36,6 +42,12 @@ class Level(models.Model):
     )
     institute = models.ManyToManyField(
         Institute, verbose_name=INSTITUTE_PLURAL, blank=True
+    )
+    level_short_name = models.CharField(
+        verbose_name=LEVEL_SINGULAR + " short name",
+        max_length=10,
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
@@ -62,6 +74,12 @@ class Programme(models.Model):
     # programme_fees = MoneyField(
     #     max_digits=10, decimal_places=2, null=True, default_currency="INR"
     # )
+    programme_short_name = models.CharField(
+        verbose_name=PROGRAMME_SINGULAR + " short name",
+        max_length=10,
+        blank=True,
+        null=True,
+    )
     level = models.ForeignKey(
         Level,
         verbose_name=LEVEL_PLURAL,
@@ -90,6 +108,12 @@ class Discipline(models.Model):
     total_credits = models.DecimalField(
         max_digits=5, decimal_places=2, blank=True, null=True
     )
+    discipline_short_name = models.CharField(
+        verbose_name=DISCIPLINE_SINGULAR + " short name",
+        max_length=10,
+        blank=True,
+        null=True,
+    )
     programme = models.ForeignKey(
         Programme,
         verbose_name=PROGRAMME_PLURAL,
@@ -112,6 +136,12 @@ class Course(models.Model):
     )
     course_title = models.CharField(
         verbose_name=COURSE_SINGULAR + " title", max_length=200
+    )
+    course_short_name = models.CharField(
+        verbose_name=COURSE_SINGULAR + " short name",
+        max_length=10,
+        blank=True,
+        null=True,
     )
     course_overview = models.TextField(
         verbose_name=COURSE_SINGULAR + " overview", blank=True, null=True
@@ -161,6 +191,12 @@ class Module(models.Model):
     )
     module_title = models.CharField(
         verbose_name=MODULE_SINGULAR + " title", max_length=200
+    )
+    module_short_name = models.CharField(
+        verbose_name=MODULE_SINGULAR + " short name",
+        max_length=10,
+        blank=True,
+        null=True,
     )
     module_overview = models.TextField(
         verbose_name=MODULE_SINGULAR + " overview", blank=True, null=True
@@ -219,6 +255,12 @@ class Unit(models.Model):
     )
     unit_test = models.TextField(
         verbose_name=UNIT_SINGULAR + " test", blank=True, null=True
+    )
+    unit_short_name = models.CharField(
+        verbose_name=UNIT_SINGULAR + " short name",
+        max_length=10,
+        blank=True,
+        null=True,
     )
     module = models.ManyToManyField(
         Module, verbose_name=MODULE_PLURAL, blank=True
