@@ -13,7 +13,7 @@ class InstituteTable(tables.Table):
 class LevelTable(tables.Table):
     class Meta:
         model = Level
-        fields = ("level_name","level_short_name")
+        fields = ("level_name", "level_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no level matching the search criteria..."
 
@@ -21,7 +21,12 @@ class LevelTable(tables.Table):
 class ProgrammeTable(tables.Table):
     class Meta:
         model = Programme
-        fields = ("programme_code", "programme_name", "programme_short_name", "programme_fees", )
+        fields = (
+            "programme_code",
+            "programme_name",
+            "programme_short_name",
+            "programme_fees",
+        )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no programme matching the search criteria..."
 
@@ -29,7 +34,12 @@ class ProgrammeTable(tables.Table):
 class DisciplineTable(tables.Table):
     class Meta:
         model = Discipline
-        fields = ("discipline_code", "discipline_name","discipline_short_name", "total_credits")
+        fields = (
+            "discipline_code",
+            "discipline_name",
+            "discipline_short_name",
+            "total_credits",
+        )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no discipline matching the search criteria..."
 
