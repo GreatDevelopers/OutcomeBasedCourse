@@ -15,7 +15,9 @@ class Institute(models.Model):
     institute_name = models.CharField(
         verbose_name=INSTITUTE_SINGULAR + " name", max_length=300
     )
-
+    institute_short_name = models.CharField(
+            max_length=10,
+    )
     def __str__(self):
         return self.institute_name
 
@@ -37,7 +39,9 @@ class Level(models.Model):
     institute = models.ManyToManyField(
         Institute, verbose_name=INSTITUTE_PLURAL, blank=True
     )
-
+    level_shore_name = models.CharField(
+        max_length=10,
+    )
     def __str__(self):
         return self.level_name
 
@@ -62,6 +66,9 @@ class Programme(models.Model):
     # programme_fees = MoneyField(
     #     max_digits=10, decimal_places=2, null=True, default_currency="INR"
     # )
+    programme_short_name = models.CharField(
+        max_length=10,
+    )
     level = models.ForeignKey(
         Level,
         verbose_name=LEVEL_PLURAL,
@@ -89,6 +96,9 @@ class Discipline(models.Model):
     )
     total_credits = models.DecimalField(
         max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    discipline_short_name = models.CharField(
+        max_length = 10,
     )
     programme = models.ForeignKey(
         Programme,
@@ -137,12 +147,14 @@ class Course(models.Model):
     course_credit = models.DecimalField(
         verbose_name=COURSE_SINGULAR + " credit", max_digits=4, decimal_places=2
     )
-    contact_hours_per_week = models.DecimalField(max_digits=4, decimal_places=2)
     course_resources = models.TextField(
         verbose_name=COURSE_SINGULAR + " resources", blank=True, null=True
     )
     course_test = models.TextField(
         verbose_name=COURSE_SINGULAR + " test", blank=True, null=True
+    )
+    course_short_name = models.CharField(
+            max_length=10,
     )
     discipline = models.ManyToManyField(
         Discipline, verbose_name=DISCIPLINE_PLURAL, blank=True
@@ -184,6 +196,9 @@ class Module(models.Model):
     module_test = models.TextField(
         verbose_name=MODULE_SINGULAR + " test", blank=True, null=True
     )
+    module_short_name = models.CharField(
+            max_length=10,
+    )
     course = models.ManyToManyField(
         Course, verbose_name=COURSE_PLURAL, blank=True
     )
@@ -223,6 +238,9 @@ class Unit(models.Model):
     )
     unit_test = models.TextField(
         verbose_name=UNIT_SINGULAR + " test", blank=True, null=True
+    )
+    unit_short_name = models.CharField(
+            max_length=10,
     )
     module = models.ManyToManyField(
         Module, verbose_name=MODULE_PLURAL, blank=True

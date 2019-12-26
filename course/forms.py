@@ -20,7 +20,17 @@ class CreateInstituteForm(forms.Form):
         ),
         required=True,
     )
-
+    institute_short_name = forms.CharField(
+        label=INSTITUTE_SINGULAR + " short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter short name",
+            }
+        ),
+        required=False,
+    )
     def __init__(self, *args, **kwargs):
         super(CreateInstituteForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -36,6 +46,17 @@ class CreateLevelForm(forms.Form):
             attrs={"class": "form-control", "placeholder": "Enter level name"}
         ),
         required=True,
+    )
+    level_short_name = forms.CharField(
+        label=LEVEL_SINGULAR + " short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter short name",
+            }
+        ),
+        required=False,
     )
     institute = forms.ModelMultipleChoiceField(
         label=INSTITUTE_PLURAL,
@@ -75,6 +96,17 @@ class CreateProgrammeForm(forms.Form):
             }
         ),
         required=True,
+    )
+    programme_short_name = forms.CharField(
+        label=PROGRAMME_SINGULAR + " short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter short name",
+            }
+        ),
+        required=False,
     )
     programme_fees = forms.IntegerField(
         label=PROGRAMME_SINGULAR + " Fees",
@@ -125,6 +157,17 @@ class CreateDisciplineForm(forms.Form):
         ),
         required=True,
     )
+    discipline_short_name = forms.CharField(
+        label=DISCIPLINE_SINGULAR + " short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter short name",
+            }
+        ),
+        required=False,
+    )
     total_credits = forms.DecimalField(
         label="Total Credits",
         max_digits=5,
@@ -167,6 +210,17 @@ class CreateCourseForm(forms.Form):
             attrs={"class": "form-control", "placeholder": "Enter course title"}
         ),
         required=True,
+    )
+    course_short_name = forms.CharField(
+        label=COURSE_SINGULAR + " short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter short name",
+            }
+        ),
+        required=False,
     )
     course_overview = MartorFormField(
         label="Overview",
@@ -288,6 +342,17 @@ class CreateModuleForm(forms.Form):
         ),
         required=True,
     )
+    module_short_name = forms.CharField(
+        label=MODULE_SINGULAR + " short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter short name",
+            }
+        ),
+        required=False,
+    )
     module_overview = MartorFormField(
         label="Overview",
         widget=forms.Textarea(
@@ -364,6 +429,17 @@ class CreateUnitForm(forms.Form):
         max_length=200,
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": "Enter unit name"}
+        ),
+        required=False,
+    )
+    unit_short_name = forms.CharField(
+        label=UNIT_SINGULAR + " short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter short name",
+            }
         ),
         required=False,
     )
