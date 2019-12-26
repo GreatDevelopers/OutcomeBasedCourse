@@ -107,6 +107,36 @@ class CreateProgrammeView(FormView):
         return context
 
 
+class DepartmentView(ListView):
+    model = Department
+    template_name = "course/department_list.html"
+    context_object_name = "department"
+    ordering = ["department_name"]
+
+    def get_context_data(self, **kwargs):
+        context = super(DepartmentView, self).get_context_data(**kwargs)
+        context["DEPARTMENT"] = DEPARTMENT_PLURAL
+        table = DepartmentTable(Department.objects.all())
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["department"] = table
+        return context
+
+
+class CreateDepartmentView(FormView):
+    template_name = "course/create_department_form.html"
+    form_class = CreateDepartmentForm
+    success_url = reverse_lazy("department")
+
+    def form_valid(self, form):
+        Department.objects.create(**form.cleaned_data).save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateDepartmentView, self).get_context_data(**kwargs)
+        context["DEPARTMENT"] = DEPARTMENT_SINGULAR
+        return context
+
+
 class DisciplineView(ListView):
     model = Discipline
     template_name = "course/discipline_list.html"
