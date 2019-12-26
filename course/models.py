@@ -117,18 +117,6 @@ class Discipline(models.Model):
 
 
 class Course(models.Model):
-    course_id = models.CharField(primary_key=True, max_length=20)
-    course_title = models.CharField(max_length=200)
-    course_overview = models.TextField(blank=True, null=True)
-    course_outcome = models.TextField(blank=True, null=True)
-    course_objective = models.TextField(blank=True, null=True)
-    course_credit = models.DecimalField(max_digits=4, decimal_places=2)
-    lecture_contact_hours_per_week = models.DecimalField(max_digits=4, decimal_places=2)
-    tutorial_contact_hours_per_week = models.DecimalField(max_digits=4, decimal_places=2)
-    practical_contact_hours_per_week = models.DecimalField(max_digits=4, decimal_places=2)
-    course_resources = models.TextField(blank=True, null=True)
-    course_test = models.TextField(blank=True, null=True)
-    discipline = models.ManyToManyField(Discipline, blank=True)
     course_id = models.CharField(
         verbose_name=COURSE_SINGULAR + " id", primary_key=True, max_length=20
     )
@@ -146,6 +134,15 @@ class Course(models.Model):
     )
     course_credit = models.DecimalField(
         verbose_name=COURSE_SINGULAR + " credit", max_digits=4, decimal_places=2
+    )
+    lecture_contact_hours_per_week = models.DecimalField(
+        max_digits=4, decimal_places=2
+    )
+    tutorial_contact_hours_per_week = models.DecimalField(
+        max_digits=4, decimal_places=2
+    )
+    practical_contact_hours_per_week = models.DecimalField(
+        max_digits=4, decimal_places=2
     )
     course_resources = models.TextField(
         verbose_name=COURSE_SINGULAR + " resources", blank=True, null=True
