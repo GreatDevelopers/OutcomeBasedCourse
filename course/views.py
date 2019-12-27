@@ -395,8 +395,9 @@ class SyllabusView(TemplateView):
         context["course_test"] = course.course_test
         context["course_resources"] = course.course_resources
         modules = Module.objects.filter(course=course)
-        context["modules"] = modules.values("module_title", "module_overview", "module_outcome", "module_objective", "module_body", "module_resources","module_test")
+        context["modules"] = modules.values("module_title", "module_overview", "module_outcome", "module_objective", "module_body", "module_resources","module_test", "module_id")
+        units = []
         for module in modules:
-                units = Unit.objects.filter(module=module)
-                context["units"] = units.values("unit_name", "unit_overview", "unit_outcome", "unit_objective", "unit_body", "unit_resources","unit_test", "module")
+                units.append(Unit.objects.filter(module=module))
+                context["units"] = units[-1].values("unit_name", "unit_overview", "unit_outcome", "unit_objective", "unit_body", "unit_resources","unit_test", "module")
         return context
