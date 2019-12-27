@@ -323,10 +323,10 @@ class CreateDisciplineForm(forms.Form):
         ),
         required=False,
     )
-    total_credits = forms.DecimalField(
+    total_credits = forms.IntegerField(
         label="Total Credits",
-        max_digits=5,
-        decimal_places=2,
+        max_value=1000,
+        min_value=1,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -400,10 +400,10 @@ class CreateCourseForm(forms.Form):
         "than one.",
         required=False,
     )
-    course_credit = forms.DecimalField(
+    course_credit = forms.IntegerField(
         label="Credit",
-        max_digits=4,
-        decimal_places=2,
+        max_value=1000,
+        min_value=1,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -412,10 +412,10 @@ class CreateCourseForm(forms.Form):
         ),
         required=True,
     )
-    lecture_contact_hours_per_week = forms.DecimalField(
+    lecture_contact_hours_per_week = forms.IntegerField(
         label="Lecture contact hours per week",
-        max_digits=4,
-        decimal_places=2,
+        max_value=1000,
+        min_value=1,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -424,10 +424,10 @@ class CreateCourseForm(forms.Form):
         ),
         required=True,
     )
-    tutorial_contact_hours_per_week = forms.DecimalField(
+    tutorial_contact_hours_per_week = forms.IntegerField(
         label="Tutorial contact hours per week",
-        max_digits=4,
-        decimal_places=2,
+        max_value=1000,
+        min_value=1,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -436,10 +436,10 @@ class CreateCourseForm(forms.Form):
         ),
         required=True,
     )
-    practical_contact_hours_per_week = forms.DecimalField(
+    practical_contact_hours_per_week = forms.IntegerField(
         label="Practical contact hours per week",
-        max_digits=4,
-        decimal_places=2,
+        max_value=1000,
+        min_value=1,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
