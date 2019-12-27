@@ -33,8 +33,13 @@ urlpatterns = [
     path("institute/", InstituteView.as_view(), name="institute"),
     path(
         "institute/add/",
-        login_required(CreateInstituteView.as_view()),
+        login_required(InstituteFormView.as_view()),
         name="create-institute",
+    ),
+    path(
+        "institute/<uuid:institute_id>/change/",
+        login_required(InstituteFormView.as_view()),
+        name="edit-institute",
     ),
     path("level/", LevelView.as_view(), name="level"),
     path(

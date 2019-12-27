@@ -1,3 +1,5 @@
+from django.urls import reverse
+from django.utils.html import mark_safe
 import django_tables2 as tables
 from .models import *
 
@@ -37,11 +39,22 @@ class ObjectiveTable(tables.Table):
 
 
 class InstituteTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Institute",
+        accessor=tables.A("institute_id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Institute
         fields = ("institute_name", "institute_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no institute matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-institute", args=[value])
+        return mark_safe(f'<a href="{url}">Edit</a>')
 
 
 class LevelTable(tables.Table):

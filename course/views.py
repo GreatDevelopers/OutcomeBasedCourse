@@ -124,17 +124,32 @@ class InstituteView(SingleTableView):
         return context
 
 
-class CreateInstituteView(FormView):
-    template_name = "course/create_institute_form.html"
-    form_class = CreateInstituteForm
+class InstituteFormView(FormView):
+    template_name = "course/institute_form.html"
+    form_class = InstituteForm
     success_url = reverse_lazy("institute")
 
+    def get_initial(self, **kwargs):
+        self.edit_institute = False
+        if "institute_id" in self.kwargs:
+            institute = Institute.objects.filter(
+                institute_id=self.kwargs["institute_id"]
+            )
+            if institute:
+                self.edit_institute = True
+                return institute.values()[0]
+
     def form_valid(self, form):
-        Institute.objects.create(**form.cleaned_data).save()
+        if self.edit_institute:
+            Institute.objects.filter(
+                institute_id=self.kwargs["institute_id"]
+            ).update(**form.cleaned_data)
+        else:
+            Institute.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateInstituteView, self).get_context_data(**kwargs)
+        context = super(InstituteFormView, self).get_context_data(**kwargs)
         context["INSTITUTE"] = INSTITUTE_SINGULAR
         return context
 
@@ -387,16 +402,39 @@ class SyllabusView(TemplateView):
         context["course_name"] = course.course_title
         context["course_overview"] = course.course_overview
         context["course_credit"] = course.course_credit
-        context["lecture_contact_hours_per_week"] = course.lecture_contact_hours_per_week
-        context["tutorial_contact_hours_per_week"] = course.tutorial_contact_hours_per_week
-        context["practical_contact_hours_per_week"] = course.practical_contact_hours_per_week
+        context[
+            "lecture_contact_hours_per_week"
+        ] = course.lecture_contact_hours_per_week
+        context[
+            "tutorial_contact_hours_per_week"
+        ] = course.tutorial_contact_hours_per_week
+        context[
+            "practical_contact_hours_per_week"
+        ] = course.practical_contact_hours_per_week
         context["course_objective"] = course.course_objective
         context["course_outcome"] = course.course_outcome
         context["course_test"] = course.course_test
         context["course_resources"] = course.course_resources
         modules = Module.objects.filter(course=course)
-        context["modules"] = modules.values("module_title", "module_overview", "module_outcome", "module_objective", "module_body", "module_resources","module_test")
+        context["modules"] = modules.values(
+            "module_title",
+            "module_overview",
+            "module_outcome",
+            "module_objective",
+            "module_body",
+            "module_resources",
+            "module_test",
+        )
         for module in modules:
-                units = Unit.objects.filter(module=module)
-                context["units"] = units.values("unit_name", "unit_overview", "unit_outcome", "unit_objective", "unit_body", "unit_resources","unit_test", "module")
+            units = Unit.objects.filter(module=module)
+            context["units"] = units.values(
+                "unit_name",
+                "unit_overview",
+                "unit_outcome",
+                "unit_objective",
+                "unit_body",
+                "unit_resources",
+                "unit_test",
+                "module",
+            )
         return context

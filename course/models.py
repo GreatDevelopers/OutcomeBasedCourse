@@ -55,11 +55,12 @@ class Institute(models.Model):
         editable=False,
     )
     institute_name = models.CharField(
-        verbose_name=INSTITUTE_SINGULAR + " name", max_length=300
+        verbose_name=INSTITUTE_SINGULAR + " name", max_length=255, unique=True,
     )
     institute_short_name = models.CharField(
         verbose_name=INSTITUTE_SINGULAR + " short name",
         max_length=10,
+        unique=True,
         blank=True,
         null=True,
     )
