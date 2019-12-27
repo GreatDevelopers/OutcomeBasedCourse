@@ -2,6 +2,9 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import (
+    CognitiveLevel,
+    ActionVerb,
+    Outcome,
     Institute,
     Level,
     Programme,
@@ -14,6 +17,96 @@ from martor.fields import MartorFormField
 from OutcomeBasedCourse.config.verbose_names import *
 
 # from djmoney.forms import MoneyWidget
+
+
+class CreateCognitiveLevelForm(forms.Form):
+    cognitive_level = forms.CharField(
+        label="Cognitive level",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter cognitive level",
+            }
+        ),
+        required=True,
+    )
+    cognitive_level_short_name = forms.CharField(
+        label="Cognitive level short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
+        ),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateCognitiveLevelForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+
+class CreateActionVerbForm(forms.Form):
+    action_verb = forms.CharField(
+        label="Action verb",
+        max_length=20,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter action verb"}
+        ),
+        required=True,
+    )
+    action_verb_short_name = forms.CharField(
+        label="Action verb short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
+        ),
+        required=False,
+    )
+    cognitive_level = forms.ModelChoiceField(
+        label="Cognitive Level",
+        queryset=CognitiveLevel.objects.all(),
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateActionVerbForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+
+class CreateOutcomeForm(forms.Form):
+    outcome = forms.CharField(
+        label="Outcome",
+        max_length=255,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter outcome"}
+        ),
+        required=True,
+    )
+    outcome_short_name = forms.CharField(
+        label="Outcome short name",
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Enter short name"}
+        ),
+        required=False,
+    )
+    action_verb = forms.ModelChoiceField(
+        label="Action Verb",
+        queryset=ActionVerb.objects.all(),
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CreateOutcomeForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "POST"
+        self.helper.add_input(Submit("submit", "Submit"))
 
 
 class CreateInstituteForm(forms.Form):
@@ -265,14 +358,12 @@ class CreateCourseForm(forms.Form):
         ),
         required=False,
     )
-    course_outcome = MartorFormField(
+    course_outcome = forms.ModelMultipleChoiceField(
         label="Outcome",
-        widget=forms.Textarea(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Enter course outcomes",
-            }
-        ),
+        queryset=Outcome.objects.all(),
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
+        "than one.",
         required=False,
     )
     course_objective = MartorFormField(
@@ -393,14 +484,12 @@ class CreateModuleForm(forms.Form):
         ),
         required=False,
     )
-    module_outcome = MartorFormField(
+    module_outcome = forms.ModelMultipleChoiceField(
         label="Outcome",
-        widget=forms.Textarea(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Enter module outcomes",
-            }
-        ),
+        queryset=Outcome.objects.all(),
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
+        "than one.",
         required=False,
     )
     module_objective = MartorFormField(
@@ -480,14 +569,12 @@ class CreateUnitForm(forms.Form):
         ),
         required=False,
     )
-    unit_outcome = MartorFormField(
+    unit_outcome = forms.ModelMultipleChoiceField(
         label="Outcome",
-        widget=forms.Textarea(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Enter unit outcomes",
-            }
-        ),
+        queryset=Outcome.objects.all(),
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
+        "than one.",
         required=False,
     )
     unit_objective = MartorFormField(

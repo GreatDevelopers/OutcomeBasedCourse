@@ -13,6 +13,78 @@ def home_page(request):
     return render(request, "course/home_page.html")
 
 
+class CognitiveLevelView(SingleTableView):
+    model = CognitiveLevel
+    template_name = "course/cognitive_level_list.html"
+    context_object_name = "cognitive_level"
+    ordering = ["cognitive_level"]
+
+    def get_context_data(self, **kwargs):
+        context = super(CognitiveLevelView, self).get_context_data(**kwargs)
+        table = CognitiveLevelTable(CognitiveLevel.objects.all())
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["cognitive_level"] = table
+        return context
+
+
+class CreateCognitiveLevelView(FormView):
+    template_name = "course/create_cognitive_level_form.html"
+    form_class = CreateCognitiveLevelForm
+    success_url = reverse_lazy("cognitive-level")
+
+    def form_valid(self, form):
+        CognitiveLevel.objects.create(**form.cleaned_data).save()
+        return super().form_valid(form)
+
+
+class ActionVerbView(SingleTableView):
+    model = ActionVerb
+    template_name = "course/action_verb_list.html"
+    context_object_name = "action_verb"
+    ordering = ["action_verb"]
+
+    def get_context_data(self, **kwargs):
+        context = super(ActionVerbView, self).get_context_data(**kwargs)
+        table = ActionVerbTable(ActionVerb.objects.all())
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["action_verb"] = table
+        return context
+
+
+class CreateActionVerbView(FormView):
+    template_name = "course/create_action_verb_form.html"
+    form_class = CreateActionVerbForm
+    success_url = reverse_lazy("action-verb")
+
+    def form_valid(self, form):
+        ActionVerb.objects.create(**form.cleaned_data).save()
+        return super().form_valid(form)
+
+
+class OutcomeView(SingleTableView):
+    model = Outcome
+    template_name = "course/outcome_list.html"
+    context_object_name = "outcome"
+    ordering = ["outcome"]
+
+    def get_context_data(self, **kwargs):
+        context = super(OutcomeView, self).get_context_data(**kwargs)
+        table = OutcomeTable(Outcome.objects.all())
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["outcome"] = table
+        return context
+
+
+class CreateOutcomeView(FormView):
+    template_name = "course/create_outcome_form.html"
+    form_class = CreateOutcomeForm
+    success_url = reverse_lazy("outcome")
+
+    def form_valid(self, form):
+        Outcome.objects.create(**form.cleaned_data).save()
+        return super().form_valid(form)
+
+
 class InstituteView(SingleTableView):
     model = Institute
     template_name = "course/institute_list.html"
@@ -190,9 +262,11 @@ class CreateCourseView(FormView):
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         discipline = cleaned_data.pop("discipline")
+        outcome = cleaned_data.pop("course_outcome")
         course = Course.objects.create(**cleaned_data)
         course.save()
         course.discipline.set(discipline)
+        course.course_outcome.set(outcome)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -224,9 +298,11 @@ class CreateModuleView(FormView):
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         course = cleaned_data.pop("course")
+        outcome = cleaned_data.pop("module_outcome")
         module = Module.objects.create(**cleaned_data)
         module.save()
         module.course.set(course)
+        module.module_outcome.set(outcome)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -258,9 +334,11 @@ class CreateUnitView(FormView):
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         module = cleaned_data.pop("module")
+        outcome = cleaned_data.pop("unit_outcome")
         unit = Unit.objects.create(**cleaned_data)
         unit.save()
         unit.module.set(module)
+        unit.unit_outcome.set(outcome)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
