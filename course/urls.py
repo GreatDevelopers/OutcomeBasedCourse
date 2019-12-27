@@ -4,6 +4,26 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path("", home_page),
+    path(
+        "cognitive-level/", CognitiveLevelView.as_view(), name="cognitive-level"
+    ),
+    path(
+        "cognitive-level/add/",
+        login_required(CreateCognitiveLevelView.as_view()),
+        name="create-cognitive-level",
+    ),
+    path("action-verb/", ActionVerbView.as_view(), name="action-verb"),
+    path(
+        "action-verb/add/",
+        login_required(CreateActionVerbView.as_view()),
+        name="create-action-verb",
+    ),
+    path("outcome/", OutcomeView.as_view(), name="outcome"),
+    path(
+        "outcome/add/",
+        login_required(CreateOutcomeView.as_view()),
+        name="create-outcome",
+    ),
     path("institute/", InstituteView.as_view(), name="institute"),
     path(
         "institute/add/",
