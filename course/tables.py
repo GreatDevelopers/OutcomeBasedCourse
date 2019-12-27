@@ -2,10 +2,44 @@ import django_tables2 as tables
 from .models import *
 
 
+class CognitiveLevelTable(tables.Table):
+    class Meta:
+        model = CognitiveLevel
+        fields = ("cognitive_level", "cognitive_level_short_name")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = (
+            "There is no cognitive level matching the search criteria..."
+        )
+
+
+class ActionVerbTable(tables.Table):
+    class Meta:
+        model = ActionVerb
+        fields = ("action_verb", "action_verb_short_name", "cognitive_level")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no action verb matching the search criteria..."
+
+
+class OutcomeTable(tables.Table):
+    class Meta:
+        model = Outcome
+        fields = ("outcome", "outcome_short_name", "action_verb")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no outcome matching the search criteria..."
+
+
+class ObjectiveTable(tables.Table):
+    class Meta:
+        model = Objective
+        fields = ("objective", "objective_short_name")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no objective matching the search criteria..."
+
+
 class InstituteTable(tables.Table):
     class Meta:
         model = Institute
-        fields = ("institute_name",)
+        fields = ("institute_name", "institute_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no institute matching the search criteria..."
 
@@ -13,7 +47,7 @@ class InstituteTable(tables.Table):
 class LevelTable(tables.Table):
     class Meta:
         model = Level
-        fields = ("level_name",)
+        fields = ("level_name", "level_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no level matching the search criteria..."
 
@@ -21,15 +55,33 @@ class LevelTable(tables.Table):
 class ProgrammeTable(tables.Table):
     class Meta:
         model = Programme
-        fields = ("programme_code", "programme_name", "programme_fees")
+        fields = (
+            "programme_code",
+            "programme_name",
+            "programme_short_name",
+            "programme_fees",
+        )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no programme matching the search criteria..."
+
+
+class DepartmentTable(tables.Table):
+    class Meta:
+        model = Department
+        fields = ("department_code", "department_name", "department_short_name")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no department matching the search criteria..."
 
 
 class DisciplineTable(tables.Table):
     class Meta:
         model = Discipline
-        fields = ("discipline_code", "discipline_name", "total_credits")
+        fields = (
+            "discipline_code",
+            "discipline_name",
+            "discipline_short_name",
+            "total_credits",
+        )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no discipline matching the search criteria..."
 
@@ -40,6 +92,7 @@ class CourseTable(tables.Table):
         fields = (
             "course_id",
             "course_title",
+            "course_short_name",
             "course_overview",
             "course_outcome",
             "course_objective",
@@ -59,6 +112,7 @@ class ModuleTable(tables.Table):
         model = Module
         fields = (
             "module_title",
+            "module_short_name",
             "module_overview",
             "module_outcome",
             "module_objective",
@@ -75,6 +129,7 @@ class UnitTable(tables.Table):
         model = Unit
         fields = (
             "unit_name",
+            "unit_short_name",
             "unit_overview",
             "unit_outcome",
             "unit_objective",
