@@ -163,7 +163,7 @@ class InstituteForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateLevelForm(forms.Form):
+class LevelForm(forms.Form):
     level_name = forms.CharField(
         label=LEVEL_SINGULAR + " Name",
         max_length=300,
@@ -190,7 +190,7 @@ class CreateLevelForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateLevelForm, self).__init__(*args, **kwargs)
+        super(LevelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

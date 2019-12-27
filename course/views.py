@@ -169,21 +169,39 @@ class LevelView(ListView):
         return context
 
 
-class CreateLevelView(FormView):
-    template_name = "course/create_level_form.html"
-    form_class = CreateLevelForm
+class LevelFormView(FormView):
+    template_name = "course/level_form.html"
+    form_class = LevelForm
     success_url = reverse_lazy("level")
+
+    def get_initial(self, **kwargs):
+        self.edit_level = False
+        if "level_id" in self.kwargs:
+            level = Level.objects.filter(level_id=self.kwargs["level_id"])
+            if level:
+                self.edit_level = True
+                initial_data = level.values()[0]
+                initial_data["institute"] = [
+                    x for x in level.values_list("institute", flat=True)
+                ]
+                return initial_data
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         institute = cleaned_data.pop("institute")
-        level = Level.objects.create(**cleaned_data)
-        level.save()
+        if self.edit_level:
+            Level.objects.filter(level_id=self.kwargs["level_id"]).update(
+                **cleaned_data
+            )
+            level = Level.objects.get(level_id=self.kwargs["level_id"])
+        else:
+            level = Level.objects.create(**cleaned_data)
+            level.save()
         level.institute.set(institute)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateLevelView, self).get_context_data(**kwargs)
+        context = super(LevelFormView, self).get_context_data(**kwargs)
         context["LEVEL"] = LEVEL_SINGULAR
         return context
 

@@ -44,8 +44,13 @@ urlpatterns = [
     path("level/", LevelView.as_view(), name="level"),
     path(
         "level/add/",
-        login_required(CreateLevelView.as_view()),
+        login_required(LevelFormView.as_view()),
         name="create-level",
+    ),
+    path(
+        "level/<uuid:level_id>/change/",
+        login_required(LevelFormView.as_view()),
+        name="edit-level",
     ),
     path("programme/", ProgrammeView.as_view(), name="programme"),
     path(

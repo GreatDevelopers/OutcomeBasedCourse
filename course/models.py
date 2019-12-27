@@ -60,7 +60,6 @@ class Institute(models.Model):
     institute_short_name = models.CharField(
         verbose_name=INSTITUTE_SINGULAR + " short name",
         max_length=10,
-        unique=True,
         blank=True,
         null=True,
     )
@@ -81,7 +80,7 @@ class Level(models.Model):
         editable=False,
     )
     level_name = models.CharField(
-        verbose_name=LEVEL_SINGULAR + " name", max_length=50
+        verbose_name=LEVEL_SINGULAR + " name", max_length=50, unique=True
     )
     institute = models.ManyToManyField(
         Institute, verbose_name=INSTITUTE_PLURAL, blank=True

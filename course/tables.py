@@ -1,5 +1,5 @@
 from django.urls import reverse
-from django.utils.html import mark_safe
+from django.utils.safestring import mark_safe
 import django_tables2 as tables
 from .models import *
 
@@ -54,15 +54,26 @@ class InstituteTable(tables.Table):
 
     def render_edit(self, value):
         url = reverse("edit-institute", args=[value])
-        return mark_safe(f'<a href="{url}">Edit</a>')
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
 
 
 class LevelTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Level",
+        accessor=tables.A("level_id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Level
         fields = ("level_name", "level_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no level matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-level", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
 
 
 class ProgrammeTable(tables.Table):
