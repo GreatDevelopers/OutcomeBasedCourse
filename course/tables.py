@@ -28,6 +28,14 @@ class OutcomeTable(tables.Table):
         empty_text = "There is no outcome matching the search criteria..."
 
 
+class ObjectiveTable(tables.Table):
+    class Meta:
+        model = Objective
+        fields = ("objective", "objective_short_name")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no objective matching the search criteria..."
+
+
 class InstituteTable(tables.Table):
     class Meta:
         model = Institute

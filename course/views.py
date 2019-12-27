@@ -85,6 +85,30 @@ class CreateOutcomeView(FormView):
         return super().form_valid(form)
 
 
+class ObjectiveView(SingleTableView):
+    model = Objective
+    template_name = "course/objective_list.html"
+    context_object_name = "objective"
+    ordering = ["objective"]
+
+    def get_context_data(self, **kwargs):
+        context = super(ObjectiveView, self).get_context_data(**kwargs)
+        table = ObjectiveTable(Objective.objects.all())
+        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
+        context["objective"] = table
+        return context
+
+
+class CreateObjectiveView(FormView):
+    template_name = "course/create_objective_form.html"
+    form_class = CreateObjectiveForm
+    success_url = reverse_lazy("objective")
+
+    def form_valid(self, form):
+        Objective.objects.create(**form.cleaned_data).save()
+        return super().form_valid(form)
+
+
 class InstituteView(SingleTableView):
     model = Institute
     template_name = "course/institute_list.html"
@@ -263,10 +287,12 @@ class CreateCourseView(FormView):
         cleaned_data = form.cleaned_data
         discipline = cleaned_data.pop("discipline")
         outcome = cleaned_data.pop("course_outcome")
+        objective = cleaned_data.pop("course_objective")
         course = Course.objects.create(**cleaned_data)
         course.save()
         course.discipline.set(discipline)
         course.course_outcome.set(outcome)
+        course.course_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -299,10 +325,12 @@ class CreateModuleView(FormView):
         cleaned_data = form.cleaned_data
         course = cleaned_data.pop("course")
         outcome = cleaned_data.pop("module_outcome")
+        objective = cleaned_data.pop("module_objective")
         module = Module.objects.create(**cleaned_data)
         module.save()
         module.course.set(course)
         module.module_outcome.set(outcome)
+        module.module_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -335,10 +363,12 @@ class CreateUnitView(FormView):
         cleaned_data = form.cleaned_data
         module = cleaned_data.pop("module")
         outcome = cleaned_data.pop("unit_outcome")
+        objective = cleaned_data.pop("unit_objective")
         unit = Unit.objects.create(**cleaned_data)
         unit.save()
         unit.module.set(module)
         unit.unit_outcome.set(outcome)
+        unit.unit_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
