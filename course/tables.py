@@ -2,10 +2,44 @@ import django_tables2 as tables
 from .models import *
 
 
+class CognitiveLevelTable(tables.Table):
+    class Meta:
+        model = CognitiveLevel
+        fields = ("cognitive_level", "cognitive_level_short_name")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = (
+            "There is no cognitive level matching the search criteria..."
+        )
+
+
+class ActionVerbTable(tables.Table):
+    class Meta:
+        model = ActionVerb
+        fields = ("action_verb", "action_verb_short_name", "cognitive_level")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no action verb matching the search criteria..."
+
+
+class OutcomeTable(tables.Table):
+    class Meta:
+        model = Outcome
+        fields = ("outcome", "outcome_short_name", "action_verb")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no outcome matching the search criteria..."
+
+
+class ObjectiveTable(tables.Table):
+    class Meta:
+        model = Objective
+        fields = ("objective", "objective_short_name")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no objective matching the search criteria..."
+
+
 class InstituteTable(tables.Table):
     class Meta:
         model = Institute
-        fields = ("institute_name", "institiue_short_name")
+        fields = ("institute_name", "institute_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no institute matching the search criteria..."
 
@@ -29,6 +63,14 @@ class ProgrammeTable(tables.Table):
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no programme matching the search criteria..."
+
+
+class DepartmentTable(tables.Table):
+    class Meta:
+        model = Department
+        fields = ("department_code", "department_name", "department_short_name")
+        attrs = {"class": "table-striped table-bordered"}
+        empty_text = "There is no department matching the search criteria..."
 
 
 class DisciplineTable(tables.Table):
