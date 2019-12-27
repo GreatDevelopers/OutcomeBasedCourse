@@ -24,6 +24,12 @@ urlpatterns = [
         login_required(CreateOutcomeView.as_view()),
         name="create-outcome",
     ),
+    path("objective/", ObjectiveView.as_view(), name="objective"),
+    path(
+        "objective/add/",
+        login_required(CreateObjectiveView.as_view()),
+        name="create-objective",
+    ),
     path("institute/", InstituteView.as_view(), name="institute"),
     path(
         "institute/add/",
