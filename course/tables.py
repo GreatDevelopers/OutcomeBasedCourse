@@ -77,6 +77,13 @@ class LevelTable(tables.Table):
 
 
 class ProgrammeTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Programme",
+        accessor=tables.A("programme_code"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Programme
         fields = (
@@ -87,6 +94,10 @@ class ProgrammeTable(tables.Table):
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no programme matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-programme", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
 
 
 class DepartmentTable(tables.Table):

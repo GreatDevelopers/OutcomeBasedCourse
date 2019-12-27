@@ -196,7 +196,7 @@ class LevelForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateProgrammeForm(forms.Form):
+class ProgrammeForm(forms.Form):
     programme_code = forms.CharField(
         label=PROGRAMME_SINGULAR + " Code",
         max_length=10,
@@ -247,7 +247,7 @@ class CreateProgrammeForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateProgrammeForm, self).__init__(*args, **kwargs)
+        super(ProgrammeForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

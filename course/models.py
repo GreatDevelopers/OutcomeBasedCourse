@@ -55,7 +55,7 @@ class Institute(models.Model):
         editable=False,
     )
     institute_name = models.CharField(
-        verbose_name=INSTITUTE_SINGULAR + " name", max_length=255, unique=True,
+        verbose_name=INSTITUTE_SINGULAR + " name", max_length=255, unique=True
     )
     institute_short_name = models.CharField(
         verbose_name=INSTITUTE_SINGULAR + " short name",
@@ -109,7 +109,7 @@ class Programme(models.Model):
     programme_name = models.CharField(
         verbose_name=PROGRAMME_SINGULAR + " name", max_length=50
     )
-    programme_fees = models.FloatField(
+    programme_fees = models.PositiveIntegerField(
         verbose_name=PROGRAMME_SINGULAR + " fees", blank=True, null=True
     )
     # Will be used for currency fields

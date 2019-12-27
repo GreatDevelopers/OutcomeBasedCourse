@@ -55,8 +55,13 @@ urlpatterns = [
     path("programme/", ProgrammeView.as_view(), name="programme"),
     path(
         "programme/add/",
-        login_required(CreateProgrammeView.as_view()),
+        login_required(ProgrammeFormView.as_view()),
         name="create-programme",
+    ),
+    path(
+        "programme/<str:programme_code>/change/",
+        login_required(ProgrammeFormView.as_view()),
+        name="edit-programme",
     ),
     path("department/", DepartmentView.as_view(), name="department"),
     path(

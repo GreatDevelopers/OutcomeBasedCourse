@@ -221,17 +221,34 @@ class ProgrammeView(ListView):
         return context
 
 
-class CreateProgrammeView(FormView):
-    template_name = "course/create_programme_form.html"
-    form_class = CreateProgrammeForm
+class ProgrammeFormView(FormView):
+    template_name = "course/programme_form.html"
+    form_class = ProgrammeForm
     success_url = reverse_lazy("programme")
 
+    def get_initial(self, **kwargs):
+        self.edit_programme = False
+        if "programme_code" in self.kwargs:
+            programme = Programme.objects.filter(
+                programme_code=self.kwargs["programme_code"]
+            )
+            if programme:
+                self.edit_programme = True
+                initial_data = programme.values()[0]
+                initial_data["level"] = initial_data.pop("level_id")
+                return initial_data
+
     def form_valid(self, form):
-        Programme.objects.create(**form.cleaned_data).save()
+        if self.edit_programme:
+            Programme.objects.filter(
+                programme_code=self.kwargs["programme_code"]
+            ).update(**form.cleaned_data)
+        else:
+            Programme.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateProgrammeView, self).get_context_data(**kwargs)
+        context = super(ProgrammeFormView, self).get_context_data(**kwargs)
         context["PROGRAMME"] = PROGRAMME_SINGULAR
         return context
 
