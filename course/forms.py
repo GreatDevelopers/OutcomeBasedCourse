@@ -349,7 +349,7 @@ class DisciplineForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateCourseForm(forms.Form):
+class CourseForm(forms.Form):
     course_id = forms.CharField(
         label=COURSE_SINGULAR + " id",
         max_length=20,
@@ -475,7 +475,7 @@ class CreateCourseForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateCourseForm, self).__init__(*args, **kwargs)
+        super(CourseForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

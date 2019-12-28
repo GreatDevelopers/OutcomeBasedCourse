@@ -144,6 +144,13 @@ class DisciplineTable(tables.Table):
 
 
 class CourseTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Course",
+        accessor=tables.A("course_id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Course
         fields = (
@@ -162,6 +169,10 @@ class CourseTable(tables.Table):
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no course matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-course", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
 
 
 class ModuleTable(tables.Table):

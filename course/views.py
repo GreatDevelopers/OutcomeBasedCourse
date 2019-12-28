@@ -361,25 +361,49 @@ class CourseView(ListView):
         return context
 
 
-class CreateCourseView(FormView):
-    template_name = "course/create_course_form.html"
-    form_class = CreateCourseForm
+class CourseFormView(FormView):
+    template_name = "course/course_form.html"
+    form_class = CourseForm
     success_url = reverse_lazy("course")
+
+    def get_initial(self, **kwargs):
+        self.edit_course = False
+        if "course_id" in self.kwargs:
+            course = Course.objects.filter(course_id=self.kwargs["course_id"])
+            if course:
+                self.edit_course = True
+                initial_data = course.values()[0]
+                initial_data["discipline"] = [
+                    x for x in course.values_list("discipline", flat=True)
+                ]
+                initial_data["course_outcome"] = [
+                    x for x in course.values_list("course_outcome", flat=True)
+                ]
+                initial_data["course_objective"] = [
+                    x for x in course.values_list("course_objective", flat=True)
+                ]
+                return initial_data
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         discipline = cleaned_data.pop("discipline")
         outcome = cleaned_data.pop("course_outcome")
         objective = cleaned_data.pop("course_objective")
-        course = Course.objects.create(**cleaned_data)
-        course.save()
+        if self.edit_course:
+            Course.objects.filter(course_id=self.kwargs["course_id"]).update(
+                **cleaned_data
+            )
+            course = Course.objects.get(course_id=self.kwargs["course_id"])
+        else:
+            course = Course.objects.create(**cleaned_data)
+            course.save()
         course.discipline.set(discipline)
         course.course_outcome.set(outcome)
         course.course_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateCourseView, self).get_context_data(**kwargs)
+        context = super(CourseFormView, self).get_context_data(**kwargs)
         context["COURSE"] = COURSE_SINGULAR
         return context
 

@@ -206,7 +206,7 @@ class Course(models.Model):
         verbose_name=COURSE_SINGULAR + " id", primary_key=True, max_length=20
     )
     course_title = models.CharField(
-        verbose_name=COURSE_SINGULAR + " title", max_length=200
+        verbose_name=COURSE_SINGULAR + " title", max_length=200, unique=True
     )
     course_short_name = models.CharField(
         verbose_name=COURSE_SINGULAR + " short name",
