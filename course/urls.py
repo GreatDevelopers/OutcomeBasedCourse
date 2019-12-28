@@ -66,8 +66,13 @@ urlpatterns = [
     path("department/", DepartmentView.as_view(), name="department"),
     path(
         "department/add/",
-        login_required(CreateDepartmentView.as_view()),
+        login_required(DepartmentFormView.as_view()),
         name="create-department",
+    ),
+    path(
+        "department/<str:department_code>/change/",
+        login_required(DepartmentFormView.as_view()),
+        name="edit-department",
     ),
     path("discipline/", DisciplineView.as_view(), name="discipline"),
     path(

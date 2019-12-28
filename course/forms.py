@@ -253,7 +253,7 @@ class ProgrammeForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateDepartmentForm(forms.Form):
+class DepartmentForm(forms.Form):
     department_code = forms.CharField(
         label=DEPARTMENT_SINGULAR + " Code",
         max_length=10,
@@ -286,7 +286,7 @@ class CreateDepartmentForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateDepartmentForm, self).__init__(*args, **kwargs)
+        super(DepartmentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

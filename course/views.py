@@ -268,17 +268,33 @@ class DepartmentView(ListView):
         return context
 
 
-class CreateDepartmentView(FormView):
-    template_name = "course/create_department_form.html"
-    form_class = CreateDepartmentForm
+class DepartmentFormView(FormView):
+    template_name = "course/department_form.html"
+    form_class = DepartmentForm
     success_url = reverse_lazy("department")
 
+    def get_initial(self, **kwargs):
+        self.edit_department = False
+        if "department_code" in self.kwargs:
+            department = Department.objects.filter(
+                department_code=self.kwargs["department_code"]
+            )
+            if department:
+                self.edit_department = True
+                initial_data = department.values()[0]
+                return initial_data
+
     def form_valid(self, form):
-        Department.objects.create(**form.cleaned_data).save()
+        if self.edit_department:
+            Department.objects.filter(
+                department_code=self.kwargs["department_code"]
+            ).update(**form.cleaned_data)
+        else:
+            Department.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateDepartmentView, self).get_context_data(**kwargs)
+        context = super(DepartmentFormView, self).get_context_data(**kwargs)
         context["DEPARTMENT"] = DEPARTMENT_SINGULAR
         return context
 

@@ -101,11 +101,22 @@ class ProgrammeTable(tables.Table):
 
 
 class DepartmentTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Department",
+        accessor=tables.A("department_code"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Department
         fields = ("department_code", "department_name", "department_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no department matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-department", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
 
 
 class DisciplineTable(tables.Table):
