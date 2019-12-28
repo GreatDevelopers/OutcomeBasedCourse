@@ -100,8 +100,13 @@ urlpatterns = [
     path("module/", ModuleView.as_view(), name="module"),
     path(
         "module/add/",
-        login_required(CreateModuleView.as_view()),
+        login_required(ModuleFormView.as_view()),
         name="create-module",
+    ),
+    path(
+        "module/<str:module_id>/change/",
+        login_required(ModuleFormView.as_view()),
+        name="edit-module",
     ),
     path("unit/", UnitView.as_view(), name="unit"),
     path(

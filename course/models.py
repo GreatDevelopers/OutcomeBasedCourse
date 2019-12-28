@@ -255,7 +255,7 @@ class Module(models.Model):
         editable=False,
     )
     module_title = models.CharField(
-        verbose_name=MODULE_SINGULAR + " title", max_length=200
+        verbose_name=MODULE_SINGULAR + " title", max_length=200, unique=True
     )
     module_short_name = models.CharField(
         verbose_name=MODULE_SINGULAR + " short name",

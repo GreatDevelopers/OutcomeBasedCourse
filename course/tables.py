@@ -176,6 +176,13 @@ class CourseTable(tables.Table):
 
 
 class ModuleTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Module",
+        accessor=tables.A("module_id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Module
         fields = (
@@ -190,6 +197,10 @@ class ModuleTable(tables.Table):
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no module matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-module", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
 
 
 class UnitTable(tables.Table):

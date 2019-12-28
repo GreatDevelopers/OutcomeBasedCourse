@@ -481,7 +481,7 @@ class CourseForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateModuleForm(forms.Form):
+class ModuleForm(forms.Form):
     module_title = forms.CharField(
         label="Title",
         max_length=200,
@@ -558,7 +558,7 @@ class CreateModuleForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateModuleForm, self).__init__(*args, **kwargs)
+        super(ModuleForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

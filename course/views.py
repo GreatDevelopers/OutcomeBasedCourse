@@ -423,25 +423,49 @@ class ModuleView(ListView):
         return context
 
 
-class CreateModuleView(FormView):
-    template_name = "course/create_module_form.html"
-    form_class = CreateModuleForm
+class ModuleFormView(FormView):
+    template_name = "course/module_form.html"
+    form_class = ModuleForm
     success_url = reverse_lazy("module")
+
+    def get_initial(self, **kwargs):
+        self.edit_module = False
+        if "module_id" in self.kwargs:
+            module = Module.objects.filter(module_id=self.kwargs["module_id"])
+            if module:
+                self.edit_module = True
+                initial_data = module.values()[0]
+                initial_data["course"] = [
+                    x for x in module.values_list("course", flat=True)
+                ]
+                initial_data["module_outcome"] = [
+                    x for x in module.values_list("module_outcome", flat=True)
+                ]
+                initial_data["module_objective"] = [
+                    x for x in module.values_list("module_objective", flat=True)
+                ]
+                return initial_data
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         course = cleaned_data.pop("course")
         outcome = cleaned_data.pop("module_outcome")
         objective = cleaned_data.pop("module_objective")
-        module = Module.objects.create(**cleaned_data)
-        module.save()
+        if self.edit_module:
+            Module.objects.filter(module_id=self.kwargs["module_id"]).update(
+                **cleaned_data
+            )
+            module = Module.objects.get(module_id=self.kwargs["module_id"])
+        else:
+            module = Module.objects.create(**cleaned_data)
+            module.save()
         module.course.set(course)
         module.module_outcome.set(outcome)
         module.module_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateModuleView, self).get_context_data(**kwargs)
+        context = super(ModuleFormView, self).get_context_data(**kwargs)
         context["MODULE"] = MODULE_SINGULAR
         return context
 
