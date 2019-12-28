@@ -75,13 +75,28 @@ class OutcomeView(SingleTableView):
         return context
 
 
-class CreateOutcomeView(FormView):
-    template_name = "course/create_outcome_form.html"
-    form_class = CreateOutcomeForm
+class OutcomeFormView(FormView):
+    template_name = "course/outcome_form.html"
+    form_class = OutcomeForm
     success_url = reverse_lazy("outcome")
 
+    def get_initial(self, **kwargs):
+        self.edit_outcome = False
+        if "outcome_id" in self.kwargs:
+            outcome = Outcome.objects.filter(id=self.kwargs["outcome_id"])
+            if outcome:
+                self.edit_outcome = True
+                initial_data = outcome.values()[0]
+                initial_data["action_verb"] = initial_data.pop("action_verb_id")
+                return initial_data
+
     def form_valid(self, form):
-        Outcome.objects.create(**form.cleaned_data).save()
+        if self.edit_outcome:
+            Outcome.objects.filter(id=self.kwargs["outcome_id"]).update(
+                **form.cleaned_data
+            )
+        else:
+            Outcome.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
 
@@ -99,13 +114,27 @@ class ObjectiveView(SingleTableView):
         return context
 
 
-class CreateObjectiveView(FormView):
-    template_name = "course/create_objective_form.html"
-    form_class = CreateObjectiveForm
+class ObjectiveFormView(FormView):
+    template_name = "course/objective_form.html"
+    form_class = ObjectiveForm
     success_url = reverse_lazy("objective")
 
+    def get_initial(self, **kwargs):
+        self.edit_objective = False
+        if "objective_id" in self.kwargs:
+            objective = Objective.objects.filter(id=self.kwargs["objective_id"])
+            if objective:
+                self.edit_objective = True
+                initial_data = objective.values()[0]
+                return initial_data
+
     def form_valid(self, form):
-        Objective.objects.create(**form.cleaned_data).save()
+        if self.edit_objective:
+            Objective.objects.filter(id=self.kwargs["objective_id"]).update(
+                **form.cleaned_data
+            )
+        else:
+            Objective.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
 
@@ -124,17 +153,32 @@ class InstituteView(SingleTableView):
         return context
 
 
-class CreateInstituteView(FormView):
-    template_name = "course/create_institute_form.html"
-    form_class = CreateInstituteForm
+class InstituteFormView(FormView):
+    template_name = "course/institute_form.html"
+    form_class = InstituteForm
     success_url = reverse_lazy("institute")
 
+    def get_initial(self, **kwargs):
+        self.edit_institute = False
+        if "institute_id" in self.kwargs:
+            institute = Institute.objects.filter(
+                institute_id=self.kwargs["institute_id"]
+            )
+            if institute:
+                self.edit_institute = True
+                return institute.values()[0]
+
     def form_valid(self, form):
-        Institute.objects.create(**form.cleaned_data).save()
+        if self.edit_institute:
+            Institute.objects.filter(
+                institute_id=self.kwargs["institute_id"]
+            ).update(**form.cleaned_data)
+        else:
+            Institute.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateInstituteView, self).get_context_data(**kwargs)
+        context = super(InstituteFormView, self).get_context_data(**kwargs)
         context["INSTITUTE"] = INSTITUTE_SINGULAR
         return context
 
@@ -154,21 +198,39 @@ class LevelView(ListView):
         return context
 
 
-class CreateLevelView(FormView):
-    template_name = "course/create_level_form.html"
-    form_class = CreateLevelForm
+class LevelFormView(FormView):
+    template_name = "course/level_form.html"
+    form_class = LevelForm
     success_url = reverse_lazy("level")
+
+    def get_initial(self, **kwargs):
+        self.edit_level = False
+        if "level_id" in self.kwargs:
+            level = Level.objects.filter(level_id=self.kwargs["level_id"])
+            if level:
+                self.edit_level = True
+                initial_data = level.values()[0]
+                initial_data["institute"] = [
+                    x for x in level.values_list("institute", flat=True)
+                ]
+                return initial_data
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         institute = cleaned_data.pop("institute")
-        level = Level.objects.create(**cleaned_data)
-        level.save()
+        if self.edit_level:
+            Level.objects.filter(level_id=self.kwargs["level_id"]).update(
+                **cleaned_data
+            )
+            level = Level.objects.get(level_id=self.kwargs["level_id"])
+        else:
+            level = Level.objects.create(**cleaned_data)
+            level.save()
         level.institute.set(institute)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateLevelView, self).get_context_data(**kwargs)
+        context = super(LevelFormView, self).get_context_data(**kwargs)
         context["LEVEL"] = LEVEL_SINGULAR
         return context
 
@@ -188,17 +250,34 @@ class ProgrammeView(ListView):
         return context
 
 
-class CreateProgrammeView(FormView):
-    template_name = "course/create_programme_form.html"
-    form_class = CreateProgrammeForm
+class ProgrammeFormView(FormView):
+    template_name = "course/programme_form.html"
+    form_class = ProgrammeForm
     success_url = reverse_lazy("programme")
 
+    def get_initial(self, **kwargs):
+        self.edit_programme = False
+        if "programme_code" in self.kwargs:
+            programme = Programme.objects.filter(
+                programme_code=self.kwargs["programme_code"]
+            )
+            if programme:
+                self.edit_programme = True
+                initial_data = programme.values()[0]
+                initial_data["level"] = initial_data.pop("level_id")
+                return initial_data
+
     def form_valid(self, form):
-        Programme.objects.create(**form.cleaned_data).save()
+        if self.edit_programme:
+            Programme.objects.filter(
+                programme_code=self.kwargs["programme_code"]
+            ).update(**form.cleaned_data)
+        else:
+            Programme.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateProgrammeView, self).get_context_data(**kwargs)
+        context = super(ProgrammeFormView, self).get_context_data(**kwargs)
         context["PROGRAMME"] = PROGRAMME_SINGULAR
         return context
 
@@ -218,17 +297,33 @@ class DepartmentView(ListView):
         return context
 
 
-class CreateDepartmentView(FormView):
-    template_name = "course/create_department_form.html"
-    form_class = CreateDepartmentForm
+class DepartmentFormView(FormView):
+    template_name = "course/department_form.html"
+    form_class = DepartmentForm
     success_url = reverse_lazy("department")
 
+    def get_initial(self, **kwargs):
+        self.edit_department = False
+        if "department_code" in self.kwargs:
+            department = Department.objects.filter(
+                department_code=self.kwargs["department_code"]
+            )
+            if department:
+                self.edit_department = True
+                initial_data = department.values()[0]
+                return initial_data
+
     def form_valid(self, form):
-        Department.objects.create(**form.cleaned_data).save()
+        if self.edit_department:
+            Department.objects.filter(
+                department_code=self.kwargs["department_code"]
+            ).update(**form.cleaned_data)
+        else:
+            Department.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateDepartmentView, self).get_context_data(**kwargs)
+        context = super(DepartmentFormView, self).get_context_data(**kwargs)
         context["DEPARTMENT"] = DEPARTMENT_SINGULAR
         return context
 
@@ -248,17 +343,34 @@ class DisciplineView(ListView):
         return context
 
 
-class CreateDisciplineView(FormView):
-    template_name = "course/create_discipline_form.html"
-    form_class = CreateDisciplineForm
+class DisciplineFormView(FormView):
+    template_name = "course/discipline_form.html"
+    form_class = DisciplineForm
     success_url = reverse_lazy("discipline")
 
+    def get_initial(self, **kwargs):
+        self.edit_discipline = False
+        if "discipline_code" in self.kwargs:
+            discipline = Discipline.objects.filter(
+                discipline_code=self.kwargs["discipline_code"]
+            )
+            if discipline:
+                self.edit_discipline = True
+                initial_data = discipline.values()[0]
+                initial_data["programme"] = initial_data.pop("programme_id")
+                return initial_data
+
     def form_valid(self, form):
-        Discipline.objects.create(**form.cleaned_data).save()
+        if self.edit_discipline:
+            Discipline.objects.filter(
+                discipline_code=self.kwargs["discipline_code"]
+            ).update(**form.cleaned_data)
+        else:
+            Discipline.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateDisciplineView, self).get_context_data(**kwargs)
+        context = super(DisciplineFormView, self).get_context_data(**kwargs)
         context["DISCIPLINE"] = DISCIPLINE_SINGULAR
         return context
 
@@ -278,25 +390,49 @@ class CourseView(ListView):
         return context
 
 
-class CreateCourseView(FormView):
-    template_name = "course/create_course_form.html"
-    form_class = CreateCourseForm
+class CourseFormView(FormView):
+    template_name = "course/course_form.html"
+    form_class = CourseForm
     success_url = reverse_lazy("course")
+
+    def get_initial(self, **kwargs):
+        self.edit_course = False
+        if "course_id" in self.kwargs:
+            course = Course.objects.filter(course_id=self.kwargs["course_id"])
+            if course:
+                self.edit_course = True
+                initial_data = course.values()[0]
+                initial_data["discipline"] = [
+                    x for x in course.values_list("discipline", flat=True)
+                ]
+                initial_data["course_outcome"] = [
+                    x for x in course.values_list("course_outcome", flat=True)
+                ]
+                initial_data["course_objective"] = [
+                    x for x in course.values_list("course_objective", flat=True)
+                ]
+                return initial_data
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         discipline = cleaned_data.pop("discipline")
         outcome = cleaned_data.pop("course_outcome")
         objective = cleaned_data.pop("course_objective")
-        course = Course.objects.create(**cleaned_data)
-        course.save()
+        if self.edit_course:
+            Course.objects.filter(course_id=self.kwargs["course_id"]).update(
+                **cleaned_data
+            )
+            course = Course.objects.get(course_id=self.kwargs["course_id"])
+        else:
+            course = Course.objects.create(**cleaned_data)
+            course.save()
         course.discipline.set(discipline)
         course.course_outcome.set(outcome)
         course.course_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateCourseView, self).get_context_data(**kwargs)
+        context = super(CourseFormView, self).get_context_data(**kwargs)
         context["COURSE"] = COURSE_SINGULAR
         return context
 
@@ -316,25 +452,49 @@ class ModuleView(ListView):
         return context
 
 
-class CreateModuleView(FormView):
-    template_name = "course/create_module_form.html"
-    form_class = CreateModuleForm
+class ModuleFormView(FormView):
+    template_name = "course/module_form.html"
+    form_class = ModuleForm
     success_url = reverse_lazy("module")
+
+    def get_initial(self, **kwargs):
+        self.edit_module = False
+        if "module_id" in self.kwargs:
+            module = Module.objects.filter(module_id=self.kwargs["module_id"])
+            if module:
+                self.edit_module = True
+                initial_data = module.values()[0]
+                initial_data["course"] = [
+                    x for x in module.values_list("course", flat=True)
+                ]
+                initial_data["module_outcome"] = [
+                    x for x in module.values_list("module_outcome", flat=True)
+                ]
+                initial_data["module_objective"] = [
+                    x for x in module.values_list("module_objective", flat=True)
+                ]
+                return initial_data
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         course = cleaned_data.pop("course")
         outcome = cleaned_data.pop("module_outcome")
         objective = cleaned_data.pop("module_objective")
-        module = Module.objects.create(**cleaned_data)
-        module.save()
+        if self.edit_module:
+            Module.objects.filter(module_id=self.kwargs["module_id"]).update(
+                **cleaned_data
+            )
+            module = Module.objects.get(module_id=self.kwargs["module_id"])
+        else:
+            module = Module.objects.create(**cleaned_data)
+            module.save()
         module.course.set(course)
         module.module_outcome.set(outcome)
         module.module_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateModuleView, self).get_context_data(**kwargs)
+        context = super(ModuleFormView, self).get_context_data(**kwargs)
         context["MODULE"] = MODULE_SINGULAR
         return context
 
@@ -354,25 +514,49 @@ class UnitView(ListView):
         return context
 
 
-class CreateUnitView(FormView):
-    template_name = "course/create_unit_form.html"
-    form_class = CreateUnitForm
+class UnitFormView(FormView):
+    template_name = "course/unit_form.html"
+    form_class = UnitForm
     success_url = reverse_lazy("unit")
+
+    def get_initial(self, **kwargs):
+        self.edit_unit = False
+        if "unit_number" in self.kwargs:
+            unit = Unit.objects.filter(unit_number=self.kwargs["unit_number"])
+            if unit:
+                self.edit_unit = True
+                initial_data = unit.values()[0]
+                initial_data["module"] = [
+                    x for x in unit.values_list("module", flat=True)
+                ]
+                initial_data["unit_outcome"] = [
+                    x for x in unit.values_list("unit_outcome", flat=True)
+                ]
+                initial_data["unit_objective"] = [
+                    x for x in unit.values_list("unit_objective", flat=True)
+                ]
+                return initial_data
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         module = cleaned_data.pop("module")
         outcome = cleaned_data.pop("unit_outcome")
         objective = cleaned_data.pop("unit_objective")
-        unit = Unit.objects.create(**cleaned_data)
-        unit.save()
+        if self.edit_unit:
+            Unit.objects.filter(unit_number=self.kwargs["unit_number"]).update(
+                **cleaned_data
+            )
+            unit = Unit.objects.get(unit_number=self.kwargs["unit_number"])
+        else:
+            unit = Unit.objects.create(**cleaned_data)
+            unit.save()
         unit.module.set(module)
         unit.unit_outcome.set(outcome)
         unit.unit_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateUnitView, self).get_context_data(**kwargs)
+        context = super(UnitFormView, self).get_context_data(**kwargs)
         context["UNIT"] = UNIT_SINGULAR
         return context
 
@@ -385,6 +569,41 @@ class SyllabusView(TemplateView):
         context = super(SyllabusView, self).get_context_data(**kwargs)
         course = Course.objects.get(course_id=self.kwargs["course_id"])
         context["course_name"] = course.course_title
+        context["course_overview"] = course.course_overview
+        context["course_credit"] = course.course_credit
+        context[
+            "lecture_contact_hours_per_week"
+        ] = course.lecture_contact_hours_per_week
+        context[
+            "tutorial_contact_hours_per_week"
+        ] = course.tutorial_contact_hours_per_week
+        context[
+            "practical_contact_hours_per_week"
+        ] = course.practical_contact_hours_per_week
+        context["course_objective"] = course.course_objective
+        context["course_outcome"] = course.course_outcome
+        context["course_test"] = course.course_test
+        context["course_resources"] = course.course_resources
         modules = Module.objects.filter(course=course)
-        context["modules"] = modules.values("module_title", "module_body")
+        context["modules"] = modules.values(
+            "module_title",
+            "module_overview",
+            "module_outcome",
+            "module_objective",
+            "module_body",
+            "module_resources",
+            "module_test",
+        )
+        for module in modules:
+            units = Unit.objects.filter(module=module)
+            context["units"] = units.values(
+                "unit_name",
+                "unit_overview",
+                "unit_outcome",
+                "unit_objective",
+                "unit_body",
+                "unit_resources",
+                "unit_test",
+                "module",
+            )
         return context

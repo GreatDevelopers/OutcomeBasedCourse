@@ -79,7 +79,7 @@ class CreateActionVerbForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateOutcomeForm(forms.Form):
+class OutcomeForm(forms.Form):
     outcome = forms.CharField(
         label="Outcome",
         max_length=255,
@@ -104,13 +104,13 @@ class CreateOutcomeForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateOutcomeForm, self).__init__(*args, **kwargs)
+        super(OutcomeForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateObjectiveForm(forms.Form):
+class ObjectiveForm(forms.Form):
     objective = forms.CharField(
         label="Objective",
         max_length=255,
@@ -129,13 +129,13 @@ class CreateObjectiveForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateObjectiveForm, self).__init__(*args, **kwargs)
+        super(ObjectiveForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateInstituteForm(forms.Form):
+class InstituteForm(forms.Form):
     institute_name = forms.CharField(
         label=INSTITUTE_SINGULAR + " Name",
         max_length=300,
@@ -157,13 +157,13 @@ class CreateInstituteForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateInstituteForm, self).__init__(*args, **kwargs)
+        super(InstituteForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateLevelForm(forms.Form):
+class LevelForm(forms.Form):
     level_name = forms.CharField(
         label=LEVEL_SINGULAR + " Name",
         max_length=300,
@@ -190,13 +190,13 @@ class CreateLevelForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateLevelForm, self).__init__(*args, **kwargs)
+        super(LevelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateProgrammeForm(forms.Form):
+class ProgrammeForm(forms.Form):
     programme_code = forms.CharField(
         label=PROGRAMME_SINGULAR + " Code",
         max_length=10,
@@ -247,13 +247,13 @@ class CreateProgrammeForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateProgrammeForm, self).__init__(*args, **kwargs)
+        super(ProgrammeForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateDepartmentForm(forms.Form):
+class DepartmentForm(forms.Form):
     department_code = forms.CharField(
         label=DEPARTMENT_SINGULAR + " Code",
         max_length=10,
@@ -286,13 +286,13 @@ class CreateDepartmentForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateDepartmentForm, self).__init__(*args, **kwargs)
+        super(DepartmentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateDisciplineForm(forms.Form):
+class DisciplineForm(forms.Form):
     discipline_code = forms.CharField(
         label=DISCIPLINE_SINGULAR + " Code",
         max_length=10,
@@ -343,13 +343,13 @@ class CreateDisciplineForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateDisciplineForm, self).__init__(*args, **kwargs)
+        super(DisciplineForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateCourseForm(forms.Form):
+class CourseForm(forms.Form):
     course_id = forms.CharField(
         label=COURSE_SINGULAR + " id",
         max_length=20,
@@ -475,13 +475,13 @@ class CreateCourseForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateCourseForm, self).__init__(*args, **kwargs)
+        super(CourseForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateModuleForm(forms.Form):
+class ModuleForm(forms.Form):
     module_title = forms.CharField(
         label="Title",
         max_length=200,
@@ -558,13 +558,13 @@ class CreateModuleForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateModuleForm, self).__init__(*args, **kwargs)
+        super(ModuleForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateUnitForm(forms.Form):
+class UnitForm(forms.Form):
     unit_name = forms.CharField(
         label="Name",
         max_length=200,
@@ -641,7 +641,7 @@ class CreateUnitForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateUnitForm, self).__init__(*args, **kwargs)
+        super(UnitForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

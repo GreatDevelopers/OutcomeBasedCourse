@@ -55,7 +55,7 @@ class Institute(models.Model):
         editable=False,
     )
     institute_name = models.CharField(
-        verbose_name=INSTITUTE_SINGULAR + " name", max_length=300
+        verbose_name=INSTITUTE_SINGULAR + " name", max_length=255, unique=True
     )
     institute_short_name = models.CharField(
         verbose_name=INSTITUTE_SINGULAR + " short name",
@@ -80,7 +80,7 @@ class Level(models.Model):
         editable=False,
     )
     level_name = models.CharField(
-        verbose_name=LEVEL_SINGULAR + " name", max_length=50
+        verbose_name=LEVEL_SINGULAR + " name", max_length=50, unique=True
     )
     institute = models.ManyToManyField(
         Institute, verbose_name=INSTITUTE_PLURAL, blank=True
@@ -109,7 +109,7 @@ class Programme(models.Model):
     programme_name = models.CharField(
         verbose_name=PROGRAMME_SINGULAR + " name", max_length=50
     )
-    programme_fees = models.FloatField(
+    programme_fees = models.PositiveIntegerField(
         verbose_name=PROGRAMME_SINGULAR + " fees", blank=True, null=True
     )
     # Will be used for currency fields
@@ -169,7 +169,7 @@ class Discipline(models.Model):
         max_length=10,
     )
     discipline_name = models.CharField(
-        verbose_name=DISCIPLINE_SINGULAR + " name", max_length=50
+        verbose_name=DISCIPLINE_SINGULAR + " name", max_length=50, unique=True
     )
     total_credits = models.PositiveSmallIntegerField(blank=True, null=True)
     discipline_short_name = models.CharField(
@@ -206,7 +206,7 @@ class Course(models.Model):
         verbose_name=COURSE_SINGULAR + " id", primary_key=True, max_length=20
     )
     course_title = models.CharField(
-        verbose_name=COURSE_SINGULAR + " title", max_length=200
+        verbose_name=COURSE_SINGULAR + " title", max_length=200, unique=True
     )
     course_short_name = models.CharField(
         verbose_name=COURSE_SINGULAR + " short name",
@@ -255,7 +255,7 @@ class Module(models.Model):
         editable=False,
     )
     module_title = models.CharField(
-        verbose_name=MODULE_SINGULAR + " title", max_length=200
+        verbose_name=MODULE_SINGULAR + " title", max_length=200, unique=True
     )
     module_short_name = models.CharField(
         verbose_name=MODULE_SINGULAR + " short name",

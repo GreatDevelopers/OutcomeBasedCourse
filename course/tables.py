@@ -1,3 +1,5 @@
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 import django_tables2 as tables
 from .models import *
 
@@ -21,38 +23,89 @@ class ActionVerbTable(tables.Table):
 
 
 class OutcomeTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Outcome",
+        accessor=tables.A("id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Outcome
         fields = ("outcome", "outcome_short_name", "action_verb")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no outcome matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-outcome", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class ObjectiveTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Objective",
+        accessor=tables.A("id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Objective
         fields = ("objective", "objective_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no objective matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-objective", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class InstituteTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Institute",
+        accessor=tables.A("institute_id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Institute
         fields = ("institute_name", "institute_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no institute matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-institute", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class LevelTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Level",
+        accessor=tables.A("level_id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Level
         fields = ("level_name", "level_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no level matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-level", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class ProgrammeTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Programme",
+        accessor=tables.A("programme_code"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Programme
         fields = (
@@ -64,16 +117,38 @@ class ProgrammeTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no programme matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-programme", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class DepartmentTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Department",
+        accessor=tables.A("department_code"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Department
         fields = ("department_code", "department_name", "department_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no department matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-department", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class DisciplineTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Discipline",
+        accessor=tables.A("discipline_code"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Discipline
         fields = (
@@ -85,8 +160,19 @@ class DisciplineTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no discipline matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-discipline", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class CourseTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Course",
+        accessor=tables.A("course_id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Course
         fields = (
@@ -106,8 +192,19 @@ class CourseTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no course matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-course", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class ModuleTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Module",
+        accessor=tables.A("module_id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Module
         fields = (
@@ -123,8 +220,19 @@ class ModuleTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no module matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-module", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class UnitTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Unit",
+        accessor=tables.A("unit_number"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Unit
         fields = (
@@ -139,3 +247,7 @@ class UnitTable(tables.Table):
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no unit matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-unit", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
