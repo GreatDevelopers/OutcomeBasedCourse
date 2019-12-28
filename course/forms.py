@@ -79,7 +79,7 @@ class CreateActionVerbForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateOutcomeForm(forms.Form):
+class OutcomeForm(forms.Form):
     outcome = forms.CharField(
         label="Outcome",
         max_length=255,
@@ -104,13 +104,13 @@ class CreateOutcomeForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateOutcomeForm, self).__init__(*args, **kwargs)
+        super(OutcomeForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateObjectiveForm(forms.Form):
+class ObjectiveForm(forms.Form):
     objective = forms.CharField(
         label="Objective",
         max_length=255,
@@ -129,7 +129,7 @@ class CreateObjectiveForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateObjectiveForm, self).__init__(*args, **kwargs)
+        super(ObjectiveForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

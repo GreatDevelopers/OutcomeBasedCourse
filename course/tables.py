@@ -23,19 +23,41 @@ class ActionVerbTable(tables.Table):
 
 
 class OutcomeTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Outcome",
+        accessor=tables.A("id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Outcome
         fields = ("outcome", "outcome_short_name", "action_verb")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no outcome matching the search criteria..."
 
+    def render_edit(self, value):
+        url = reverse("edit-outcome", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
+
 
 class ObjectiveTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Objective",
+        accessor=tables.A("id"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Objective
         fields = ("objective", "objective_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no objective matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-objective", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))
 
 
 class InstituteTable(tables.Table):

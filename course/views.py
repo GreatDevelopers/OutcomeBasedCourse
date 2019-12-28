@@ -75,13 +75,28 @@ class OutcomeView(SingleTableView):
         return context
 
 
-class CreateOutcomeView(FormView):
-    template_name = "course/create_outcome_form.html"
-    form_class = CreateOutcomeForm
+class OutcomeFormView(FormView):
+    template_name = "course/outcome_form.html"
+    form_class = OutcomeForm
     success_url = reverse_lazy("outcome")
 
+    def get_initial(self, **kwargs):
+        self.edit_outcome = False
+        if "outcome_id" in self.kwargs:
+            outcome = Outcome.objects.filter(id=self.kwargs["outcome_id"])
+            if outcome:
+                self.edit_outcome = True
+                initial_data = outcome.values()[0]
+                initial_data["action_verb"] = initial_data.pop("action_verb_id")
+                return initial_data
+
     def form_valid(self, form):
-        Outcome.objects.create(**form.cleaned_data).save()
+        if self.edit_outcome:
+            Outcome.objects.filter(id=self.kwargs["outcome_id"]).update(
+                **form.cleaned_data
+            )
+        else:
+            Outcome.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
 
@@ -99,13 +114,27 @@ class ObjectiveView(SingleTableView):
         return context
 
 
-class CreateObjectiveView(FormView):
-    template_name = "course/create_objective_form.html"
-    form_class = CreateObjectiveForm
+class ObjectiveFormView(FormView):
+    template_name = "course/objective_form.html"
+    form_class = ObjectiveForm
     success_url = reverse_lazy("objective")
 
+    def get_initial(self, **kwargs):
+        self.edit_objective = False
+        if "objective_id" in self.kwargs:
+            objective = Objective.objects.filter(id=self.kwargs["objective_id"])
+            if objective:
+                self.edit_objective = True
+                initial_data = objective.values()[0]
+                return initial_data
+
     def form_valid(self, form):
-        Objective.objects.create(**form.cleaned_data).save()
+        if self.edit_objective:
+            Objective.objects.filter(id=self.kwargs["objective_id"]).update(
+                **form.cleaned_data
+            )
+        else:
+            Objective.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
 

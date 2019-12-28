@@ -21,14 +21,24 @@ urlpatterns = [
     path("outcome/", OutcomeView.as_view(), name="outcome"),
     path(
         "outcome/add/",
-        login_required(CreateOutcomeView.as_view()),
+        login_required(OutcomeFormView.as_view()),
         name="create-outcome",
+    ),
+    path(
+        "outcome/<str:outcome_id>/change/",
+        login_required(OutcomeFormView.as_view()),
+        name="edit-outcome",
     ),
     path("objective/", ObjectiveView.as_view(), name="objective"),
     path(
         "objective/add/",
-        login_required(CreateObjectiveView.as_view()),
+        login_required(ObjectiveFormView.as_view()),
         name="create-objective",
+    ),
+    path(
+        "objective/<str:objective_id>/change/",
+        login_required(ObjectiveFormView.as_view()),
+        name="edit-objective",
     ),
     path("institute/", InstituteView.as_view(), name="institute"),
     path(
@@ -110,7 +120,7 @@ urlpatterns = [
     ),
     path("unit/", UnitView.as_view(), name="unit"),
     path(
-        "unit/add/", login_required(UnitFormView.as_view()), name="create-unit",
+        "unit/add/", login_required(UnitFormView.as_view()), name="create-unit"
     ),
     path(
         "unit/<str:unit_number>/change/",
