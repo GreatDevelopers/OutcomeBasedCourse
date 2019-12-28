@@ -204,6 +204,13 @@ class ModuleTable(tables.Table):
 
 
 class UnitTable(tables.Table):
+    edit = tables.Column(
+        verbose_name="Edit Unit",
+        accessor=tables.A("unit_number"),
+        orderable=False,
+        exclude_from_export=True,
+    )
+
     class Meta:
         model = Unit
         fields = (
@@ -218,3 +225,7 @@ class UnitTable(tables.Table):
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no unit matching the search criteria..."
+
+    def render_edit(self, value):
+        url = reverse("edit-unit", args=[value])
+        return mark_safe('<a href="%s">Edit</a>' % (url,))

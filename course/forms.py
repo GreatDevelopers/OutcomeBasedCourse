@@ -564,7 +564,7 @@ class ModuleForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateUnitForm(forms.Form):
+class UnitForm(forms.Form):
     unit_name = forms.CharField(
         label="Name",
         max_length=200,
@@ -641,7 +641,7 @@ class CreateUnitForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateUnitForm, self).__init__(*args, **kwargs)
+        super(UnitForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

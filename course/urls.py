@@ -110,8 +110,11 @@ urlpatterns = [
     ),
     path("unit/", UnitView.as_view(), name="unit"),
     path(
-        "unit/add/",
-        login_required(CreateUnitView.as_view()),
-        name="create-unit",
+        "unit/add/", login_required(UnitFormView.as_view()), name="create-unit",
+    ),
+    path(
+        "unit/<str:unit_number>/change/",
+        login_required(UnitFormView.as_view()),
+        name="edit-unit",
     ),
 ]

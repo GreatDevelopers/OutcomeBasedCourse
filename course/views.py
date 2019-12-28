@@ -485,25 +485,49 @@ class UnitView(ListView):
         return context
 
 
-class CreateUnitView(FormView):
-    template_name = "course/create_unit_form.html"
-    form_class = CreateUnitForm
+class UnitFormView(FormView):
+    template_name = "course/unit_form.html"
+    form_class = UnitForm
     success_url = reverse_lazy("unit")
+
+    def get_initial(self, **kwargs):
+        self.edit_unit = False
+        if "unit_number" in self.kwargs:
+            unit = Unit.objects.filter(unit_number=self.kwargs["unit_number"])
+            if unit:
+                self.edit_unit = True
+                initial_data = unit.values()[0]
+                initial_data["module"] = [
+                    x for x in unit.values_list("module", flat=True)
+                ]
+                initial_data["unit_outcome"] = [
+                    x for x in unit.values_list("unit_outcome", flat=True)
+                ]
+                initial_data["unit_objective"] = [
+                    x for x in unit.values_list("unit_objective", flat=True)
+                ]
+                return initial_data
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
         module = cleaned_data.pop("module")
         outcome = cleaned_data.pop("unit_outcome")
         objective = cleaned_data.pop("unit_objective")
-        unit = Unit.objects.create(**cleaned_data)
-        unit.save()
+        if self.edit_unit:
+            Unit.objects.filter(unit_number=self.kwargs["unit_number"]).update(
+                **cleaned_data
+            )
+            unit = Unit.objects.get(unit_number=self.kwargs["unit_number"])
+        else:
+            unit = Unit.objects.create(**cleaned_data)
+            unit.save()
         unit.module.set(module)
         unit.unit_outcome.set(outcome)
         unit.unit_objective.set(objective)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateUnitView, self).get_context_data(**kwargs)
+        context = super(UnitFormView, self).get_context_data(**kwargs)
         context["UNIT"] = UNIT_SINGULAR
         return context
 
