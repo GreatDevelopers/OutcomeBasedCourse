@@ -171,9 +171,7 @@ class Discipline(models.Model):
     discipline_name = models.CharField(
         verbose_name=DISCIPLINE_SINGULAR + " name", max_length=50
     )
-    total_credits = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    total_credits = models.PositiveSmallIntegerField(blank=True, null=True)
     discipline_short_name = models.CharField(
         verbose_name=DISCIPLINE_SINGULAR + " short name",
         max_length=10,
@@ -219,18 +217,12 @@ class Course(models.Model):
     course_overview = models.TextField(
         verbose_name=COURSE_SINGULAR + " overview", blank=True, null=True
     )
-    course_credit = models.DecimalField(
-        verbose_name=COURSE_SINGULAR + " credit", max_digits=4, decimal_places=2
+    course_credit = models.IntegerField(
+        verbose_name=COURSE_SINGULAR + " credit"
     )
-    lecture_contact_hours_per_week = models.DecimalField(
-        max_digits=4, decimal_places=2
-    )
-    tutorial_contact_hours_per_week = models.DecimalField(
-        max_digits=4, decimal_places=2
-    )
-    practical_contact_hours_per_week = models.DecimalField(
-        max_digits=4, decimal_places=2
-    )
+    lecture_contact_hours_per_week = models.PositiveSmallIntegerField()
+    tutorial_contact_hours_per_week = models.PositiveSmallIntegerField()
+    practical_contact_hours_per_week = models.PositiveSmallIntegerField()
     course_resources = models.TextField(
         verbose_name=COURSE_SINGULAR + " resources", blank=True, null=True
     )
@@ -287,7 +279,7 @@ class Module(models.Model):
         Outcome, verbose_name=MODULE_SINGULAR + " outcome", blank=True
     )
     module_objective = models.ManyToManyField(
-        Objective, verbose_name=MODULE_SINGULAR + " objective", blank=True,
+        Objective, verbose_name=MODULE_SINGULAR + " objective", blank=True
     )
     course = models.ManyToManyField(
         Course, verbose_name=COURSE_PLURAL, blank=True
@@ -333,7 +325,7 @@ class Unit(models.Model):
         Outcome, verbose_name=UNIT_SINGULAR + " outcome", blank=True
     )
     unit_objective = models.ManyToManyField(
-        Objective, verbose_name=UNIT_SINGULAR + " objective", blank=True,
+        Objective, verbose_name=UNIT_SINGULAR + " objective", blank=True
     )
     module = models.ManyToManyField(
         Module, verbose_name=MODULE_PLURAL, blank=True
