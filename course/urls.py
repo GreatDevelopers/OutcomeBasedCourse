@@ -77,8 +77,13 @@ urlpatterns = [
     path("discipline/", DisciplineView.as_view(), name="discipline"),
     path(
         "discipline/add/",
-        login_required(CreateDisciplineView.as_view()),
+        login_required(DisciplineFormView.as_view()),
         name="create-discipline",
+    ),
+    path(
+        "discipline/<str:discipline_code>/change/",
+        login_required(DisciplineFormView.as_view()),
+        name="edit-discipline",
     ),
     path("course/", CourseView.as_view(), name="course"),
     path("syllabus/<str:course_id>", SyllabusView.as_view(), name="syllabus"),

@@ -169,7 +169,7 @@ class Discipline(models.Model):
         max_length=10,
     )
     discipline_name = models.CharField(
-        verbose_name=DISCIPLINE_SINGULAR + " name", max_length=50
+        verbose_name=DISCIPLINE_SINGULAR + " name", max_length=50, unique=True
     )
     total_credits = models.PositiveSmallIntegerField(blank=True, null=True)
     discipline_short_name = models.CharField(

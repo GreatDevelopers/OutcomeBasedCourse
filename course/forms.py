@@ -292,7 +292,7 @@ class DepartmentForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CreateDisciplineForm(forms.Form):
+class DisciplineForm(forms.Form):
     discipline_code = forms.CharField(
         label=DISCIPLINE_SINGULAR + " Code",
         max_length=10,
@@ -343,7 +343,7 @@ class CreateDisciplineForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateDisciplineForm, self).__init__(*args, **kwargs)
+        super(DisciplineForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))

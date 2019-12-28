@@ -314,17 +314,34 @@ class DisciplineView(ListView):
         return context
 
 
-class CreateDisciplineView(FormView):
-    template_name = "course/create_discipline_form.html"
-    form_class = CreateDisciplineForm
+class DisciplineFormView(FormView):
+    template_name = "course/discipline_form.html"
+    form_class = DisciplineForm
     success_url = reverse_lazy("discipline")
 
+    def get_initial(self, **kwargs):
+        self.edit_discipline = False
+        if "discipline_code" in self.kwargs:
+            discipline = Discipline.objects.filter(
+                discipline_code=self.kwargs["discipline_code"]
+            )
+            if discipline:
+                self.edit_discipline = True
+                initial_data = discipline.values()[0]
+                initial_data["programme"] = initial_data.pop("programme_id")
+                return initial_data
+
     def form_valid(self, form):
-        Discipline.objects.create(**form.cleaned_data).save()
+        if self.edit_discipline:
+            Discipline.objects.filter(
+                discipline_code=self.kwargs["discipline_code"]
+            ).update(**form.cleaned_data)
+        else:
+            Discipline.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateDisciplineView, self).get_context_data(**kwargs)
+        context = super(DisciplineFormView, self).get_context_data(**kwargs)
         context["DISCIPLINE"] = DISCIPLINE_SINGULAR
         return context
 
