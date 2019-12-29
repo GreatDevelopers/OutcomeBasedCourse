@@ -175,18 +175,14 @@ class InstituteFormView(FormView):
         return super().form_valid(form)
 
 
-class LevelView(ListView):
+class LevelView(SingleTableMixin, FilterView):
     model = Level
-    template_name = "course/level_list.html"
-    context_object_name = "level"
+    table_class = LevelTable
+    filterset_class = LevelFilter
+    context_table_name = "level_table"
+    pagination = {"per_page": 30}
     ordering = ["level_name"]
-
-    def get_context_data(self, **kwargs):
-        context = super(LevelView, self).get_context_data(**kwargs)
-        table = LevelTable(Level.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["level"] = table
-        return context
+    template_name = "course/level_list.html"
 
 
 class LevelFormView(FormView):
@@ -221,18 +217,14 @@ class LevelFormView(FormView):
         return super().form_valid(form)
 
 
-class ProgrammeView(ListView):
+class ProgrammeView(SingleTableMixin, FilterView):
     model = Programme
-    template_name = "course/programme_list.html"
-    context_object_name = "programme"
+    table_class = ProgrammeTable
+    filterset_class = ProgrammeFilter
+    context_table_name = "programme_table"
+    pagination = {"per_page": 30}
     ordering = ["programme_name"]
-
-    def get_context_data(self, **kwargs):
-        context = super(ProgrammeView, self).get_context_data(**kwargs)
-        table = ProgrammeTable(Programme.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["programme"] = table
-        return context
+    template_name = "course/programme_list.html"
 
 
 class ProgrammeFormView(FormView):
@@ -302,18 +294,14 @@ class DepartmentFormView(FormView):
         return super().form_valid(form)
 
 
-class DisciplineView(ListView):
+class DisciplineView(SingleTableMixin, FilterView):
     model = Discipline
-    template_name = "course/discipline_list.html"
-    context_object_name = "discipline"
+    table_class = DisciplineTable
+    filterset_class = DisciplineFilter
+    context_table_name = "discipline_table"
+    pagination = {"per_page": 30}
     ordering = ["discipline_name"]
-
-    def get_context_data(self, **kwargs):
-        context = super(DisciplineView, self).get_context_data(**kwargs)
-        table = DisciplineTable(Discipline.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["discipline"] = table
-        return context
+    template_name = "course/discipline_list.html"
 
 
 class DisciplineFormView(FormView):

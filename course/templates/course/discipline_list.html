@@ -3,5 +3,11 @@
 
 {% block content %}
 <h4>{{DISCIPLINE_PLURAL}}</h4><br>
-{% render_table discipline %}
+{% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'filter' %}
+    </form>
+{% endif %}
+{% render_table discipline_table %}
 {% endblock %}
