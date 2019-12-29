@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     "bootstrap4",
     "crispy_forms",
     "martor",
+    "django_filters",
     # "djmoney",
     "course.apps.CourseConfig",
 ]

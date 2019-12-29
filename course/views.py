@@ -2,10 +2,12 @@ from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import render
-from django_tables2 import RequestConfig, SingleTableView
+from django_tables2 import RequestConfig, SingleTableView, SingleTableMixin
+from django_filters.views import FilterView
 from .models import *
 from .forms import *
 from .tables import *
+from .filters import *
 from OutcomeBasedCourse.config.verbose_names import *
 
 
@@ -138,18 +140,14 @@ class ObjectiveFormView(FormView):
         return super().form_valid(form)
 
 
-class InstituteView(SingleTableView):
+class InstituteView(SingleTableMixin, FilterView):
     model = Institute
-    template_name = "course/institute_list.html"
-    context_object_name = "institute"
+    table_class = InstituteTable
+    filterset_class = InstituteFilter
+    context_table_name = "institute_table"
+    pagination = {"per_page": 30}
     ordering = ["institute_name"]
-
-    def get_context_data(self, **kwargs):
-        context = super(InstituteView, self).get_context_data(**kwargs)
-        table = InstituteTable(Institute.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["institute"] = table
-        return context
+    template_name = "course/institute_list.html"
 
 
 class InstituteFormView(FormView):
