@@ -146,7 +146,6 @@ class InstituteView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super(InstituteView, self).get_context_data(**kwargs)
-        context["INSTITUTE"] = INSTITUTE_PLURAL
         table = InstituteTable(Institute.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["institute"] = table
@@ -177,11 +176,6 @@ class InstituteFormView(FormView):
             Institute.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(InstituteFormView, self).get_context_data(**kwargs)
-        context["INSTITUTE"] = INSTITUTE_SINGULAR
-        return context
-
 
 class LevelView(ListView):
     model = Level
@@ -191,7 +185,6 @@ class LevelView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LevelView, self).get_context_data(**kwargs)
-        context["LEVEL"] = LEVEL_PLURAL
         table = LevelTable(Level.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["level"] = table
@@ -229,11 +222,6 @@ class LevelFormView(FormView):
         level.institute.set(institute)
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(LevelFormView, self).get_context_data(**kwargs)
-        context["LEVEL"] = LEVEL_SINGULAR
-        return context
-
 
 class ProgrammeView(ListView):
     model = Programme
@@ -243,7 +231,6 @@ class ProgrammeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProgrammeView, self).get_context_data(**kwargs)
-        context["PROGRAMME"] = PROGRAMME_PLURAL
         table = ProgrammeTable(Programme.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["programme"] = table
@@ -276,11 +263,6 @@ class ProgrammeFormView(FormView):
             Programme.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(ProgrammeFormView, self).get_context_data(**kwargs)
-        context["PROGRAMME"] = PROGRAMME_SINGULAR
-        return context
-
 
 class DepartmentView(ListView):
     model = Department
@@ -290,7 +272,6 @@ class DepartmentView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DepartmentView, self).get_context_data(**kwargs)
-        context["DEPARTMENT"] = DEPARTMENT_PLURAL
         table = DepartmentTable(Department.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["department"] = table
@@ -322,11 +303,6 @@ class DepartmentFormView(FormView):
             Department.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(DepartmentFormView, self).get_context_data(**kwargs)
-        context["DEPARTMENT"] = DEPARTMENT_SINGULAR
-        return context
-
 
 class DisciplineView(ListView):
     model = Discipline
@@ -336,7 +312,6 @@ class DisciplineView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DisciplineView, self).get_context_data(**kwargs)
-        context["DISCIPLINE"] = DISCIPLINE_PLURAL
         table = DisciplineTable(Discipline.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["discipline"] = table
@@ -369,11 +344,6 @@ class DisciplineFormView(FormView):
             Discipline.objects.create(**form.cleaned_data).save()
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(DisciplineFormView, self).get_context_data(**kwargs)
-        context["DISCIPLINE"] = DISCIPLINE_SINGULAR
-        return context
-
 
 class CourseView(ListView):
     model = Course
@@ -383,7 +353,6 @@ class CourseView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CourseView, self).get_context_data(**kwargs)
-        context["COURSE"] = COURSE_PLURAL
         table = CourseTable(Course.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["course"] = table
@@ -431,11 +400,6 @@ class CourseFormView(FormView):
         course.course_objective.set(objective)
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(CourseFormView, self).get_context_data(**kwargs)
-        context["COURSE"] = COURSE_SINGULAR
-        return context
-
 
 class ModuleView(ListView):
     model = Module
@@ -445,7 +409,6 @@ class ModuleView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ModuleView, self).get_context_data(**kwargs)
-        context["MODULE"] = MODULE_PLURAL
         table = ModuleTable(Module.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["module"] = table
@@ -493,11 +456,6 @@ class ModuleFormView(FormView):
         module.module_objective.set(objective)
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(ModuleFormView, self).get_context_data(**kwargs)
-        context["MODULE"] = MODULE_SINGULAR
-        return context
-
 
 class UnitView(ListView):
     model = Unit
@@ -507,7 +465,6 @@ class UnitView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(UnitView, self).get_context_data(**kwargs)
-        context["UNIT"] = UNIT_PLURAL
         table = UnitTable(Unit.objects.all())
         RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
         context["unit"] = table
@@ -554,11 +511,6 @@ class UnitFormView(FormView):
         unit.unit_outcome.set(outcome)
         unit.unit_objective.set(objective)
         return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(UnitFormView, self).get_context_data(**kwargs)
-        context["UNIT"] = UNIT_SINGULAR
-        return context
 
 
 class SyllabusView(TemplateView):

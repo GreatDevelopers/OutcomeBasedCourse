@@ -82,7 +82,7 @@ AUTHENTICATION_BACKENDS = (
 
 # ldap config end
 
-LOGIN_URL = '/admin/login'
+LOGIN_URL = "/admin/login"
 
 # Application definition
 
@@ -124,7 +124,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-            ]
+                "course.verbose_names_context.get_verbose_names",
+            ],
+            "builtins": ["bootstrap4.templatetags.bootstrap4"],
         },
     }
 ]
