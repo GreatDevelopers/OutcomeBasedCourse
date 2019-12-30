@@ -16,6 +16,7 @@ Requirements
 1. python-mysqldb
 1. django 3.0
 1. libldap2-dev
+1. libmysqlclient-dev
 ```
 
 #### Installation
@@ -34,7 +35,7 @@ chmod +x setup.sh
 Installation of Requirements
 
 ```bash
-sudo apt install apache2 mysql-server python python3-pip python-mysqldb libldap2-dev
+sudo apt install apache2 mysql-server python python3-pip python-mysqldb libldap2-dev libmysqlclient-dev
 sudo python3 -m pip install -r requirements.txt
 ```
 
@@ -62,7 +63,7 @@ DATABASES = {
 ```bash
 python3 manage.py makemigrations
 python3 manage.py migrate
-python3 manage.py runserver 127.0.0.1:8000
+python3 manage.py runserver 127.0.0.1:8090
 ```
 1. Open "http://127.0.0.1:8090" in your browser.
 
