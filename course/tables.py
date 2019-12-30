@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 import django_tables2 as tables
 from .models import *
 
+
 class CognitiveLevelTable(tables.Table):
     class Meta:
         model = CognitiveLevel
@@ -37,7 +38,7 @@ class OutcomeTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-outcome", args=[value])
@@ -60,7 +61,7 @@ class ObjectiveTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-objective", args=[value])
@@ -83,7 +84,7 @@ class InstituteTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-institute", args=[value])
@@ -106,7 +107,7 @@ class LevelTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-level", args=[value])
@@ -134,7 +135,7 @@ class ProgrammeTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-programme", args=[value])
@@ -157,7 +158,7 @@ class DepartmentTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-department", args=[value])
@@ -186,7 +187,7 @@ class DisciplineTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-discipline", args=[value])
@@ -222,7 +223,7 @@ class CourseTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-course", args=[value])
@@ -254,7 +255,7 @@ class ModuleTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-module", args=[value])
@@ -286,7 +287,7 @@ class UnitTable(tables.Table):
 
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
-            self.columns.hide('edit')
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-unit", args=[value])
