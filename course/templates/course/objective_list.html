@@ -5,5 +5,11 @@
 
 {% block content %}
 <h4>Objectives</h4><br>
-{% render_table objective %}
+{% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'filter' %}
+    </form>
+{% endif %}
+{% render_table objective_table %}
 {% endblock %}

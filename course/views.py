@@ -15,18 +15,14 @@ def home_page(request):
     return render(request, "course/home_page.html")
 
 
-class CognitiveLevelView(SingleTableView):
+class CognitiveLevelView(SingleTableMixin, FilterView):
     model = CognitiveLevel
-    template_name = "course/cognitive_level_list.html"
-    context_object_name = "cognitive_level"
+    table_class = CognitiveLevelTable
+    filterset_class = CognitiveLevelFilter
+    context_table_name = "cognitive_level_table"
+    pagination = {"per_page": 30}
     ordering = ["cognitive_level"]
-
-    def get_context_data(self, **kwargs):
-        context = super(CognitiveLevelView, self).get_context_data(**kwargs)
-        table = CognitiveLevelTable(CognitiveLevel.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["cognitive_level"] = table
-        return context
+    template_name = "course/cognitive_level_list.html"
 
 
 class CreateCognitiveLevelView(FormView):
@@ -39,18 +35,14 @@ class CreateCognitiveLevelView(FormView):
         return super().form_valid(form)
 
 
-class ActionVerbView(SingleTableView):
+class ActionVerbView(SingleTableMixin, FilterView):
     model = ActionVerb
-    template_name = "course/action_verb_list.html"
-    context_object_name = "action_verb"
+    table_class = ActionVerbTable
+    filterset_class = ActionVerbFilter
+    context_table_name = "action_verb_table"
+    pagination = {"per_page": 30}
     ordering = ["action_verb"]
-
-    def get_context_data(self, **kwargs):
-        context = super(ActionVerbView, self).get_context_data(**kwargs)
-        table = ActionVerbTable(ActionVerb.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["action_verb"] = table
-        return context
+    template_name = "course/action_verb_list.html"
 
 
 class CreateActionVerbView(FormView):
@@ -63,18 +55,14 @@ class CreateActionVerbView(FormView):
         return super().form_valid(form)
 
 
-class OutcomeView(SingleTableView):
+class OutcomeView(SingleTableMixin, FilterView):
     model = Outcome
-    template_name = "course/outcome_list.html"
-    context_object_name = "outcome"
+    table_class = OutcomeTable
+    filterset_class = OutcomeFilter
+    context_table_name = "outcome_table"
+    pagination = {"per_page": 30}
     ordering = ["outcome"]
-
-    def get_context_data(self, **kwargs):
-        context = super(OutcomeView, self).get_context_data(**kwargs)
-        table = OutcomeTable(Outcome.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["outcome"] = table
-        return context
+    template_name = "course/outcome_list.html"
 
 
 class OutcomeFormView(FormView):
@@ -102,18 +90,14 @@ class OutcomeFormView(FormView):
         return super().form_valid(form)
 
 
-class ObjectiveView(SingleTableView):
+class ObjectiveView(SingleTableMixin, FilterView):
     model = Objective
-    template_name = "course/objective_list.html"
-    context_object_name = "objective"
+    table_class = ObjectiveTable
+    filterset_class = ObjectiveFilter
+    context_table_name = "objective_table"
+    pagination = {"per_page": 30}
     ordering = ["objective"]
-
-    def get_context_data(self, **kwargs):
-        context = super(ObjectiveView, self).get_context_data(**kwargs)
-        table = ObjectiveTable(Objective.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["objective"] = table
-        return context
+    template_name = "course/objective_list.html"
 
 
 class ObjectiveFormView(FormView):
@@ -331,18 +315,14 @@ class DisciplineFormView(FormView):
         return super().form_valid(form)
 
 
-class CourseView(ListView):
+class CourseView(SingleTableMixin, FilterView):
     model = Course
-    template_name = "course/course_list.html"
-    context_object_name = "course"
+    table_class = CourseTable
+    filterset_class = CourseFilter
+    context_table_name = "course_table"
+    pagination = {"per_page": 30}
     ordering = ["course_title"]
-
-    def get_context_data(self, **kwargs):
-        context = super(CourseView, self).get_context_data(**kwargs)
-        table = CourseTable(Course.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["course"] = table
-        return context
+    template_name = "course/course_list.html"
 
 
 class CourseFormView(FormView):
@@ -387,18 +367,14 @@ class CourseFormView(FormView):
         return super().form_valid(form)
 
 
-class ModuleView(ListView):
+class ModuleView(SingleTableMixin, FilterView):
     model = Module
-    template_name = "course/module_list.html"
-    context_object_name = "module"
+    table_class = ModuleTable
+    filterset_class = ModuleFilter
+    context_table_name = "module_table"
+    pagination = {"per_page": 30}
     ordering = ["module_title"]
-
-    def get_context_data(self, **kwargs):
-        context = super(ModuleView, self).get_context_data(**kwargs)
-        table = ModuleTable(Module.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["module"] = table
-        return context
+    template_name = "course/module_list.html"
 
 
 class ModuleFormView(FormView):
@@ -443,18 +419,14 @@ class ModuleFormView(FormView):
         return super().form_valid(form)
 
 
-class UnitView(ListView):
+class UnitView(SingleTableMixin, FilterView):
     model = Unit
-    template_name = "course/unit_list.html"
-    context_object_name = "unit"
+    table_class = UnitTable
+    filterset_class = UnitFilter
+    context_table_name = "unit_table"
+    pagination = {"per_page": 30}
     ordering = ["unit_name"]
-
-    def get_context_data(self, **kwargs):
-        context = super(UnitView, self).get_context_data(**kwargs)
-        table = UnitTable(Unit.objects.all())
-        RequestConfig(self.request, paginate={"per_page": 30}).configure(table)
-        context["unit"] = table
-        return context
+    template_name = "course/unit_list.html"
 
 
 class UnitFormView(FormView):
