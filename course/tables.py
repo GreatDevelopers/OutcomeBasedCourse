@@ -156,6 +156,7 @@ class DisciplineTable(tables.Table):
             "discipline_name",
             "discipline_short_name",
             "total_credits",
+            "department",
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no discipline matching the search criteria..."
