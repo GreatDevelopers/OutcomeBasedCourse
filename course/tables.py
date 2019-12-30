@@ -36,6 +36,10 @@ class OutcomeTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no outcome matching the search criteria..."
 
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
+
     def render_edit(self, value):
         url = reverse("edit-outcome", args=[value])
         return mark_safe('<a href="%s">Edit</a>' % (url,))
@@ -54,6 +58,10 @@ class ObjectiveTable(tables.Table):
         fields = ("objective", "objective_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no objective matching the search criteria..."
+
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-objective", args=[value])
@@ -74,6 +82,10 @@ class InstituteTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no institute matching the search criteria..."
 
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
+
     def render_edit(self, value):
         url = reverse("edit-institute", args=[value])
         return mark_safe('<a href="%s">Edit</a>' % (url,))
@@ -92,6 +104,10 @@ class LevelTable(tables.Table):
         fields = ("level_name", "level_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no level matching the search criteria..."
+
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-level", args=[value])
@@ -117,6 +133,10 @@ class ProgrammeTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no programme matching the search criteria..."
 
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
+
     def render_edit(self, value):
         url = reverse("edit-programme", args=[value])
         return mark_safe('<a href="%s">Edit</a>' % (url,))
@@ -135,6 +155,10 @@ class DepartmentTable(tables.Table):
         fields = ("department_code", "department_name", "department_short_name")
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no department matching the search criteria..."
+
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-department", args=[value])
@@ -160,6 +184,10 @@ class DisciplineTable(tables.Table):
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no discipline matching the search criteria..."
+
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-discipline", args=[value])
@@ -193,6 +221,10 @@ class CourseTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no course matching the search criteria..."
 
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
+
     def render_edit(self, value):
         url = reverse("edit-course", args=[value])
         return mark_safe('<a href="%s">Edit</a>' % (url,))
@@ -221,6 +253,10 @@ class ModuleTable(tables.Table):
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no module matching the search criteria..."
 
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
+
     def render_edit(self, value):
         url = reverse("edit-module", args=[value])
         return mark_safe('<a href="%s">Edit</a>' % (url,))
@@ -248,6 +284,10 @@ class UnitTable(tables.Table):
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no unit matching the search criteria..."
+
+    def before_render(self, request):
+        if self.request.user.is_authenticated == False:
+            self.columns.hide("edit")
 
     def render_edit(self, value):
         url = reverse("edit-unit", args=[value])
