@@ -185,7 +185,7 @@ class Discipline(models.Model):
         blank=True,
         null=True,
     )
-    offered_by = models.ForeignKey(
+    department = models.ForeignKey(
         Department,
         verbose_name=DEPARTMENT_SINGULAR,
         on_delete=models.CASCADE,
