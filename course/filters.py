@@ -52,6 +52,13 @@ class LevelFilter(django_filters.FilterSet):
 
 
 class ProgrammeFilter(django_filters.FilterSet):
+    level_id = django_filters.ModelChoiceFilter(
+        field_name="level",
+        lookup_expr="exact",
+        empty_label="Select Level",
+        queryset=Level.objects.all(),
+    )
+
     class Meta:
         model = Programme
         fields = {"programme_code": ["exact"], "programme_name": ["icontains"]}

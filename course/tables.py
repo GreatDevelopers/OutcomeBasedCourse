@@ -104,7 +104,7 @@ class InstituteTable(tables.Table):
         url = reverse("edit-institute", args=[value])
         return mark_safe(
             bootstrap.bootstrap_button(
-                content="Edit", href=url, extra_classes="btn-link"
+                content="Edit", href=url, button_class="btn-link"
             )
         )
 
@@ -113,6 +113,7 @@ class LevelTable(tables.Table):
     edit = tables.Column(
         verbose_name="Edit Level",
         accessor=tables.A("level_id"),
+        attrs={"td": {"align": "center"}},
         orderable=False,
         exclude_from_export=True,
     )
@@ -127,9 +128,25 @@ class LevelTable(tables.Table):
         if self.request.user.is_authenticated == False:
             self.columns.hide("edit")
 
+    def render_level_name(self, value):
+        level_id = Level.objects.get(level_name=value).level_id
+        url = (reverse("programme") + "?level_id=%s") % (level_id,)
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content=value,
+                href=url,
+                button_class="btn-link",
+                extra_classes="text-body",
+            )
+        )
+
     def render_edit(self, value):
         url = reverse("edit-level", args=[value])
-        return mark_safe('<a href="%s">Edit</a>' % (url,))
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content="Edit", href=url, button_class="btn-link"
+            )
+        )
 
 
 class ProgrammeTable(tables.Table):
@@ -147,6 +164,7 @@ class ProgrammeTable(tables.Table):
             "programme_name",
             "programme_short_name",
             "programme_fees",
+            "level",
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no programme matching the search criteria..."
