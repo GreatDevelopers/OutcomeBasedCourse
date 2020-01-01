@@ -87,6 +87,13 @@ class DisciplineFilter(django_filters.FilterSet):
 
 
 class CourseFilter(django_filters.FilterSet):
+    discipline_code = django_filters.ModelChoiceFilter(
+        field_name="discipline",
+        lookup_expr="exact",
+        empty_label="Select Discipline",
+        queryset=Discipline.objects.all(),
+    )
+
     class Meta:
         model = Course
         fields = {"course_id": ["exact"], "course_title": ["icontains"]}

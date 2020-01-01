@@ -201,6 +201,7 @@ class DepartmentTable(tables.Table):
     edit = tables.Column(
         verbose_name="Edit Department",
         accessor=tables.A("department_code"),
+        attrs={"td": {"align": "center"}},
         orderable=False,
         exclude_from_export=True,
     )
@@ -217,13 +218,18 @@ class DepartmentTable(tables.Table):
 
     def render_edit(self, value):
         url = reverse("edit-department", args=[value])
-        return mark_safe('<a href="%s">Edit</a>' % (url,))
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content="Edit", href=url, button_class="btn-link"
+            )
+        )
 
 
 class DisciplineTable(tables.Table):
     edit = tables.Column(
         verbose_name="Edit Discipline",
         accessor=tables.A("discipline_code"),
+        attrs={"td": {"align": "center"}},
         orderable=False,
         exclude_from_export=True,
     )
@@ -245,9 +251,27 @@ class DisciplineTable(tables.Table):
         if self.request.user.is_authenticated == False:
             self.columns.hide("edit")
 
+    def render_discipline_name(self, value):
+        discipline_code = Discipline.objects.get(
+            discipline_name=value
+        ).discipline_code
+        url = (reverse("course") + "?discipline_code=%s") % (discipline_code,)
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content=value,
+                href=url,
+                button_class="btn-link",
+                extra_classes="text-body",
+            )
+        )
+
     def render_edit(self, value):
         url = reverse("edit-discipline", args=[value])
-        return mark_safe('<a href="%s">Edit</a>' % (url,))
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content="Edit", href=url, button_class="btn-link"
+            )
+        )
 
 
 class CourseTable(tables.Table):
@@ -273,6 +297,7 @@ class CourseTable(tables.Table):
             "practical_contact_hours_per_week",
             "course_resources",
             "course_test",
+            "discipline",
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no course matching the search criteria..."
@@ -283,7 +308,11 @@ class CourseTable(tables.Table):
 
     def render_edit(self, value):
         url = reverse("edit-course", args=[value])
-        return mark_safe('<a href="%s">Edit</a>' % (url,))
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content="Edit", href=url, button_class="btn-link"
+            )
+        )
 
 
 class ModuleTable(tables.Table):
