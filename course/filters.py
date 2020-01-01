@@ -65,12 +65,24 @@ class ProgrammeFilter(django_filters.FilterSet):
 
 
 class DisciplineFilter(django_filters.FilterSet):
+    department_code = django_filters.ModelChoiceFilter(
+        field_name="department",
+        lookup_expr="exact",
+        empty_label="Select Department",
+        queryset=Department.objects.all(),
+    )
+    programme_code = django_filters.ModelChoiceFilter(
+        field_name="programme",
+        lookup_expr="exact",
+        empty_label="Select Programme",
+        queryset=Programme.objects.all(),
+    )
+
     class Meta:
         model = Discipline
         fields = {
             "discipline_code": ["exact"],
             "discipline_name": ["icontains"],
-            "department__department_name": ["icontains"],
         }
 
 

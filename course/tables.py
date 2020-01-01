@@ -153,6 +153,7 @@ class ProgrammeTable(tables.Table):
     edit = tables.Column(
         verbose_name="Edit Programme",
         accessor=tables.A("programme_code"),
+        attrs={"td": {"align": "center"}},
         orderable=False,
         exclude_from_export=True,
     )
@@ -173,9 +174,27 @@ class ProgrammeTable(tables.Table):
         if self.request.user.is_authenticated == False:
             self.columns.hide("edit")
 
+    def render_programme_name(self, value):
+        programme_code = Programme.objects.get(
+            programme_name=value
+        ).programme_code
+        url = (reverse("discipline") + "?programme_code=%s") % (programme_code,)
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content=value,
+                href=url,
+                button_class="btn-link",
+                extra_classes="text-body",
+            )
+        )
+
     def render_edit(self, value):
         url = reverse("edit-programme", args=[value])
-        return mark_safe('<a href="%s">Edit</a>' % (url,))
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content="Edit", href=url, button_class="btn-link"
+            )
+        )
 
 
 class DepartmentTable(tables.Table):
@@ -217,6 +236,7 @@ class DisciplineTable(tables.Table):
             "discipline_short_name",
             "total_credits",
             "department",
+            "programme",
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no discipline matching the search criteria..."
