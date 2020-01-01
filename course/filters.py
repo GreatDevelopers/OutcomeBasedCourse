@@ -39,6 +39,13 @@ class InstituteFilter(django_filters.FilterSet):
 
 
 class LevelFilter(django_filters.FilterSet):
+    institute_id = django_filters.ModelChoiceFilter(
+        field_name="institute",
+        lookup_expr="exact",
+        empty_label="Select Institute",
+        queryset=Institute.objects.all(),
+    )
+
     class Meta:
         model = Level
         fields = {"level_name": ["icontains"]}
