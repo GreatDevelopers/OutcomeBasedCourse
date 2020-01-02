@@ -3,7 +3,7 @@ from .views import *
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    path("", home_page),
+    path("", home_page, name="home"),
     path(
         "cognitive-level/", CognitiveLevelView.as_view(), name="cognitive-level"
     ),
