@@ -113,6 +113,13 @@ class ModuleFilter(django_filters.FilterSet):
 
 
 class UnitFilter(django_filters.FilterSet):
+    module_id = django_filters.ModelChoiceFilter(
+        field_name="module",
+        lookup_expr="exact",
+        empty_label="Select Module",
+        queryset=Module.objects.all(),
+    )
+
     class Meta:
         model = Unit
         fields = {"unit_name": ["icontains"]}

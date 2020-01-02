@@ -332,6 +332,7 @@ class ModuleTable(tables.Table):
     edit = tables.Column(
         verbose_name="Edit Module",
         accessor=tables.A("module_id"),
+        attrs={"td": {"align": "center"}},
         orderable=False,
         exclude_from_export=True,
     )
@@ -356,6 +357,18 @@ class ModuleTable(tables.Table):
         if self.request.user.is_authenticated == False:
             self.columns.hide("edit")
 
+    def render_module_title(self, value):
+        module_id = Module.objects.get(module_title=value).module_id
+        url = (reverse("unit") + "?module_id=%s") % (module_id,)
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content=value,
+                href=url,
+                button_class="btn-link",
+                extra_classes="text-body",
+            )
+        )
+
     def render_edit(self, value):
         url = reverse("edit-module", args=[value])
         return mark_safe(
@@ -369,6 +382,7 @@ class UnitTable(tables.Table):
     edit = tables.Column(
         verbose_name="Edit Unit",
         accessor=tables.A("unit_number"),
+        attrs={"td": {"align": "center"}},
         orderable=False,
         exclude_from_export=True,
     )
@@ -384,6 +398,7 @@ class UnitTable(tables.Table):
             "unit_body",
             "unit_resources",
             "unit_test",
+            "module",
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no unit matching the search criteria..."
@@ -394,4 +409,8 @@ class UnitTable(tables.Table):
 
     def render_edit(self, value):
         url = reverse("edit-unit", args=[value])
-        return mark_safe('<a href="%s">Edit</a>' % (url,))
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content="Edit", href=url, button_class="btn-link"
+            )
+        )
