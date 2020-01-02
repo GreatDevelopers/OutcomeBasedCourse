@@ -100,6 +100,13 @@ class CourseFilter(django_filters.FilterSet):
 
 
 class ModuleFilter(django_filters.FilterSet):
+    course_id = django_filters.ModelChoiceFilter(
+        field_name="course",
+        lookup_expr="exact",
+        empty_label="Select Course",
+        queryset=Course.objects.all(),
+    )
+
     class Meta:
         model = Module
         fields = {"module_title": ["icontains"]}

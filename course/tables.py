@@ -278,6 +278,7 @@ class CourseTable(tables.Table):
     edit = tables.Column(
         verbose_name="Edit Course",
         accessor=tables.A("course_id"),
+        attrs={"td": {"align": "center"}},
         orderable=False,
         exclude_from_export=True,
     )
@@ -305,6 +306,18 @@ class CourseTable(tables.Table):
     def before_render(self, request):
         if self.request.user.is_authenticated == False:
             self.columns.hide("edit")
+
+    def render_course_title(self, value):
+        course_id = Course.objects.get(course_title=value).course_id
+        url = (reverse("module") + "?course_id=%s") % (course_id,)
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content=value,
+                href=url,
+                button_class="btn-link",
+                extra_classes="text-body",
+            )
+        )
 
     def render_edit(self, value):
         url = reverse("edit-course", args=[value])
@@ -334,6 +347,7 @@ class ModuleTable(tables.Table):
             "module_body",
             "module_resources",
             "module_test",
+            "course",
         )
         attrs = {"class": "table-striped table-bordered"}
         empty_text = "There is no module matching the search criteria..."
@@ -344,7 +358,11 @@ class ModuleTable(tables.Table):
 
     def render_edit(self, value):
         url = reverse("edit-module", args=[value])
-        return mark_safe('<a href="%s">Edit</a>' % (url,))
+        return mark_safe(
+            bootstrap.bootstrap_button(
+                content="Edit", href=url, button_class="btn-link"
+            )
+        )
 
 
 class UnitTable(tables.Table):
