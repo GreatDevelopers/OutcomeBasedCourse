@@ -127,4 +127,5 @@ urlpatterns = [
         login_required(UnitFormView.as_view()),
         name="edit-unit",
     ),
+    path("printpdf/<str:course_id>", html_to_pdf.as_view(), name="syllabus"),
 ]

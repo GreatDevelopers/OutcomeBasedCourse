@@ -494,8 +494,8 @@ class SyllabusView(TemplateView):
         context["course_outcome"] = course.course_outcome
         context["course_test"] = course.course_test
         context["course_resources"] = course.course_resources
+        context["course_id"] = course.course_id
         modules = Module.objects.filter(course=course)
-
         context["modules"] = modules.values(
             "module_title",
             "module_overview",
@@ -505,16 +505,91 @@ class SyllabusView(TemplateView):
             "module_resources",
             "module_test",
         )
+        units = []
+        attributes = []
         for module in modules:
-            units = Unit.objects.filter(module=module)
-            context["units"] = units.values(
-                "unit_name",
-                "unit_overview",
-                "unit_outcome",
-                "unit_objective",
-                "unit_body",
-                "unit_resources",
-                "unit_test",
-                "module",
+            units.append(Unit.objects.filter(module=module))
+        for unit in units:
+            attributes.append(
+                unit.values(
+                    "unit_name",
+                    "unit_overview",
+                    "unit_outcome",
+                    "unit_objective",
+                    "unit_body",
+                    "unit_resources",
+                    "unit_test",
+                    "module",
+                )
             )
-               return context
+        context["units"] = attributes
+        return context
+
+
+class html_to_pdf(View):
+    context_object_name = "syllabus"
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        course = Course.objects.get(course_id=self.kwargs["course_id"])
+        context["course_name"] = course.course_title
+        context["course_overview"] = course.course_overview
+        context["course_credit"] = course.course_credit
+        context[
+            "lecture_contact_hours_per_week"
+        ] = course.lecture_contact_hours_per_week
+        context[
+            "tutorial_contact_hours_per_week"
+        ] = course.tutorial_contact_hours_per_week
+        context[
+            "practical_contact_hours_per_week"
+        ] = course.practical_contact_hours_per_week
+        context["course_objective"] = course.course_objective
+        context["course_outcome"] = course.course_outcome
+        context["course_test"] = course.course_test
+        context["course_resources"] = course.course_resources
+        modules = Module.objects.filter(course=course)
+        context["modules"] = modules.values(
+            "module_title",
+            "module_overview",
+            "module_outcome",
+            "module_objective",
+            "module_body",
+            "module_resources",
+            "module_test",
+            "module_id",
+        )
+        units = []
+        attributes = []
+        for module in modules:
+            units.append(Unit.objects.filter(module=module))
+        for unit in units:
+            attributes.append(
+                unit.values(
+                    "unit_name",
+                    "unit_overview",
+                    "unit_outcome",
+                    "unit_objective",
+                    "unit_body",
+                    "unit_resources",
+                    "unit_test",
+                    "module",
+                )
+            )
+        context["units"] = attributes
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        html_string = render_to_string("course/render_syllabus.html", context)
+
+        html = HTML(string=html_string)
+        html.write_pdf(target="/tmp/mypdf.pdf")
+
+        fs = FileSystemStorage("/tmp")
+        with fs.open("mypdf.pdf") as pdf:
+            response = HttpResponse(pdf, content_type="application/pdf")
+            response["Content-Disposition"] = 'attachment; filename="mypdf.pdf"'
+            return response
+
+        # return response

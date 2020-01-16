@@ -1,7 +1,3 @@
-{% extends "course/base.html" %}
-
-{% block content %}
-
 <br>
 <center><h2>{{ course_name }} Syllabus</h2>
 <p>{{ course_overview }}</p></center>
@@ -39,7 +35,3 @@
 <p><b>Outcomes:</b> {{ course_outcome}}</p>
 <p><b>Tests:</b> {{ course_test}}</p>
 <p><b>Resources:</b> {{ course_resources}}</p>
-
-<button><a href="/printpdf/{{course_id}}">Create pdf</a></button>
-
-{% endblock %}
