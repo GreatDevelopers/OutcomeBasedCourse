@@ -15,15 +15,19 @@
 <p><b>Outcomes:</b> {{ module.module_outcome}}</p><br>
 <p><b>Tests:</b> {{ module.module_test}}</p><br>
 <p><b>Resources:</b> {{ module.module_resources}}</p>
+<p><b>Module ID:</b> {{ module.module_id}}</p>
 {{ module.module_body|linebreaks }}<br></li>
 <ol type="i">
 	{% for unit in units %}
+	{% if unit.module == module.module_id %}
 	<li><b>{{ unit.unit_name }}</b>: {{unit.unit_overview}}<br>
 	<p><b>Objective:</b> {{ unit.unit_objective}}</p><br>
 	<p><b>Outcomes:</b> {{ unit.unit_outcome}}</p><br>
 	<p><b>Tests:</b> {{ unit.unit_test}}</p><br>
 	<p><b>Resources:</b> {{ unit.unit_resources}}</p>
+	<p><b>Module ID:</b> {{ unit.module}}</p>
 	{{ unit.unit_body|linebreaks }}<br></li>
+	{% endif %}
 	{% endfor %}
 </ol>
 
