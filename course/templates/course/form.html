@@ -1,8 +1,16 @@
 {% extends "course/base.html"%}
 
 {% load crispy_forms_tags %}
-
+{% load static %}
 {% load martortags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "course/css/widgets.css" %}">
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static "course/js/i18n.js" %}"></script>
+{% endblock %}
 
 {% block content %}
 <div class="container">
