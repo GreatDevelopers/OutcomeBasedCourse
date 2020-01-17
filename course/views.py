@@ -1,6 +1,8 @@
 from django.views.generic import TemplateView, ListView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import CreateView, FormView
 from django.urls import reverse_lazy
+
+# from django.db import transaction
 from django.shortcuts import render
 from django_tables2 import RequestConfig, SingleTableView, SingleTableMixin
 from django_filters.views import FilterView
@@ -330,6 +332,14 @@ class CourseFormView(FormView):
     form_class = CourseForm
     success_url = reverse_lazy("course")
 
+    def get_context_data(self, **kwargs):
+        context = super(CourseFormView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context["outcomes"] = OutcomeFormSet(self.request.POST)
+        else:
+            context["outcomes"] = OutcomeFormSet()
+        return context
+
     def get_initial(self, **kwargs):
         self.edit_course = False
         if "course_id" in self.kwargs:
@@ -348,10 +358,13 @@ class CourseFormView(FormView):
                 ]
                 return initial_data
 
-    def form_valid(self, form):
+    def form_valid(self, form, **kwargs):
+        super(CourseFormView, self).get_context_data(**kwargs)
+        context = self.get_context_data()
+        # with transaction.atomic():
         cleaned_data = form.cleaned_data
         discipline = cleaned_data.pop("discipline")
-        outcome = cleaned_data.pop("course_outcome")
+        cleaned_data.pop("course_outcome")
         objective = cleaned_data.pop("course_objective")
         if self.edit_course:
             Course.objects.filter(course_id=self.kwargs["course_id"]).update(
@@ -362,8 +375,22 @@ class CourseFormView(FormView):
             course = Course.objects.create(**cleaned_data)
             course.save()
         course.discipline.set(discipline)
-        course.course_outcome.set(outcome)
         course.course_objective.set(objective)
+        outcomes_formset = context["outcomes"]
+        if outcomes_formset.is_valid():
+            for outcome_formset in outcomes_formset:
+                cleaned_outcome = outcome_formset.cleaned_data
+                outcome_name = cleaned_outcome["outcome"]
+                outcome_short_name = cleaned_outcome["outcome_short_name"]
+                action_verb = cleaned_outcome["action_verb"]
+                outcome = Outcome(
+                    outcome=outcome_name,
+                    outcome_short_name=outcome_short_name,
+                    action_verb=action_verb,
+                    course_outcome=course,
+                )
+                outcome.save()
+        course.course_outcome.set(Outcome.objects.filter(course_outcome=course))
         return super().form_valid(form)
 
 
