@@ -10,3 +10,4 @@ martor==1.4.4
 mysqlclient==1.4.6
 pre-commit==1.20.0
 python-ldap==3.2.0
+WeasyPrint==51
