@@ -12,6 +12,11 @@ from .tables import *
 from .filters import *
 from OutcomeBasedCourse.config.verbose_names import *
 
+from django.views import View
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML as weasy_html
 
 def home_page(request):
     return render(request, "course/home_page.html")
@@ -610,7 +615,7 @@ class html_to_pdf(View):
         context = self.get_context_data()
         html_string = render_to_string("course/render_syllabus.html", context)
 
-        html = HTML(string=html_string)
+        html = weasy_html(string=html_string)
         html.write_pdf(target="/tmp/mypdf.pdf")
 
         fs = FileSystemStorage("/tmp")
