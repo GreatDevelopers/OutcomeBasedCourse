@@ -1,7 +1,17 @@
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
+from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import (
+    Layout,
+    Field,
+    Fieldset,
+    Div,
+    HTML,
+    ButtonHolder,
+    Submit,
+)
+from .custom_layout_object import *
 from .models import (
     CognitiveLevel,
     ActionVerb,
@@ -80,7 +90,7 @@ class CreateActionVerbForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class OutcomeForm(forms.Form):
+class OutcomeForm(forms.ModelForm):
     outcome = forms.CharField(
         label="Outcome",
         max_length=255,
@@ -109,6 +119,10 @@ class OutcomeForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
+
+    class Meta:
+        model = Outcome
+        exclude = ("course_outcome",)
 
 
 class ObjectiveForm(forms.Form):
@@ -350,7 +364,7 @@ class DisciplineForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CourseForm(forms.Form):
+class CourseForm(forms.ModelForm):
     course_id = forms.CharField(
         label=COURSE_SINGULAR + " id",
         max_length=20,
@@ -475,11 +489,48 @@ class CourseForm(forms.Form):
         required=False,
     )
 
+    class Meta:
+        model = Course
+        exclude = []
+
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-md-3"
+        self.helper.field_class = "col-md-9"
+        self.helper.layout = Layout(
+            Div(
+                Field("course_id"),
+                HTML("<br>"),
+                Field("course_title"),
+                HTML("<br>"),
+                Field("course_short_name"),
+                HTML("<br>"),
+                Field("course_overview"),
+                HTML("<br>"),
+                Fieldset("Add Outcomes", FormsetLayoutObject("outcomes")),
+                HTML("<br>"),
+                Field("course_objective"),
+                HTML("<br>"),
+                Field("course_credit"),
+                HTML("<br>"),
+                Field("lecture_contact_hours_per_week"),
+                HTML("<br>"),
+                Field("tutorial_contact_hours_per_week"),
+                HTML("<br>"),
+                Field("practical_contact_hours_per_week"),
+                HTML("<br>"),
+                Field("course_resources"),
+                HTML("<br>"),
+                Field("course_test"),
+                HTML("<br>"),
+                Field("discipline"),
+                HTML("<br>"),
+                ButtonHolder(Submit("submit", "Submit")),
+            )
+        )
 
 
 class ModuleForm(forms.Form):
@@ -646,3 +697,12 @@ class UnitForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
+
+
+OutcomeFormSet = inlineformset_factory(
+    parent_model=Course,
+    model=Outcome,
+    form=OutcomeForm,
+    extra=1,
+    can_delete=True,
+)

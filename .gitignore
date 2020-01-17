@@ -126,8 +126,5 @@ dmypy.json
 # Backup files
 *.bak*
 
-# Migrations
-*/migrations/
-
 # Python virtual environment
 .venv/

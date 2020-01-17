@@ -14,7 +14,12 @@
 
 {% block content %}
 <div class="container">
-  <br><h2>{% block heading %} {% endblock %}</h2>
-  {% crispy form %}
+  <br>
+  <div class="card">
+    <div class="card-header">{% block heading %} {% endblock %}</div>
+    <div class="card-body">
+      {% crispy form %}
+    </div>
+  </div>
 </div>
 {% endblock %}
