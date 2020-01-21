@@ -430,7 +430,7 @@ class CourseForm(forms.ModelForm):
     lecture_contact_hours_per_week = forms.IntegerField(
         label="Lecture contact hours per week",
         max_value=1000,
-        min_value=1,
+        min_value=0,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -442,7 +442,7 @@ class CourseForm(forms.ModelForm):
     tutorial_contact_hours_per_week = forms.IntegerField(
         label="Tutorial contact hours per week",
         max_value=1000,
-        min_value=1,
+        min_value=0,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -454,7 +454,7 @@ class CourseForm(forms.ModelForm):
     practical_contact_hours_per_week = forms.IntegerField(
         label="Practical contact hours per week",
         max_value=1000,
-        min_value=1,
+        min_value=0,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
