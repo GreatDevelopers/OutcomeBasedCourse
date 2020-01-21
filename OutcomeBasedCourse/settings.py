@@ -28,7 +28,9 @@ ALLOWED_HOSTS = []
 # ldap config start
 
 # Baseline configuration.
-AUTH_LDAP_SERVER_URI = "ldap://lab.gdy.club:389"
+# ldaps protocol specify here ldap + tls
+AUTH_LDAP_SERVER_URI = "ldaps://lab.gdy.club:389"
+AUTH_LDAP_START_TLS = True
 
 AUTH_LDAP_BIND_DN = "cn=admin,dc=lab,dc=gdy,dc=club"
 AUTH_LDAP_BIND_PASSWORD = "fillpassword"
