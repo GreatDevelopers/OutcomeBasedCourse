@@ -109,7 +109,7 @@ class OutcomeForm(forms.ModelForm):
     )
     action_verb = forms.ModelChoiceField(
         label="Action Verb",
-        queryset=ActionVerb.objects.all(),
+        queryset=ActionVerb.objects.all().order_by("action_verb"),
         widget=forms.Select(attrs={"class": "form-control"}),
         required=True,
     )
