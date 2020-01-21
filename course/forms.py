@@ -1,6 +1,17 @@
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
+from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import (
+    Layout,
+    Field,
+    Fieldset,
+    Div,
+    HTML,
+    ButtonHolder,
+    Submit,
+)
+from .custom_layout_object import *
 from .models import (
     CognitiveLevel,
     ActionVerb,
@@ -79,7 +90,7 @@ class CreateActionVerbForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class OutcomeForm(forms.Form):
+class OutcomeForm(forms.ModelForm):
     outcome = forms.CharField(
         label="Outcome",
         max_length=255,
@@ -108,6 +119,10 @@ class OutcomeForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
+
+    class Meta:
+        model = Outcome
+        exclude = ("course_outcome",)
 
 
 class ObjectiveForm(forms.Form):
@@ -183,9 +198,9 @@ class LevelForm(forms.Form):
     institute = forms.ModelMultipleChoiceField(
         label=INSTITUTE_PLURAL,
         queryset=Institute.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name=INSTITUTE_PLURAL, is_stacked=False
+        ),
         required=False,
     )
 
@@ -349,7 +364,7 @@ class DisciplineForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CourseForm(forms.Form):
+class CourseForm(forms.ModelForm):
     course_id = forms.CharField(
         label=COURSE_SINGULAR + " id",
         max_length=20,
@@ -385,19 +400,19 @@ class CourseForm(forms.Form):
         required=False,
     )
     course_outcome = forms.ModelMultipleChoiceField(
-        label="Outcome",
+        label="Outcomes",
         queryset=Outcome.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name="Outcomes", is_stacked=False
+        ),
         required=False,
     )
     course_objective = forms.ModelMultipleChoiceField(
-        label="Objective",
+        label="Objectives",
         queryset=Objective.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name="Objectives", is_stacked=False
+        ),
         required=False,
     )
     course_credit = forms.IntegerField(
@@ -415,7 +430,7 @@ class CourseForm(forms.Form):
     lecture_contact_hours_per_week = forms.IntegerField(
         label="Lecture contact hours per week",
         max_value=1000,
-        min_value=1,
+        min_value=0,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -427,7 +442,7 @@ class CourseForm(forms.Form):
     tutorial_contact_hours_per_week = forms.IntegerField(
         label="Tutorial contact hours per week",
         max_value=1000,
-        min_value=1,
+        min_value=0,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -439,7 +454,7 @@ class CourseForm(forms.Form):
     practical_contact_hours_per_week = forms.IntegerField(
         label="Practical contact hours per week",
         max_value=1000,
-        min_value=1,
+        min_value=0,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
@@ -468,17 +483,54 @@ class CourseForm(forms.Form):
     discipline = forms.ModelMultipleChoiceField(
         label=DISCIPLINE_PLURAL,
         queryset=Discipline.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name=DISCIPLINE_PLURAL, is_stacked=False
+        ),
         required=False,
     )
+
+    class Meta:
+        model = Course
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-md-3"
+        self.helper.field_class = "col-md-9"
+        self.helper.layout = Layout(
+            Div(
+                Field("course_id"),
+                HTML("<br>"),
+                Field("course_title"),
+                HTML("<br>"),
+                Field("course_short_name"),
+                HTML("<br>"),
+                Field("course_overview"),
+                HTML("<br>"),
+                Fieldset("Add Outcomes", FormsetLayoutObject("outcomes")),
+                HTML("<br>"),
+                Field("course_objective"),
+                HTML("<br>"),
+                Field("course_credit"),
+                HTML("<br>"),
+                Field("lecture_contact_hours_per_week"),
+                HTML("<br>"),
+                Field("tutorial_contact_hours_per_week"),
+                HTML("<br>"),
+                Field("practical_contact_hours_per_week"),
+                HTML("<br>"),
+                Field("course_resources"),
+                HTML("<br>"),
+                Field("course_test"),
+                HTML("<br>"),
+                Field("discipline"),
+                HTML("<br>"),
+                ButtonHolder(Submit("submit", "Submit")),
+            )
+        )
 
 
 class ModuleForm(forms.Form):
@@ -509,19 +561,19 @@ class ModuleForm(forms.Form):
         required=False,
     )
     module_outcome = forms.ModelMultipleChoiceField(
-        label="Outcome",
+        label="Outcomes",
         queryset=Outcome.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name="Outcomes", is_stacked=False
+        ),
         required=False,
     )
     module_objective = forms.ModelMultipleChoiceField(
-        label="Objective",
+        label="Objectives",
         queryset=Objective.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name="Objectives", is_stacked=False
+        ),
         required=False,
     )
     module_body = MartorFormField(
@@ -551,9 +603,9 @@ class ModuleForm(forms.Form):
     course = forms.ModelMultipleChoiceField(
         label=COURSE_PLURAL,
         queryset=Course.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name=COURSE_PLURAL, is_stacked=False
+        ),
         required=False,
     )
 
@@ -592,19 +644,19 @@ class UnitForm(forms.Form):
         required=False,
     )
     unit_outcome = forms.ModelMultipleChoiceField(
-        label="Outcome",
+        label="Outcomes",
         queryset=Outcome.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name="Outcomes", is_stacked=False
+        ),
         required=False,
     )
     unit_objective = forms.ModelMultipleChoiceField(
-        label="Objective",
+        label="Objectives",
         queryset=Objective.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name="Objectives", is_stacked=False
+        ),
         required=False,
     )
     unit_body = MartorFormField(
@@ -634,9 +686,9 @@ class UnitForm(forms.Form):
     module = forms.ModelMultipleChoiceField(
         label=MODULE_PLURAL,
         queryset=Module.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-        help_text="Hold down “Control”, or “Command” on a Mac, to select more "
-        "than one.",
+        widget=FilteredSelectMultiple(
+            verbose_name=MODULE_PLURAL, is_stacked=False
+        ),
         required=False,
     )
 
@@ -645,3 +697,12 @@ class UnitForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Submit"))
+
+
+OutcomeFormSet = inlineformset_factory(
+    parent_model=Course,
+    model=Outcome,
+    form=OutcomeForm,
+    extra=1,
+    can_delete=True,
+)

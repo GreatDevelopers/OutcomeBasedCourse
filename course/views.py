@@ -1,6 +1,8 @@
 from django.views.generic import TemplateView, ListView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import CreateView, FormView
 from django.urls import reverse_lazy
+
+# from django.db import transaction
 from django.shortcuts import render
 from django_tables2 import RequestConfig, SingleTableView, SingleTableMixin
 from django_filters.views import FilterView
@@ -10,6 +12,11 @@ from .tables import *
 from .filters import *
 from OutcomeBasedCourse.config.verbose_names import *
 
+from django.views import View
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML as weasy_html
 
 def home_page(request):
     return render(request, "course/home_page.html")
@@ -330,6 +337,14 @@ class CourseFormView(FormView):
     form_class = CourseForm
     success_url = reverse_lazy("course")
 
+    def get_context_data(self, **kwargs):
+        context = super(CourseFormView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context["outcomes"] = OutcomeFormSet(self.request.POST)
+        else:
+            context["outcomes"] = OutcomeFormSet()
+        return context
+
     def get_initial(self, **kwargs):
         self.edit_course = False
         if "course_id" in self.kwargs:
@@ -348,10 +363,13 @@ class CourseFormView(FormView):
                 ]
                 return initial_data
 
-    def form_valid(self, form):
+    def form_valid(self, form, **kwargs):
+        super(CourseFormView, self).get_context_data(**kwargs)
+        context = self.get_context_data()
+        # with transaction.atomic():
         cleaned_data = form.cleaned_data
         discipline = cleaned_data.pop("discipline")
-        outcome = cleaned_data.pop("course_outcome")
+        cleaned_data.pop("course_outcome")
         objective = cleaned_data.pop("course_objective")
         if self.edit_course:
             Course.objects.filter(course_id=self.kwargs["course_id"]).update(
@@ -362,8 +380,22 @@ class CourseFormView(FormView):
             course = Course.objects.create(**cleaned_data)
             course.save()
         course.discipline.set(discipline)
-        course.course_outcome.set(outcome)
         course.course_objective.set(objective)
+        outcomes_formset = context["outcomes"]
+        if outcomes_formset.is_valid():
+            for outcome_formset in outcomes_formset:
+                cleaned_outcome = outcome_formset.cleaned_data
+                outcome_name = cleaned_outcome["outcome"]
+                outcome_short_name = cleaned_outcome["outcome_short_name"]
+                action_verb = cleaned_outcome["action_verb"]
+                outcome = Outcome(
+                    outcome=outcome_name,
+                    outcome_short_name=outcome_short_name,
+                    action_verb=action_verb,
+                    course_outcome=course,
+                )
+                outcome.save()
+        course.course_outcome.set(Outcome.objects.filter(course_outcome=course))
         return super().form_valid(form)
 
 
@@ -494,6 +526,7 @@ class SyllabusView(TemplateView):
         context["course_outcome"] = course.course_outcome
         context["course_test"] = course.course_test
         context["course_resources"] = course.course_resources
+        context["course_id"] = course.course_id
         modules = Module.objects.filter(course=course)
         context["modules"] = modules.values(
             "module_title",
@@ -504,16 +537,91 @@ class SyllabusView(TemplateView):
             "module_resources",
             "module_test",
         )
+        units = []
+        attributes = []
         for module in modules:
-            units = Unit.objects.filter(module=module)
-            context["units"] = units.values(
-                "unit_name",
-                "unit_overview",
-                "unit_outcome",
-                "unit_objective",
-                "unit_body",
-                "unit_resources",
-                "unit_test",
-                "module",
+            units.append(Unit.objects.filter(module=module))
+        for unit in units:
+            attributes.append(
+                unit.values(
+                    "unit_name",
+                    "unit_overview",
+                    "unit_outcome",
+                    "unit_objective",
+                    "unit_body",
+                    "unit_resources",
+                    "unit_test",
+                    "module",
+                )
             )
+        context["units"] = attributes
         return context
+
+
+class html_to_pdf(View):
+    context_object_name = "syllabus"
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        course = Course.objects.get(course_id=self.kwargs["course_id"])
+        context["course_name"] = course.course_title
+        context["course_overview"] = course.course_overview
+        context["course_credit"] = course.course_credit
+        context[
+            "lecture_contact_hours_per_week"
+        ] = course.lecture_contact_hours_per_week
+        context[
+            "tutorial_contact_hours_per_week"
+        ] = course.tutorial_contact_hours_per_week
+        context[
+            "practical_contact_hours_per_week"
+        ] = course.practical_contact_hours_per_week
+        context["course_objective"] = course.course_objective
+        context["course_outcome"] = course.course_outcome
+        context["course_test"] = course.course_test
+        context["course_resources"] = course.course_resources
+        modules = Module.objects.filter(course=course)
+        context["modules"] = modules.values(
+            "module_title",
+            "module_overview",
+            "module_outcome",
+            "module_objective",
+            "module_body",
+            "module_resources",
+            "module_test",
+            "module_id",
+        )
+        units = []
+        attributes = []
+        for module in modules:
+            units.append(Unit.objects.filter(module=module))
+        for unit in units:
+            attributes.append(
+                unit.values(
+                    "unit_name",
+                    "unit_overview",
+                    "unit_outcome",
+                    "unit_objective",
+                    "unit_body",
+                    "unit_resources",
+                    "unit_test",
+                    "module",
+                )
+            )
+        context["units"] = attributes
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        html_string = render_to_string("course/render_syllabus.html", context)
+
+        html = weasy_html(string=html_string)
+        html.write_pdf(target="/tmp/mypdf.pdf")
+
+        fs = FileSystemStorage("/tmp")
+        with fs.open("mypdf.pdf") as pdf:
+            response = HttpResponse(pdf, content_type="application/pdf")
+            response["Content-Disposition"] = 'attachment; filename="mypdf.pdf"'
+            return response
+
+        # return response
