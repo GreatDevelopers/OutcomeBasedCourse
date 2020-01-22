@@ -10,13 +10,13 @@ Requirements
 
 ```
 1. Apache2
-1. mysql-server
-1. python3.7
-1. python3-pip
-1. python-mysqldb
-1. django 3.0
-1. libldap2-dev
-1. libmysqlclient-dev
+2. mysql-server
+3. python3.7
+4. python3-pip
+5. python-mysqldb
+6. django 3.0
+7. libldap2-dev
+8. libmysqlclient-dev
 ```
 
 #### Installation
@@ -44,11 +44,11 @@ Steps for installation of OutcomeBasedCourse
 ```bash
 git clone https://github.com/GreatDevelopers/OutcomeBasedCourse
 ```
-1. Create a database for OutcomeBasedCourse
+2. Create a database for OutcomeBasedCourse
 ```bash
 mysql -u root -p -e "create database outcomebasedcourse;"
 ```
-1. Edit settings.py file in OutcomeBasedCourse/ directory. Things to be edited are:
+3. Edit settings.py file in OutcomeBasedCourse/ directory. Things to be edited are:
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
