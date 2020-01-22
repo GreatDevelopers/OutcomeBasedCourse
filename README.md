@@ -59,13 +59,14 @@ DATABASES = {
         "PASSWORD": "Your MySQl password",
     }
 }
-1. Goto the project directory and run the following commands:
+4. Goto the project directory and run the following commands:
 ```bash
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py runserver 127.0.0.1:8090
 ```
-1. Open "http://127.0.0.1:8090" in your browser.
+
+5. Open "http://127.0.0.1:8090" in your browser.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
