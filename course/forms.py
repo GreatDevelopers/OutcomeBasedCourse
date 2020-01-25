@@ -109,7 +109,7 @@ class OutcomeForm(forms.ModelForm):
     )
     action_verb = forms.ModelChoiceField(
         label="Action Verb",
-        queryset=ActionVerb.objects.all(),
+        queryset=ActionVerb.objects.all().order_by("action_verb"),
         widget=forms.Select(attrs={"class": "form-control"}),
         required=True,
     )
@@ -364,7 +364,7 @@ class DisciplineForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CourseForm(forms.ModelForm):
+class CourseForm(forms.Form):
     course_id = forms.CharField(
         label=COURSE_SINGULAR + " id",
         max_length=20,
