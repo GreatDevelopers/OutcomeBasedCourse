@@ -364,7 +364,7 @@ class DisciplineForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-class CourseForm(forms.ModelForm):
+class CourseForm(forms.Form):
     course_id = forms.CharField(
         label=COURSE_SINGULAR + " id",
         max_length=20,
