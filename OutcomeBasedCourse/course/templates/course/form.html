@@ -1,0 +1,31 @@
+{% extends "course/base.html"%}
+
+{% load crispy_forms_tags %}
+{% load static %}
+{% load martortags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "course/css/widgets.css" %}">
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static "course/js/i18n.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <br>
+  <div class="card">
+    <div class="card-header">{% block heading %} {% endblock %}</div>
+    <div class="card-body">
+      {% crispy form %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block a %}
+
+25%
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "course/base.html" %}
+
+{% block content %}
+
+<br>
+<center><h2>{{ course_name }} Syllabus</h2>
+<p>{{ course_overview }}</p></center>
+<p style="float:left"><b>Credits:<b> {{ course_credit }}<p><br>
+<p style="float:left"><b>Contact Hours Per Week: L:</b> {{ lecture_contact_hours_per_week}} <b>T:</b> {{ tutorial_contact_hours_per_week}} <b>P:</b> {{ practical_contact_hours_per_week}}</p><br>
+<p><b>Objective:</b> {{ course_objective}}</p>
+<ol>
+{% for module in modules %}
+<li><b>{{ module.module_title }}</b>: {{module.module_overview}}<br>
+<p><b>Objective:</b> {{ module.module_objective}}</p><br>
+<p><b>Outcomes:</b> {{ module.module_outcome}}</p><br>
+<p><b>Tests:</b> {{ module.module_test}}</p><br>
+<p><b>Resources:</b> {{ module.module_resources}}</p>
+<p><b>Module ID:</b> {{ module.module_id}}</p>
+{{ module.module_body|linebreaks }}<br></li>
+<ol type="i">
+	{% for unit in units %}
+	{% for subunit in unit %}
+        {% if subunit.module == module.module_id %}
+	<li><b>{{ subunit.unit_name }}</b>: {{subunit.unit_overview}}<br>
+	<p><b>Objective:</b> {{ subunit.unit_objective}}</p><br>
+	<p><b>Outcomes:</b> {{ subunit.unit_outcome}}</p><br>
+	<p><b>Tests:</b> {{ subunit.unit_test}}</p><br>
+	<p><b>Resources:</b> {{ subunit.unit_resources}}</p>
+	<p><b>Module ID:</b> {{ subunit.module}}</p>
+	{{ subunit.unit_body|linebreaks }}<br></li>
+        {% endif %}
+	{% endfor %}
+	{% endfor %}
+</ol>
+
+{% endfor %}
+</ol>
+
+<p><b>Outcomes:</b> {{ course_outcome}}</p>
+<p><b>Tests:</b> {{ course_test}}</p>
+<p><b>Resources:</b> {{ course_resources}}</p>
+
+<button><a href="/printpdf/{{course_id}}">Create pdf</a></button>
+
+{% endblock %}
