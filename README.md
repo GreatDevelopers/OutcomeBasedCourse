@@ -17,6 +17,7 @@ Requirements
 1. django 3.0
 1. libldap2-dev
 1. libmysqlclient-dev
+1. python3.7-dev
 
 
 #### Installation
@@ -35,13 +36,13 @@ chmod +x setup.sh
 Installation of Requirements
 
 ```bash
-sudo apt install apache2 mysql-server python3 python3-pip python3-mysqldb libldap2-dev libmysqlclient-dev
+sudo apt install apache2 mysql-server python3 python3-pip python3-mysqldb libldap2-dev libmysqlclient-dev python3.7-dev 
 sudo python3 -m pip install -r requirements.txt
 ```
 
 Steps for installation of OutcomeBasedCourse:
 
-1. Clone the repository [OutcomeBasedCourse](https://github.com/      GreatDevelopers/OutcomeBasedCourse).
+1. Clone the repository [OutcomeBasedCourse](https://github.com/GreatDevelopers/OutcomeBasedCourse).
 
         git clone https://github.com/GreatDevelopers/OutcomeBasedCourse
 
@@ -52,14 +53,14 @@ Steps for installation of OutcomeBasedCourse:
 1. Edit settings.py file in OutcomeBasedCourse/ directory. Things to be edited are:
    
         DATABASES = {
-        "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "Your database name"
-        "HOST": "Your MySQl server host",
-        "PORT": "Your MySQl server port",
-        "USER": "Your MySQL username",
-        "PASSWORD": "Your MySQl password",
-         } 
+                 "default":  {
+                        "ENGINE": "django.db.backends.mysql",
+                        "NAME": "Your database name"
+                        "HOST": "Your MySQl server host",
+                        "PORT": "Your MySQl server port",
+                        "USER": "Your MySQL username",
+                        "PASSWORD": "Your MySQl password",
+                 } 
          } 
 
 1. Goto the project directory and run the following commands:
