@@ -342,7 +342,9 @@ class CourseFormView(FormView):
         if self.request.POST:
             context["outcomes"] = OutcomeFormSet(self.request.POST)
         else:
-            context["outcomes"] = OutcomeFormSet()
+            context["outcomes"] = OutcomeFormSet(
+                queryset=Outcome.objects.none()
+            )
         return context
 
     def get_initial(self, **kwargs):
@@ -385,10 +387,17 @@ class CourseFormView(FormView):
         course.discipline.set(discipline)
         course.course_objective.set(objective)
 
-        outcomes_formset.instance = course
-        outcomes_formset.save()
-
-        course.course_outcome.set(Outcome.objects.filter(course_outcome=course))
+        for outcome_form in outcomes_formset:
+            outcome = outcome_form.instance
+            try:
+                outcome = Outcome.objects.get(
+                    outcome=outcome.outcome,
+                    outcome_short_name=outcome.outcome_short_name,
+                    action_verb=outcome.action_verb,
+                )
+            except:
+                outcome = outcome_form.save()
+            course.course_outcome.add(outcome)
 
         return super().form_valid(form)
 
