@@ -8,7 +8,7 @@ Design and develop your own outcome-based courses
 Requirements
 ------------
 
-```
+
 1. Apache2
 1. mysql-server
 1. python3.7
@@ -17,7 +17,7 @@ Requirements
 1. django 3.0
 1. libldap2-dev
 1. libmysqlclient-dev
-```
+
 
 #### Installation
 
@@ -35,37 +35,40 @@ chmod +x setup.sh
 Installation of Requirements
 
 ```bash
-sudo apt install apache2 mysql-server python python3-pip python-mysqldb libldap2-dev libmysqlclient-dev
+sudo apt install apache2 mysql-server python3 python3-pip python3-mysqldb libldap2-dev libmysqlclient-dev
 sudo python3 -m pip install -r requirements.txt
 ```
 
-Steps for installation of OutcomeBasedCourse
-1. Clone the repository [OutcomeBasedCourse](https://github.com/GreatDevelopers/OutcomeBasedCourse)
-```bash
-git clone https://github.com/GreatDevelopers/OutcomeBasedCourse
-```
-1. Create a database for OutcomeBasedCourse
-```bash
-mysql -u root -p -e "create database outcomebasedcourse;"
-```
+Steps for installation of OutcomeBasedCourse:
+
+1. Clone the repository [OutcomeBasedCourse](https://github.com/      GreatDevelopers/OutcomeBasedCourse).
+
+        git clone https://github.com/GreatDevelopers/OutcomeBasedCourse
+
+1. Create a database for OutcomeBasedCourse.
+
+         mysql -u root -p -e "create database outcomebasedcourse;"
+
 1. Edit settings.py file in OutcomeBasedCourse/ directory. Things to be edited are:
-DATABASES = {
-    "default": {
+   
+        DATABASES = {
+        "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "Your database name"
         "HOST": "Your MySQl server host",
         "PORT": "Your MySQl server port",
         "USER": "Your MySQL username",
         "PASSWORD": "Your MySQl password",
-    }
-}
-1. Goto the project directory and run the following commands:
-```bash
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py runserver 127.0.0.1:8090
-```
-1. Open "http://127.0.0.1:8090" in your browser.
+         } 
+         } 
 
+1. Goto the project directory and run the following commands:
+
+        python3 manage.py makemigrations
+        python3 manage.py migrate
+        python3 manage.py runserver 127.0.0.1:8090
+
+1. Open "http://127.0.0.1:8090" in your browser.
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
