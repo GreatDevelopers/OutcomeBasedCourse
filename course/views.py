@@ -1,9 +1,7 @@
-import ipdb
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import CreateView, FormView
 from django.urls import reverse_lazy
 
-from django.db import transaction
 from django.shortcuts import render
 from django_tables2 import RequestConfig, SingleTableView, SingleTableMixin
 from django_filters.views import FilterView
@@ -371,41 +369,27 @@ class CourseFormView(FormView):
         outcomes_formset = context["outcomes"]
         if not outcomes_formset.is_valid():
             return super().form_invalid(form)
-        with transaction.atomic():
-            cleaned_data = form.cleaned_data
-            discipline = cleaned_data.pop("discipline")
-            cleaned_data.pop("course_outcome")
-            objective = cleaned_data.pop("course_objective")
-            if self.edit_course:
-                Course.objects.filter(
-                    course_id=self.kwargs["course_id"]
-                ).update(**cleaned_data)
-                course = Course.objects.get(course_id=self.kwargs["course_id"])
-            else:
-                course = Course.objects.create(**cleaned_data)
-                course.save()
-            course.discipline.set(discipline)
-            course.course_objective.set(objective)
 
-            for outcome_form in outcomes_formset:
-                cleaned_outcome = outcome_form.cleaned_data
-                ipdb.set_trace()
-                if "outcome" not in cleaned_outcome:
-                    continue
-                outcome_name = cleaned_outcome["outcome"]
-                outcome_short_name = cleaned_outcome["outcome_short_name"]
-                action_verb = cleaned_outcome["action_verb"]
-                outcome = Outcome(
-                    outcome=outcome_name,
-                    outcome_short_name=outcome_short_name,
-                    action_verb=action_verb,
-                    course_outcome=course,
-                )
-                outcome.save()
-
-            course.course_outcome.set(
-                Outcome.objects.filter(course_outcome=course)
+        cleaned_data = form.cleaned_data
+        discipline = cleaned_data.pop("discipline")
+        cleaned_data.pop("course_outcome")
+        objective = cleaned_data.pop("course_objective")
+        if self.edit_course:
+            Course.objects.filter(course_id=self.kwargs["course_id"]).update(
+                **cleaned_data
             )
+            course = Course.objects.get(course_id=self.kwargs["course_id"])
+        else:
+            course = Course.objects.create(**cleaned_data)
+            course.save()
+        course.discipline.set(discipline)
+        course.course_objective.set(objective)
+
+        outcomes_formset.instance = course
+        outcomes_formset.save()
+
+        course.course_outcome.set(Outcome.objects.filter(course_outcome=course))
+
         return super().form_valid(form)
 
 

@@ -1,257 +1,118 @@
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_messages %}
-
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static "course/fontawesome/css/all.css" %}">
+<title>{%block head %}Outcome Based Course{% endblock %}</title>
+{% block extra_css %}{% endblock %}
+{% block extra_scripts %}{% endblock %}
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
 
-    <title>{% block head %}Outcome Based Course{% endblock %}</title>
+.navbarr {
+  overflow: hidden;
+  background-color: #333; 
+}
 
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-    {% block extra_css %}{% endblock %}
+.navbarr a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
 
-    <!-- Font Awesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-    {% block extra_scripts %}{% endblock %}
+.subnavv {
+  float: left;
+  overflow: hidden;
+}
 
+.subnavv .subnavbutn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  left: 600px; 
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
 
-    <style type="text/css">
-        .wrapper {
-            display: flex;
-            width: 100%;
-            align-items: stretch;
-        }
+.navbarr a:hover, .subnavv:hover .subnavbutn {
+  background-color: red;
+}
 
-        .wrapper {
-            display: flex;
-            align-items: stretch;
-        }
+.subnavv-contentt {
+  display: none;
+  position: fixed;
+  left: 0;
+  background-color: red;
+  width: 100%;
+  z-index: 1;
+}
 
-        #sidebar {
-            width: 250px;
-            max-width: 250px;
-            height: 100vh;
-        }
+.subnavv-contentt a {
+  float: left;
+  color: white;
+  text-decoration: none;
+}
 
-        #sidebar.active {
-            margin-left: -250px;
-        }
+.subnavv-contentt a:hover {
+  background-color: #eee;
+  color: black;
+}
 
-        a[data-toggle="collapse"] {
-            position: relative;
-        }
-
-        .dropdown-toggle::after {
-            display: block;
-            position: absolute;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-        }
-
-        @media (max-width: 768px) {
-            #sidebar {
-            margin-left: -250px;
-            }
-            #sidebar.active {
-            margin-left: 0;
-            }
-        }
-
-        @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #fafafa;
-        }
-
-        p {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1em;
-            font-weight: 300;
-            line-height: 1.7em;
-            color: #999;
-        }
-
-        a, a:hover, a:focus {
-            color: inherit;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        #sidebar {
-            /* don't forget to add all the previously mentioned styles here too */
-            background: #7386D5;
-            color: #fff;
-            transition: all 0.3s;
-        }
-
-        #sidebar .sidebar-header {
-            padding: 20px;
-            background: #6d7fcc;
-        }
-
-        #sidebar ul.components {
-            padding: 20px 0;
-            border-bottom: 1px solid #47748b;
-        }
-
-        #sidebar ul p {
-            color: #fff;
-            padding: 10px;
-        }
-
-        #sidebar ul li a {
-            padding: 10px;
-            font-size: 1.1em;
-            display: block;
-        }
-        #sidebar ul li a:hover {
-            color: #7386D5;
-            background: #fff;
-        }
-
-        #sidebar ul li.active > a, a[aria-expanded="true"] {
-            color: #fff;
-            background: #6d7fcc;
-        }
-        ul ul a {
-            font-size: 0.9em !important;
-            padding-left: 30px !important;
-            background: #6d7fcc;
-        }
-
-
-    </style>
+.subnavv:hover .subnavv-contentt {
+  display: block;
+}
+</style>
 </head>
-
 <body>
 
-    <div class="wrapper">
-    <!-- Sidebar -->
-    <nav id="sidebar" style="height: cover;">
-        <div class="sidebar-header">
-            <h3>Navbar</h3>
-        </div>
-
-        <ul class="list-unstyled components">
-            <p>Admin</p>
-            <li class="active">
-                <a href="/">Home</a>
-            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Create</a>
-                <ul class="collapse list-unstyled" id="homeSubmenu">
-                    <li>
-                        <a href="/institute/add/">Institutiion</a>
-                    </li>
-                    <li>
-                        <a href="/level/add/">Level</a>
-                    </li>
-                    <li>
-                        <a href="/programme/add/">Programme</a>
-                    </li>
-                    <li>
-                        <a href="/discipline/add/">Discipline</a>
-                    </li>
-                    <li>
-                        <a href="/course/add/">Course</a>
-                    </li>
-                    <li>
-                        <a href="/module/add/">Module</a>
-                    </li>
-                    <li>
-                        <a href="/unit/add/">Unit</a>
-                    </li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">View</a>
-                <ul class="collapse list-unstyled" id="pageSubmenu">
-                    <li>
-                        <a href="/institute/">Institutiion</a>
-                    </li>
-                    <li>
-                        <a href="/level/">Level</a>
-                    </li>
-                    <li>
-                        <a href="/programme/">Programme</a>
-                    </li>
-                    <li>
-                        <a href="/discipline/">Discipline</a>
-                    </li>
-                    <li>
-                        <a href="/course/">Course</a>
-                    </li>
-                    <li>
-                        <a href="/module/">Module</a>
-                    </li>
-                    <li>
-                        <a href="/unit/">Unit</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#">Contact</a>
-            </li>
-        </ul>
-    </nav>
-
-    <div id="content">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <button type="button" id="sidebarCollapse" class="btn btn-info" style="position: absolute; top: 10px; left: 10px;">
-                <i class="fas fa-align-left"></i>
-                <span>Menu</span>
-            </button>
-        <div class = "wrapper col-lg-12" style="margin-left: {% block a %} {% endblock %} ; height: 90vh; overflow-y: scroll;">
-          <div class="white-board">
-            <div class ="main-box" id="c-panel">
-              <center>
-                <header class="primary-branding" style="font-size:32;">
-                    <br>
-              <span class="pb-dark">OUTCOME BASED COURSE</span>
-                </header>
-              </center>
-              {% block content %}{% endblock %}
-            </div>
-             </div>
-        </div>
-        </div>
-    </nav>
+<div class="navbarr"> 
+ <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i>   Home</a>
+  <div class="subnavv">
+    <button class="subnavbutn"><i class="fas fa-plus" aria-hidden="true"></i>   Create <i class="fa fa-caret-down"></i></button>
+    <div class="subnavv-contentt">
+    <a href="{% url 'create-institute' %}"><i class="fas fa-university" aria-hidden="true"></i>  Institution</a>
+    <a href="{% url 'create-level' %}"><i class="fas fa-level-up-alt" aria-hidden="true"></i>  Level</a>
+    <a href="{% url 'create-programme' %}"><i class="fas fa-tasks" aria-hidden="true"></i>  Programme</a>
+    <a href="{% url 'create-discipline' %}"><i class="fas fa-chart-area" aria-hidden="true"></i>  Discipline</a>
+    <a href="{% url 'create-course' %}"><i class="fas fa-graduation-cap" aria-hidden="true"></i>  Course</a>
+    <a href="{% url 'create-module' %}"><i class="fas fa-book" aria-hidden="true"></i>  Module</a>
+    <a href="{% url 'create-unit' %}"><i class="fas fa-paperclip" aria-hidden="true"></i>  Unit</a>
     </div>
-
- <div class="overlay"></div>
+  </div> 
+  <div class="subnavv">
+    <button class="subnavbutn"><i class="fas fa-eye" aria-hidden="true"></i>   View <i class="fa fa-caret-down"></i></button>
+    <div class="subnavv-contentt">
+    <a href="{% url 'institute' %}"><i class="fas fa-university" aria-hidden="true"></i>  Institution</a>
+    <a href="{% url 'level' %}"><i class="fas fa-level-up-alt" aria-hidden="true"></i>  Level</a>
+    <a href="{% url 'programme' %}"><i class="fas fa-tasks" aria-hidden="true"></i>  Programme</a>
+    <a href="{% url 'discipline' %}"><i class="fas fa-chart-area" aria-hidden="true"></i>  Discipline</a>
+    <a href="{% url 'course' %}"><i class="fas fa-graduation-cap" aria-hidden="true"></i>  Course</a>
+    <a href="{% url 'module' %}"><i class="fas fa-book" aria-hidden="true"></i>  Module</a>
+    <a href="{% url 'unit' %}"><i class="fas fa-paperclip" aria-hidden="true"></i>  Unit</a>
+    
+  </a>
+</div>
+  </div>
+  </div> 
+  
+ 
+</div>
+<div class="maiin">
+<center>Outcome Based Course</center>
+{% block content %}{% endblock %}
 </div>
 
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <!-- Popper.JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-        $('#sidebarCollapse').on('click', function () {
-        $('#sidebar').toggleClass('active');
-    });
-
-});
-
-
-    </script>
-</body>
-
-</html>
