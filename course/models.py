@@ -29,12 +29,9 @@ class ActionVerb(models.Model):
 
 
 class Outcome(models.Model):
-    outcome = models.CharField(max_length=255, unique=True)
+    outcome = models.CharField(max_length=255)
     outcome_short_name = models.CharField(max_length=10, blank=True, null=True)
     action_verb = models.ForeignKey(ActionVerb, on_delete=models.CASCADE)
-    course_outcome = models.ForeignKey(
-        "course.Course", on_delete=models.SET_NULL, blank=True, null=True
-    )
 
     def __str__(self):
         return self.outcome

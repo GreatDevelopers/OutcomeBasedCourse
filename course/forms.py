@@ -1,6 +1,5 @@
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
-from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
     Layout,
@@ -699,10 +698,6 @@ class UnitForm(forms.Form):
         self.helper.add_input(Submit("submit", "Submit"))
 
 
-OutcomeFormSet = inlineformset_factory(
-    parent_model=Course,
-    model=Outcome,
-    form=OutcomeForm,
-    extra=1,
-    can_delete=True,
+OutcomeFormSet = forms.models.modelformset_factory(
+    model=Outcome, form=OutcomeForm, extra=1, can_delete=True,
 )
