@@ -341,28 +341,34 @@ class CourseFormView(FormView):
         context = super(CourseFormView, self).get_context_data(**kwargs)
         if self.request.POST:
             context["outcomes"] = OutcomeFormSet(self.request.POST)
+        elif self.edit_course:
+            context["outcomes"] = OutcomeFormSet(
+                queryset=self.course.course_outcome.all()
+            )
         else:
             context["outcomes"] = OutcomeFormSet(
                 queryset=Outcome.objects.none()
             )
+
         return context
 
     def get_initial(self, **kwargs):
         self.edit_course = False
         if "course_id" in self.kwargs:
-            course = Course.objects.filter(course_id=self.kwargs["course_id"])
-            if course:
+            try:
+                course = Course.objects.get(course_id=self.kwargs["course_id"])
+            except Course.DoesNotExist:
+                pass
+            else:
                 self.edit_course = True
-                initial_data = course.values()[0]
-                initial_data["discipline"] = [
-                    x for x in course.values_list("discipline", flat=True)
-                ]
-                initial_data["course_outcome"] = [
-                    x for x in course.values_list("course_outcome", flat=True)
-                ]
-                initial_data["course_objective"] = [
-                    x for x in course.values_list("course_objective", flat=True)
-                ]
+                self.course = course
+                initial_data = Course.objects.filter(
+                    course_id=self.kwargs["course_id"]
+                ).values()[0]
+                initial_data["discipline"] = self.course.discipline.all()
+                initial_data[
+                    "course_objective"
+                ] = self.course.course_objective.all()
                 return initial_data
 
     def form_valid(self, form, **kwargs):
@@ -387,7 +393,14 @@ class CourseFormView(FormView):
         course.discipline.set(discipline)
         course.course_objective.set(objective)
 
+        outcome_list = []
         for outcome_form in outcomes_formset:
+
+            # Check if outcome is to be deassociated from course
+            # Then don't add it to outcome_list
+            if outcome_form in outcomes_formset.deleted_forms:
+                continue
+
             outcome = outcome_form.instance
             try:
                 outcome = Outcome.objects.get(
@@ -395,9 +408,17 @@ class CourseFormView(FormView):
                     outcome_short_name=outcome.outcome_short_name,
                     action_verb=outcome.action_verb,
                 )
-            except:
+                outcome_list.append(outcome)
+            # This exception occurs when outcome form is empty thus action_verb
+            # is also empty
+            except Outcome.action_verb.RelatedObjectDoesNotExist:
+                continue
+            # Create outcome if it doesn't already exists in database
+            except Outcome.DoesNotExist:
                 outcome = outcome_form.save()
-            course.course_outcome.add(outcome)
+                outcome_list.append(outcome)
+
+        course.course_outcome.set(outcome_list)
 
         return super().form_valid(form)
 
