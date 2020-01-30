@@ -488,10 +488,6 @@ class CourseForm(forms.Form):
         required=False,
     )
 
-    class Meta:
-        model = Course
-        exclude = []
-
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -612,7 +608,32 @@ class ModuleForm(forms.Form):
         super(ModuleForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-md-3"
+        self.helper.field_class = "col-md-9"
+        self.helper.layout = Layout(
+            Div(
+                Field("module_title"),
+                HTML("<br>"),
+                Field("module_short_name"),
+                HTML("<br>"),
+                Field("module_overview"),
+                HTML("<br>"),
+                Fieldset("Add Outcomes", FormsetLayoutObject("outcomes")),
+                HTML("<br>"),
+                Field("module_objective"),
+                HTML("<br>"),
+                Field("module_body"),
+                HTML("<br>"),
+                Field("module_resources"),
+                HTML("<br>"),
+                Field("module_test"),
+                HTML("<br>"),
+                Field("course"),
+                HTML("<br>"),
+                ButtonHolder(Submit("submit", "Submit")),
+            )
+        )
 
 
 class UnitForm(forms.Form):
@@ -695,7 +716,32 @@ class UnitForm(forms.Form):
         super(UnitForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "POST"
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-md-3"
+        self.helper.field_class = "col-md-9"
+        self.helper.layout = Layout(
+            Div(
+                Field("unit_name"),
+                HTML("<br>"),
+                Field("unit_short_name"),
+                HTML("<br>"),
+                Field("unit_overview"),
+                HTML("<br>"),
+                Fieldset("Add Outcomes", FormsetLayoutObject("outcomes")),
+                HTML("<br>"),
+                Field("unit_objective"),
+                HTML("<br>"),
+                Field("unit_body"),
+                HTML("<br>"),
+                Field("unit_resources"),
+                HTML("<br>"),
+                Field("unit_test"),
+                HTML("<br>"),
+                Field("module"),
+                HTML("<br>"),
+                ButtonHolder(Submit("submit", "Submit")),
+            )
+        )
 
 
 OutcomeFormSet = forms.models.modelformset_factory(

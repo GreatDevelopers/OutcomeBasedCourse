@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, ListView
-from django.views.generic.edit import CreateView, FormView
+from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 
 from django.shortcuts import render
@@ -438,28 +438,50 @@ class ModuleFormView(FormView):
     form_class = ModuleForm
     success_url = reverse_lazy("module")
 
+    def get_context_data(self, **kwargs):
+        context = super(ModuleFormView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context["outcomes"] = OutcomeFormSet(self.request.POST)
+        elif self.edit_module:
+            context["outcomes"] = OutcomeFormSet(
+                queryset=self.module.module_outcome.all()
+            )
+        else:
+            context["outcomes"] = OutcomeFormSet(
+                queryset=Outcome.objects.none()
+            )
+
+        return context
+
     def get_initial(self, **kwargs):
         self.edit_module = False
         if "module_id" in self.kwargs:
-            module = Module.objects.filter(module_id=self.kwargs["module_id"])
-            if module:
+            try:
+                module = Module.objects.get(module_id=self.kwargs["module_id"])
+            except Module.DoesNotExist:
+                pass
+            else:
                 self.edit_module = True
-                initial_data = module.values()[0]
-                initial_data["course"] = [
-                    x for x in module.values_list("course", flat=True)
-                ]
-                initial_data["module_outcome"] = [
-                    x for x in module.values_list("module_outcome", flat=True)
-                ]
-                initial_data["module_objective"] = [
-                    x for x in module.values_list("module_objective", flat=True)
-                ]
+                self.module = module
+                initial_data = Module.objects.filter(
+                    module_id=self.kwargs["module_id"]
+                ).values()[0]
+                initial_data["course"] = self.module.course.all()
+                initial_data[
+                    "module_objective"
+                ] = self.module.module_objective.all()
                 return initial_data
 
-    def form_valid(self, form):
+    def form_valid(self, form, **kwargs):
+        super(ModuleFormView, self).get_context_data(**kwargs)
+        context = self.get_context_data()
+        outcomes_formset = context["outcomes"]
+        if not outcomes_formset.is_valid():
+            return super().form_invalid(form)
+
         cleaned_data = form.cleaned_data
         course = cleaned_data.pop("course")
-        outcome = cleaned_data.pop("module_outcome")
+        cleaned_data.pop("module_outcome")
         objective = cleaned_data.pop("module_objective")
         if self.edit_module:
             Module.objects.filter(module_id=self.kwargs["module_id"]).update(
@@ -470,8 +492,35 @@ class ModuleFormView(FormView):
             module = Module.objects.create(**cleaned_data)
             module.save()
         module.course.set(course)
-        module.module_outcome.set(outcome)
         module.module_objective.set(objective)
+
+        outcome_list = []
+        for outcome_form in outcomes_formset:
+
+            # Check if outcome is to be deassociated from module
+            # Then don't add it to outcome_list
+            if outcome_form in outcomes_formset.deleted_forms:
+                continue
+
+            outcome = outcome_form.instance
+            try:
+                outcome = Outcome.objects.get(
+                    outcome=outcome.outcome,
+                    outcome_short_name=outcome.outcome_short_name,
+                    action_verb=outcome.action_verb,
+                )
+                outcome_list.append(outcome)
+            # This exception occurs when outcome form is empty thus action_verb
+            # is also empty
+            except Outcome.action_verb.RelatedObjectDoesNotExist:
+                continue
+            # Create outcome if it doesn't already exists in database
+            except Outcome.DoesNotExist:
+                outcome = outcome_form.save()
+                outcome_list.append(outcome)
+
+        module.module_outcome.set(outcome_list)
+
         return super().form_valid(form)
 
 
@@ -490,28 +539,48 @@ class UnitFormView(FormView):
     form_class = UnitForm
     success_url = reverse_lazy("unit")
 
+    def get_context_data(self, **kwargs):
+        context = super(UnitFormView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context["outcomes"] = OutcomeFormSet(self.request.POST)
+        elif self.edit_unit:
+            context["outcomes"] = OutcomeFormSet(
+                queryset=self.unit.unit_outcome.all()
+            )
+        else:
+            context["outcomes"] = OutcomeFormSet(
+                queryset=Outcome.objects.none()
+            )
+
+        return context
+
     def get_initial(self, **kwargs):
         self.edit_unit = False
         if "unit_number" in self.kwargs:
-            unit = Unit.objects.filter(unit_number=self.kwargs["unit_number"])
-            if unit:
+            try:
+                unit = Unit.objects.get(unit_number=self.kwargs["unit_number"])
+            except Unit.DoesNotExist:
+                pass
+            else:
                 self.edit_unit = True
-                initial_data = unit.values()[0]
-                initial_data["module"] = [
-                    x for x in unit.values_list("module", flat=True)
-                ]
-                initial_data["unit_outcome"] = [
-                    x for x in unit.values_list("unit_outcome", flat=True)
-                ]
-                initial_data["unit_objective"] = [
-                    x for x in unit.values_list("unit_objective", flat=True)
-                ]
+                self.unit = unit
+                initial_data = Unit.objects.filter(
+                    unit_number=self.kwargs["unit_number"]
+                ).values()[0]
+                initial_data["module"] = self.unit.module.all()
+                initial_data["unit_objective"] = self.unit.unit_objective.all()
                 return initial_data
 
-    def form_valid(self, form):
+    def form_valid(self, form, **kwargs):
+        super(UnitFormView, self).get_context_data(**kwargs)
+        context = self.get_context_data()
+        outcomes_formset = context["outcomes"]
+        if not outcomes_formset.is_valid():
+            return super().form_invalid(form)
+
         cleaned_data = form.cleaned_data
         module = cleaned_data.pop("module")
-        outcome = cleaned_data.pop("unit_outcome")
+        cleaned_data.pop("unit_outcome")
         objective = cleaned_data.pop("unit_objective")
         if self.edit_unit:
             Unit.objects.filter(unit_number=self.kwargs["unit_number"]).update(
@@ -522,8 +591,35 @@ class UnitFormView(FormView):
             unit = Unit.objects.create(**cleaned_data)
             unit.save()
         unit.module.set(module)
-        unit.unit_outcome.set(outcome)
         unit.unit_objective.set(objective)
+
+        outcome_list = []
+        for outcome_form in outcomes_formset:
+
+            # Check if outcome is to be deassociated from unit
+            # Then don't add it to outcome_list
+            if outcome_form in outcomes_formset.deleted_forms:
+                continue
+
+            outcome = outcome_form.instance
+            try:
+                outcome = Outcome.objects.get(
+                    outcome=outcome.outcome,
+                    outcome_short_name=outcome.outcome_short_name,
+                    action_verb=outcome.action_verb,
+                )
+                outcome_list.append(outcome)
+            # This exception occurs when outcome form is empty thus action_verb
+            # is also empty
+            except Outcome.action_verb.RelatedObjectDoesNotExist:
+                continue
+            # Create outcome if it doesn't already exists in database
+            except Outcome.DoesNotExist:
+                outcome = outcome_form.save()
+                outcome_list.append(outcome)
+
+        unit.unit_outcome.set(outcome_list)
+
         return super().form_valid(form)
 
 
