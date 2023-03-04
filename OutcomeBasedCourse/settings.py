@@ -146,8 +146,8 @@ DATABASES = {
         "NAME": "outcomebasedcourse",
         "HOST": "localhost",
         "PORT": "",
-        "USER": "outcomebasedcourse",
-        "PASSWORD": "outcomebasedcourse",
+        "USER": "root",
+        "PASSWORD": "Admin@123",
     }
 }
 
