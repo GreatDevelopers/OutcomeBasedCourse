@@ -11,13 +11,13 @@ Requirements
 
 1. Apache2
 1. mysql-server
-1. python3.7
+1. python3.11
 1. python3-pip
 1. python-mysqldb
-1. django 3.0
+1. django 4.1.7
 1. libldap2-dev
 1. libmysqlclient-dev
-1. python3.7-dev
+1. python3.11-dev
 
 
 #### Installation
@@ -36,7 +36,7 @@ chmod +x setup.sh
 Installation of Requirements
 
 ```bash
-sudo apt install apache2 mysql-server python3 python3-pip python3-mysqldb libldap2-dev libmysqlclient-dev python3.7-dev 
+sudo apt install apache2 mysql-server python3 python3-pip python3-mysqldb libldap2-dev libmysqlclient-dev python3.11-dev 
 sudo python3 -m pip install -r requirements.txt
 ```
 
