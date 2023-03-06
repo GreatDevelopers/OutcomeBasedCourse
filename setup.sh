@@ -1,17 +1,11 @@
 #!/bin/bash
 
 # Install dependencies
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt install apache2 mysql-server python3 python3-pip python3-mysqldb libldap2-dev libmysqlclient-dev python3.11-dev
 pip install --upgrade pip
-pip install django
-sudo apt-get install libldap2-dev
-pip install python-ldap
-pip install django-auth-ldap
-pip install django_tables2
-pip install django-bootstrap4
-pip install django-crispy_forms
-pip install martor
-pip install django-filter
-sudo apt-get install libmysqlclient-dev
-pip install mysqlclient
-pip install weasyprint
-
+sudo pip3 install virtualenv
+virtualenv env
+source env/bin/activate
+sudo python3 -m pip install -r requirements.txt
